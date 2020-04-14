@@ -1,21 +1,21 @@
 import { strict as assert } from 'assert';
-import {TestMatrix, BANNER, RESOLUTION, BROWSER, OPERATING_SYSTEM} from "../../src/TestMatrix";
+import {TestMatrix, BANNER, DEVICE, BROWSER, OPERATING_SYSTEM} from "../../src/TestMatrix";
 
 
 
 describe('TestMatrix', () => {
-	it('Build a dimension array', () => {
+	it('Builds a dimension array', () => {
 		const matrix = new TestMatrix();
 		matrix.addDimension( BANNER, [ 'ctrl', 'var' ] )
-			.addDimension( RESOLUTION, [ '1280', '768' ])
+			.addDimension( DEVICE, [ 'iphone_xs_max', 'iphone_se' ])
 			.build();
 
-		assert.deepEqual( matrix.getDimensions(), [ BANNER, RESOLUTION ] );
+		assert.deepEqual( matrix.getDimensions(), [ BANNER, DEVICE ] );
 		assert.deepEqual( matrix.getDimensionArray(), [
-			[ 'ctrl', '1280' ],
-			[ 'ctrl', '768' ],
-			[ 'var', '1280' ],
-			[ 'var', '768' ],
+			[ 'ctrl', 'iphone_xs_max' ],
+			[ 'ctrl', 'iphone_se' ],
+			[ 'var', 'iphone_xs_max' ],
+			[ 'var', 'iphone_se' ],
 		] );
 	} );
 
@@ -34,4 +34,26 @@ describe('TestMatrix', () => {
 			[ 'chrome', 'linux' ],
 		] );
 	} );
+
+	it('Throws an error on build when not passed required dimensions', () => {
+		const expectedError = 'Dimensions are missing a required column, please specify a device name or a combination of browser and OS';
+
+		assert.throws(() => {
+			const matrix = new TestMatrix();
+			matrix.build();
+		}, Error, expectedError);
+
+		assert.throws(() => {
+			const matrix = new TestMatrix();
+			matrix.addDimension( OPERATING_SYSTEM, [ 'linux' ])
+				.build();
+		}, Error, expectedError);
+
+		assert.throws(() => {
+			const matrix = new TestMatrix();
+			matrix.addDimension( BROWSER, [ 'edge' ])
+				.build();
+		}, Error, expectedError);
+	} );
+
 } );
