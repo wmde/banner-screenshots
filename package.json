@@ -19,6 +19,7 @@
     "wdio-chromedriver-service": "^5.0.2"
   },
   "dependencies": {
-    "esm": "^3.2.25"
+    "esm": "^3.2.25",
+    "partition-all": "^1.0.1"
   }
 }
