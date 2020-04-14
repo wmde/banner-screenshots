@@ -56,4 +56,23 @@ describe('TestMatrix', () => {
 		}, Error, expectedError);
 	} );
 
+	it('Can build a matrix from dimension values', () => {
+		const matrix = new TestMatrix();
+		matrix.addDimension( BANNER, [ 'ctrl', 'var' ] )
+			.addDimension( DEVICE, [ 'iphone_xs_max', 'iphone_se' ])
+			.build();
+
+		const matrixValues = matrix.getDimensionArray();
+		const mapFirstRow = matrix.getDimensionMap( matrixValues[0] );
+		const mapSecondRow = matrix.getDimensionMap( matrixValues[1] );
+
+		assert.ok( mapFirstRow.has( BANNER ) );
+		assert.ok( mapFirstRow.has( DEVICE ) );
+		assert.ok( !mapFirstRow.has( BROWSER ) );
+		assert.strictEqual( mapFirstRow.get( BANNER ), 'ctrl' );
+		assert.strictEqual( mapFirstRow.get( DEVICE ), 'iphone_xs_max' );
+		assert.strictEqual( mapSecondRow.get( DEVICE ), 'iphone_se' );
+
+	} );
+
 } );

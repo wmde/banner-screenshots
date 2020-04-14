@@ -88,6 +88,9 @@ export class TestMatrix {
 	}
 
 
+	/**
+	 * @return {string[]}
+	 */
 	getDimensions() {
 		return Array.from( this.dimensions.keys() );
 	}
@@ -95,6 +98,17 @@ export class TestMatrix {
 
 	getDimensionArray() {
 		return this.matrix;
+	}
+
+	/**
+	 * Convert a matrix row into a map
+	 *
+	 * @param {string[]} dimensionValues A matrix row
+	 * @return {Map<string, string>}
+	 */
+	getDimensionMap( dimensionValues ) {
+		const dimensionKeys = this.getDimensions();
+		return new Map( dimensionValues.map( (v, i ) => [ dimensionKeys[i], v ] ) );
 	}
 
 

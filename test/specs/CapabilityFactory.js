@@ -16,10 +16,10 @@ describe('getCapabilities', () => {
 		const allPossibilities = matrix.getDimensionArray();
 		assert.strictEqual( allPossibilities.length, 1 ); // Just a sanity check
 
-		const factory = new CapabilityFactory( matrix, { 'sauce:options': {} } );
-		assert.deepEqual( factory.getCapabilities( allPossibilities[0] ), {
+		const factory = new CapabilityFactory( { 'sauce:options': {} } );
+		assert.deepEqual( factory.getCapabilities( matrix.getDimensionMap( allPossibilities[0] ) ), {
 			browserName: 'chrome',
-			platformName: 'macOS 10.15',
+			platformName: 'macOS 10.14',
 			'sauce:options': {
 				screenResolution: '1280x1200'
 			}
@@ -37,8 +37,8 @@ describe('getCapabilities', () => {
 		const allPossibilities = matrix.getDimensionArray();
 		assert.strictEqual( allPossibilities.length, 1 ); // Just a sanity check
 
-		const factory = new CapabilityFactory( matrix, {} );
-		assert.deepEqual( factory.getCapabilities( allPossibilities[0] ), {
+		const factory = new CapabilityFactory( {} );
+		assert.deepEqual( factory.getCapabilities( matrix.getDimensionMap( allPossibilities[0] ) ), {
 			browserName: 'Safari',
 			deviceName: 'iPhone XS Simulator',
 			deviceOrientation: 'portrait',
