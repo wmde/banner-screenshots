@@ -1,17 +1,30 @@
-// See https://stackoverflow.com/questions/12303989/cartesian-product-of-multiple-arrays-in-javascript
-const concatFunction = ( leftArray, rightArray ) => [].concat( ...leftArray.map(
-	leftValue => rightArray.map(
-		rightValue => [].concat( leftValue, rightValue )
-	)
-) );
+import cartesian from './Cartesian';
 
-const cartesian = ( leftArray, rightArray, ...additionalArrays ) => {
-	if( rightArray ) {
-		return cartesian( concatFunction( leftArray, rightArray ), ...additionalArrays );
+export const BANNER = 'banner';
+export const RESOLUTION = 'resolution';
+export const OPERATING_SYSTEM = 'operating_system';
+export const BROWSER = 'browser';
+
+const ALLOWED_DIMENSIONS = [ BANNER, BROWSER, RESOLUTION, OPERATING_SYSTEM ];
+
+const BROWSERS_EXCLUDED_OPERATING_SYSTEMS = [
+	{
+		name: 'ie11',
+		excluded : [ 'win10', 'linux', 'macos' ]
+	},
+	{
+		name: 'edge',
+		excluded : [ 'win7', 'linux', 'macos' ]
+	},
+	{
+		name: 'safari',
+		excluded : [ 'win7', 'win10', 'linux' ]
+	},
+	{
+		name: 'chrome',
+		excluded : [ 'win7' ]
 	}
-
-	return leftArray;
-};
+];
 
 export class TestMatrix {
 
@@ -22,13 +35,42 @@ export class TestMatrix {
 
 
 	addDimension( key, values ) {
+		if ( ALLOWED_DIMENSIONS.indexOf( key ) === -1 ) {
+			throw new Error( `Invalid dimension: ${key}` );
+		}
 		this.dimensions.set( key, values );
 		return this;
 	}
 
 
 	build() {
-		this.matrix = cartesian.apply( this, Array.from(  this.dimensions.values() ) );
+		let matrix = cartesian.apply( this, Array.from(  this.dimensions.values() ) );
+		this.matrix = matrix.filter( row => {
+			return this.filterBrowsers( row );
+			 // TODO && this.filterXXX
+		} );
+	}
+
+
+	filterBrowsers( row )
+	{
+		const browserColumn = this.getDimensions().indexOf( BROWSER );
+		const osColumn = this.getDimensions().indexOf( OPERATING_SYSTEM );
+		if ( browserColumn === -1 || osColumn === -1 ) {
+			return true;
+		}
+
+		let shouldRemove = false;
+		BROWSERS_EXCLUDED_OPERATING_SYSTEMS.forEach( browser => {
+			if( row[ browserColumn ] !== browser.name  ) {
+				return;
+			}
+			if ( browser.excluded.indexOf( row[ osColumn ] ) > -1 ) {
+				shouldRemove = true;
+			}
+		} );
+
+		return !shouldRemove;
 	}
 
 
