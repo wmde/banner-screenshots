@@ -1,20 +1,21 @@
 import partitionAll from 'partition-all';
 import {BrowserFactory, SAUCELABS_CONNECTION} from "./src/BrowserFactory";
 import {CapabilityFactory} from "./src/CapabilityFactory";
-import {BROWSER, OPERATING_SYSTEM, TestMatrix} from "./src/TestMatrix";
+import {BROWSER, OPERATING_SYSTEM, RESOLUTION, TestMatrix} from "./src/TestMatrix";
 import {shootBanner} from "./src/test_functions/shootBanner";
 import {browserSpy} from "./src/test_functions/browserSpy";
 
 // TODO get matrix from config file
 const matrix = new TestMatrix();
 matrix.addDimension( BROWSER, [ 'ie11', 'edge', 'safari', 'chrome', 'firefox' ] )
-	.addDimension( OPERATING_SYSTEM, [ 'win7', 'win10', 'macos', 'linux' ])
+	.addDimension( OPERATING_SYSTEM, [  'linux' ])
+	.addDimension( RESOLUTION, ['1024x768'])
 	.build();
 
 const CONCURRENT_REQUEST_LIMIT = 4;
 
 (async () => {
-	const browserFactory = new BrowserFactory( SAUCELABS_CONNECTION, new CapabilityFactory( {} ) );
+	const browserFactory = new BrowserFactory( SAUCELABS_CONNECTION, new CapabilityFactory( { 'sauce:options': { recordVideo: false } } ) );
 
 	const shoot = async dimensions => {
 		const browser = await browserFactory.getBrowser( matrix.getDimensionMap( dimensions ) );

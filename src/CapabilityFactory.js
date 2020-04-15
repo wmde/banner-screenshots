@@ -23,8 +23,6 @@ const DEVICE_NAMES = new Map( [
 
 ] );
 
-const BROWSER_NEEDS_PLATFORM_NAME = [ 'ie11', 'edge', 'chrome' ];
-
 
 export class CapabilityFactory {
 	/**
@@ -44,9 +42,7 @@ export class CapabilityFactory {
 	getCapabilities( dimensions) {
 		let capabilityResult = Object.assign( {}, this.defaultCapabilities ) ;
 		// TODO make it more flexible for other vendors than saucelabs or use a deep clone function
-		if ( this.defaultCapabilities['sauce:options'] ) {
-			capabilityResult['sauce:options'] = Object.assign( {}, this.defaultCapabilities['sauce:options'] );
-		}
+
 		if ( dimensions.has( DEVICE ) ) {
 			capabilityResult = DEVICE_NAMES.get( dimensions.get( DEVICE ) );
 			capabilityResult.deviceOrientation = dimensions.has( ORIENTATION ) ? dimensions.get( ORIENTATION ) : 'portrait';
@@ -54,14 +50,20 @@ export class CapabilityFactory {
 		}
 		const browserName = dimensions.get( BROWSER );
 		capabilityResult.browserName = BROWSER_NAMES.get( browserName );
-		capabilityResult.platform = OPERATING_SYSTEM_NAMES.get( dimensions.get( OPERATING_SYSTEM ) );
-		if ( BROWSER_NEEDS_PLATFORM_NAME.indexOf( browserName ) > -1 ) {
-			capabilityResult.platformName  = OPERATING_SYSTEM_NAMES.get( dimensions.get( OPERATING_SYSTEM ) );
-		}
+
+		capabilityResult.platformName  = OPERATING_SYSTEM_NAMES.get( dimensions.get( OPERATING_SYSTEM ) );
+
 		if ( dimensions.has( RESOLUTION ) ) {
 			// todo make more flexible than just saucelabs
 			capabilityResult['sauce:options'].screenResolution = dimensions.get( RESOLUTION );
 		}
+
+		if ( capabilityResult.platformName === 'Linux' ) {
+			delete capabilityResult['sauce:options'];
+			capabilityResult.platform = capabilityResult.platformName;
+			delete capabilityResult.platformName;
+		}
+
 		return capabilityResult;
 	}
 
