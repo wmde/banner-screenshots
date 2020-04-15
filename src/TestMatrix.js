@@ -25,6 +25,10 @@ const BROWSERS_EXCLUDED_OPERATING_SYSTEMS = [
 	{
 		name: 'chrome',
 		excluded: [ 'win7' ]
+	},
+	{
+		name: 'firefox',
+		excluded: [ 'win7' ]
 	}
 ];
 
