@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "esm": "^3.2.25",
-    "partition-all": "^1.0.1"
+    "partition-all": "^1.0.1",
+    "toml": "^3.0.0"
   }
 }
