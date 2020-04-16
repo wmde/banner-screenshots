@@ -2,25 +2,31 @@
 preview_url = 'https://de.wikipedia.org/wiki/Wikipedia:Hauptseite?banner={{PLACEHOLDER}}'
 
 [desktop.banners.ctrl]
-pagename = "B19WMDE_21_191221_ctrl"
-
-[desktop.banners.var]
-pagename = "B19WMDE_21_191221_var"
+pagename = "B20_WMDE_Test_Desktop"
 
 [desktop.test_matrix]
 operating_system = ["win10", "win7", "macos", "linux"]
 browser = ["edge", "ie11", "firefox", "safari", "chrome"]
-resolution = ["1024x768", "1280x960"]
+resolution = [ "1024x768", "1280x960"]
+
+[test]
+preview_url = 'https://de.wikipedia.org/wiki/Wikipedia:Hauptseite?banner={{PLACEHOLDER}}'
+
+[test.banners.ctrl]
+pagename = "B20_WMDE_Test_Desktop"
+
+[test.test_matrix]
+operating_system = ["win10", "win7" ]
+browser = [ "edge", "ie11", "firefox", "safari", "chrome"]
+resolution = ["1280x960"]
+
 
 [mobile]
 preview_url = 'https://de.m.wikipedia.org/wiki/Wikipedia:Hauptseite?banner={{PLACEHOLDER}}'
 
 [mobile.banners.ctrl]
-pagename = "B19WMDE_21_191221_ctrl"
-
-[mobile.banners.var]
-pagename = "B19WMDE_21_191221_var"
+pagename = "B20_WMDE_Test_Mobile"
 
 [mobile.test_matrix]
-device = ["iphone_xs_max", "iphone_se", "iphone_se", "samsung_s9"]
-orientation = ["portrait", "landscape"]
+device = ["iphone_xs_max", "iphone_5s", "samsung_s6", "samsung_s9_plus"]
+orientation = ["portrait"]

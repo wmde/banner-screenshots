@@ -26,7 +26,6 @@ export class BrowserFactory {
 
 	async getBrowser( testCase ) {
 		const browserOptions = Object.assign(
-			{logLevel:'trace'},
 			this.connectionOptions,
 			{ capabilities: this.capabilityFactory.getCapabilities( testCase ) }
 		);

@@ -3,13 +3,12 @@ import partitionAll from 'partition-all';
 import {BrowserFactory, SAUCELABS_CONNECTION} from "./src/BrowserFactory";
 import {CapabilityFactory} from "./src/CapabilityFactory";
 import {shootBanner} from "./src/test_functions/shootBanner";
-import {browserSpy} from "./src/test_functions/browserSpy";
 import { ConfigurationParser } from "./src/ConfigurationParser";
 
 // TODO read config file as an option and campaign name as an argument
 const config = fs.readFileSync( __dirname + '/campaign_info.toml' );
 const parser = new ConfigurationParser( config );
-const testCaseGenerator = parser.generate( 'desktop' );
+const testCaseGenerator = parser.generate( 'mobile' );
 
 const CONCURRENT_REQUEST_LIMIT = 4;
 
@@ -18,8 +17,7 @@ const CONCURRENT_REQUEST_LIMIT = 4;
 
 	const shoot = async testCase => {
 		const browser = await browserFactory.getBrowser( testCase );
-		// TODO replace with shootBanner
-		return browserSpy( browser, testCase );
+		return shootBanner( browser, testCase );
 	};
 
 	// Partition test matrix & wait for all async requests to finish, to prevent going over the saucelabs concurrent request limit

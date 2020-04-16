@@ -41,7 +41,12 @@ export class CapabilityFactory {
 	getCapabilities( testCase ) {
 		const dimensions = testCase.getDimensions();
 
+		// TODO use deep clone library instead
 		let capabilityResult = Object.assign( {}, this.defaultCapabilities ) ;
+		if ( this.defaultCapabilities['sauce:options'] ) {
+			capabilityResult['sauce:options'] = Object.assign( {}, this.defaultCapabilities['sauce:options'] );
+		}
+
 		if ( dimensions.has( DEVICE ) ) {
 			const device = dimensions.get( DEVICE );
 			if ( !DEVICE_NAMES.has( device ) ) {
