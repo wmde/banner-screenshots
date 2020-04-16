@@ -2,11 +2,18 @@ const toml = require( 'toml' );
 import {TestCaseGenerator, BANNER as BANNER_DIMENSION} from "./TestCaseGenerator";
 import objectToMap from "./ObjectToMap";
 
+// Campaign keys
 const PREVIEW_URL = 'preview_url';
 const BANNERS = 'banners';
 const TEST_MATRIX = 'test_matrix';
+const CAMPAIGN_TRACKING = 'campaign_tracking';
+
+// Banner keys
 const PAGE_NAME = 'pagename';
+
+// Placeholder in PREVIEW_URL
 const PLACEHOLDER = '{{PLACEHOLDER}}';
+
 
 export class ConfigurationParser {
 
@@ -54,6 +61,7 @@ export class ConfigurationParser {
 
 
 	/**
+	 * @private
 	 * @param {Map<string,any>} campaign
 	 * @return {TestCaseGenerator}
 	 */
@@ -81,6 +89,7 @@ export class ConfigurationParser {
 	}
 
 	/**
+	 * @private
 	 * @param banners
 	 * @return {Map<string, string>}
 	 */
@@ -91,4 +100,14 @@ export class ConfigurationParser {
 		} );
 		return bannerMap;
 	}
+
+	/**
+	 *
+	 * @param {string} campaignName
+	 * @return {string}
+	 */
+	getCampaignTracking( campaignName ) {
+		return this.data.get( campaignName ).get( CAMPAIGN_TRACKING )
+	}
+
 }
