@@ -23,7 +23,11 @@ const testCaseGenerator = parser.generate( campaignName );
 
 	const shoot = async testCase => {
 		const browser = await browserFactory.getBrowser( testCase );
-		return shootBanner( browser, testCase, imageWriter );
+		try {
+			await shootBanner( browser, testCase, imageWriter );
+		} catch( e ) {
+			console.log( `Error while generating screenshot for banner ${ testCase.getScreenshotFilename() }`, e );
+		}
 	};
 
 	// Partition test matrix & wait for all async requests to finish, to prevent going over the saucelabs concurrent request limit
