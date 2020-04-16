@@ -16,10 +16,10 @@ const BROWSER_NAMES = new Map( [
 ] );
 
 const DEVICE_NAMES = new Map( [
-	[ 'iphone_xs_max', { deviceName: 'iPhone XS Simulator', platformName: 'iOS', browserName: 'Safari' } ],
-	[ 'iphone_se', { deviceName: 'iPhone SE Simulator', platformName: 'iOS', browserName: 'Safari' } ],
-	[ 'iphone_se', { deviceName: 'iPhone SE Simulator', platformName: 'iOS', browserName: 'Safari' } ],
-	[ 'samsung_s9', { deviceName: 'Samsung Galaxy S9 Plus FHD GoogleAPI Emulator', platformName: 'Android', browserName: 'Chrome', platformVersion: '8.1' } ],
+	[ 'iphone_xs_max', { deviceName: 'iPhone XS Max Simulator', platformName: 'iOS', browserName: 'Safari', appiumVersion: '1.16.0', platformVersion: '13.2' } ],
+	[ 'iphone_5s', { deviceName: 'iPhone 5s Simulator', platformName: 'iOS', browserName: 'Safari', appiumVersion: '1.13.0', platformVersion: '12.4' } ],
+	[ 'samsung_s6', { deviceName: 'Samsung Galaxy S6 GoogleAPI Emulator', platformName: 'Android', browserName: 'Chrome', platformVersion: '7.0', appiumVersion: '1.11.1' } ],
+	[ 'samsung_s9_plus', { deviceName: 'Samsung Galaxy S9 Plus WQHD GoogleAPI Emulator', platformName: 'Android', browserName: 'Chrome', platformVersion: '8.1', appiumVersion: '1.16.0' } ],
 
 ] );
 
