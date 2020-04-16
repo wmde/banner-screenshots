@@ -27,7 +27,6 @@ const DEVICE_NAMES = new Map( [
 export class CapabilityFactory {
 	/**
 	 *
-	 * @param {TestMatrix} testMatrix
 	 * @param {object} defaultCapabilities
 	 */
 	constructor( defaultCapabilities ) {
@@ -41,10 +40,12 @@ export class CapabilityFactory {
 	 */
 	getCapabilities( dimensions) {
 		let capabilityResult = Object.assign( {}, this.defaultCapabilities ) ;
-		// TODO make it more flexible for other vendors than saucelabs or use a deep clone function
-
 		if ( dimensions.has( DEVICE ) ) {
-			capabilityResult = DEVICE_NAMES.get( dimensions.get( DEVICE ) );
+			const device = dimensions.get( DEVICE );
+			if ( !DEVICE_NAMES.has( device ) ) {
+				throw new Error( `Unsupported device: ${device}` )
+			}
+			capabilityResult = DEVICE_NAMES.get( device );
 			capabilityResult.deviceOrientation = dimensions.has( ORIENTATION ) ? dimensions.get( ORIENTATION ) : 'portrait';
 			return capabilityResult;
 		}
@@ -58,6 +59,7 @@ export class CapabilityFactory {
 			capabilityResult['sauce:options'].screenResolution = dimensions.get( RESOLUTION );
 		}
 
+		// SauceLabs supports only older browsers with one resolution on Linux & uses an old protocol for that
 		if ( capabilityResult.platformName === 'Linux' ) {
 			delete capabilityResult['sauce:options'];
 			capabilityResult.platform = capabilityResult.platformName;
