@@ -1,12 +1,11 @@
-import {writeImageData} from "../writeImageData";
-
 /**
  *
  * @param browser
  * @param {TestCase} testCase
+ * @param {function} writeImageData
  * @return {Promise<void>}
  */
-export async function shootBanner( browser, testCase ) {
+export async function shootBanner( browser, testCase, writeImageData ) {
 	await browser.url( testCase.getBannerUrl() )
 
 	const banner = await browser.$('.banner-position--state-finished');
