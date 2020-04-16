@@ -44,4 +44,20 @@ describe('createGrid', () => {
 		assert.strictEqual( grid[0][2].getScreenshotFilename(), 'ctrl__1280x1024__win10__firefox.png' );
 		assert.strictEqual( grid[0][3].getScreenshotFilename(), 'ctrl__800x600__win10__firefox.png' );
 	} );
+
+	it( 'can create a grid from multiple banner dimensions', () => {
+		const rowDimensions = new Map( [ [ BANNER, [ 'ctrl', 'var' ] ], [ BROWSER, ['firefox', 'chrome' ] ] ] );
+		const orderByDimensions = [ RESOLUTION, OPERATING_SYSTEM ];
+		const grid = createGrid( testCases, rowDimensions, orderByDimensions);
+
+		assert.strictEqual( grid.length, 4 );
+		assert.strictEqual( grid[0][0].getScreenshotFilename(), 'ctrl__1280x1024__win10__chrome.png' );
+		assert.strictEqual( grid[0][1].getScreenshotFilename(), 'ctrl__800x600__win10__chrome.png' );
+		assert.strictEqual( grid[1][0].getScreenshotFilename(), 'ctrl__1280x1024__win10__firefox.png' );
+		assert.strictEqual( grid[1][1].getScreenshotFilename(), 'ctrl__800x600__win10__firefox.png' );
+		assert.strictEqual( grid[2][0].getScreenshotFilename(), 'var__1280x1024__win10__chrome.png' );
+		assert.strictEqual( grid[2][1].getScreenshotFilename(), 'var__800x600__win10__chrome.png' );
+		assert.strictEqual( grid[3][0].getScreenshotFilename(), 'var__1280x1024__win10__firefox.png' );
+		assert.strictEqual( grid[3][1].getScreenshotFilename(), 'var__800x600__win10__firefox.png' );
+	} );
 } );

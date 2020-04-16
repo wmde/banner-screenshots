@@ -18,6 +18,15 @@ function createDimensionSorter( dimensionOrder ) {
 	}
 }
 
+function cutArray( arr, partitionSize ) {
+	const partitions = []
+	for( let i = 0; i < arr.length; i+= partitionSize ) {
+		partitions.push( arr.slice( i, i + partitionSize ) );
+	}
+	return partitions;
+}
+
+
 /**
  *
  * @param {TestCase[]} testcases
@@ -28,15 +37,13 @@ export function createGrid( testcases, rowDimensions, orderByDimensions ) {
 	const compareAllDimensions = createDimensionSorter( Array.from( rowDimensions.keys() ).concat( orderByDimensions ) );
 	testcases.sort( compareAllDimensions );
 
-	// we just support 1 key at the moment, we'd have to loop rowDimensions to slice differently and repeatedly
-	if( rowDimensions.size !== 1 ) {
-		throw Error( "rowDimension must have exactly 1 dimension" )
-	}
-	const currentDimension  = rowDimensions.values().next(); // get 1st value as Iterator result object
-	const sliceSize = testcases.length / currentDimension.value.length;
-	const rows = [];
-	for( let i = 0; i < testcases.length; i+= sliceSize ) {
-		rows.push( testcases.slice( i, i + sliceSize ) );
-	}
+	let rows = [testcases];
+	rowDimensions.forEach( ( dimensionValues ) => {
+		const sliceSize = rows[0].length / dimensionValues.length;
+		const newRows = [];
+		rows.forEach( row => cutArray( row, sliceSize ).forEach( newRow => newRows.push( newRow) ) )
+		rows = newRows
+	} );
+
 	return rows;
 }
