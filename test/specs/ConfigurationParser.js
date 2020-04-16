@@ -1,8 +1,7 @@
-import { TestMatrix } from "../../src/TestMatrix";
-
 const assert = require('assert');
 const fs = require('fs');
 import {ConfigurationParser} from '../../src/ConfigurationParser';
+import { TestCaseGenerator } from "../../src/TestCaseGenerator";
 
 const CAMPAIGN = 'desktop';
 const VALID_TOML = '/../data/valid.toml';
@@ -63,6 +62,6 @@ describe('CampaignScreenshotGenerator', () => {
 		let generator = new ConfigurationParser( config );
 		let matrix = generator.generate( CAMPAIGN );
 
-		assert.ok( matrix instanceof TestMatrix, "object should be Instance of TestMatrix" );
+		assert.ok( matrix instanceof TestCaseGenerator, "object should be Instance of TestMatrix" );
 	});
-})
+});

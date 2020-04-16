@@ -24,12 +24,12 @@ export class BrowserFactory {
 		this.capabilityFactory = capabilityFactory;
 	}
 
-	async getBrowser( dimensions ) {
+	async getBrowser( testCase ) {
 		const browserOptions = Object.assign(
 			{logLevel:'trace'},
 			this.connectionOptions,
-			{ capabilities: this.capabilityFactory.getCapabilities( dimensions ) }
+			{ capabilities: this.capabilityFactory.getCapabilities( testCase ) }
 		);
-		return await remote( browserOptions )
+		return remote( browserOptions );
 	}
 }

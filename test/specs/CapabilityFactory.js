@@ -1,23 +1,22 @@
 import { strict as assert } from 'assert';
-import {TestMatrix, BANNER, RESOLUTION, BROWSER, OPERATING_SYSTEM, DEVICE} from "../../src/TestMatrix";
+import {TestCaseGenerator, BANNER, RESOLUTION, BROWSER, OPERATING_SYSTEM, DEVICE} from "../../src/TestCaseGenerator";
 import { CapabilityFactory } from "../../src/CapabilityFactory";
+import { TestCase } from "../../src/TestCase";
 
 
 
 describe('getCapabilities', () => {
 
 	it( 'builds capabilities for OS, browser, and resolution', () => {
-		const matrix = new TestMatrix();
-		matrix.addDimension( BROWSER, [ 'chrome' ] )
-			.addDimension( OPERATING_SYSTEM, [ 'macos' ] )
-			.addDimension( RESOLUTION, ['1280x1200'] )
-			.build();
 
-		const allPossibilities = matrix.getDimensionArray();
-		assert.strictEqual( allPossibilities.length, 1 ); // Just a sanity check
+		const testCase = new TestCase(
+			[ BROWSER, OPERATING_SYSTEM, RESOLUTION, BANNER ],
+			[ 'chrome', 'macos', '1280x1200', 'ctrl' ],
+			'https://de.wikipedia.org'
+		);
 
 		const factory = new CapabilityFactory( { 'sauce:options': {} } );
-		assert.deepEqual( factory.getCapabilities( matrix.getDimensionMap( allPossibilities[0] ) ), {
+		assert.deepEqual( factory.getCapabilities( testCase ), {
 			browserName: 'chrome',
 			platformName: 'macOS 10.14',
 			'sauce:options': {
@@ -27,18 +26,15 @@ describe('getCapabilities', () => {
 	} );
 
 	it( 'overrides values for browser, OS and resolution when given a device', () => {
-		const matrix = new TestMatrix();
-		matrix.addDimension( DEVICE, ['iphone_xs_max'])
-			.addDimension( BROWSER, [ 'chrome' ] )
-			.addDimension( OPERATING_SYSTEM, [ 'macos' ])
-			.addDimension( RESOLUTION, ['1280'])
-			.build();
 
-		const allPossibilities = matrix.getDimensionArray();
-		assert.strictEqual( allPossibilities.length, 1 ); // Just a sanity check
+		const testCase = new TestCase(
+			[ DEVICE, BROWSER, OPERATING_SYSTEM, RESOLUTION, BANNER ],
+			[ 'iphone_xs_max', 'chrome', 'macos', '1280', 'ctrl' ],
+			'https://de.wikipedia.org'
+		);
 
 		const factory = new CapabilityFactory( {} );
-		assert.deepEqual( factory.getCapabilities( matrix.getDimensionMap( allPossibilities[0] ) ), {
+		assert.deepEqual( factory.getCapabilities( testCase ), {
 			browserName: 'Safari',
 			deviceName: 'iPhone XS Simulator',
 			deviceOrientation: 'portrait',
