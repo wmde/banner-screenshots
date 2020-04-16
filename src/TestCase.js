@@ -170,4 +170,15 @@ export class TestCase {
 	getDimensions() {
 		return this.dimensions;
 	}
+
+	/**
+	 * @param {string} name
+	 * @return {string}
+	 */
+	getDimension( name ) {
+		if ( !this.dimensions.has( name ) ) {
+			throw new Error( `Invalid dimension: ${name}` );
+		}
+		return this.dimensions.get( name );
+	}
 }
