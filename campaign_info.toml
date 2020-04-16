@@ -10,7 +10,7 @@ pagename = "B19WMDE_21_191221_var"
 [desktop.test_matrix]
 operating_system = ["win10", "win7", "macos", "linux"]
 browser = ["edge", "ie11", "firefox", "safari", "chrome"]
-resolution = ["800x600", "1024x768", "1280x960"]
+resolution = ["1024x768", "1280x960"]
 
 [mobile]
 preview_url = 'https://de.m.wikipedia.org/wiki/Wikipedia:Hauptseite?banner={{PLACEHOLDER}}'

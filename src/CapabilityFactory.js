@@ -1,4 +1,4 @@
-import {BROWSER, DEVICE, OPERATING_SYSTEM, ORIENTATION, RESOLUTION} from "./TestMatrix";
+import {BROWSER, DEVICE, OPERATING_SYSTEM, ORIENTATION, RESOLUTION} from "./TestCaseGenerator";
 
 const OPERATING_SYSTEM_NAMES = new Map( [
 	[ 'win7', 'Windows 7' ],
@@ -35,10 +35,12 @@ export class CapabilityFactory {
 
 	/**
 	 *
-	 * @param {Map<string,string>} dimensions
+	 * @param {TestCase} testCase
 	 * @return object
 	 */
-	getCapabilities( dimensions) {
+	getCapabilities( testCase ) {
+		const dimensions = testCase.getDimensions();
+
 		let capabilityResult = Object.assign( {}, this.defaultCapabilities ) ;
 		if ( dimensions.has( DEVICE ) ) {
 			const device = dimensions.get( DEVICE );

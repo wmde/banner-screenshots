@@ -1,5 +1,5 @@
 const toml = require( 'toml' );
-import {TestMatrix, BANNER as BANNER_DIMENSION} from "./TestMatrix";
+import {TestCaseGenerator, BANNER as BANNER_DIMENSION} from "./TestCaseGenerator";
 import objectToMap from "./ObjectToMap";
 
 const PREVIEW_URL = 'preview_url';
@@ -10,6 +10,9 @@ const PLACEHOLDER = '{{PLACEHOLDER}}';
 
 export class ConfigurationParser {
 
+	/**
+	 * @param {string} data
+	 */
 	constructor( data ) {
 		const tomlData = toml.parse( data );
 		this.data = objectToMap( tomlData );
@@ -36,49 +39,56 @@ export class ConfigurationParser {
 
 	/**
 	 * @param {string} campaignName
-	 * @return {TestMatrix}
+	 * @return {TestCaseGenerator}
 	 */
 	generate( campaignName ) {
+		if ( !this.data.has( campaignName ) ) {
+			throw new Error( `Campaign "${campaignName}" not found in configuration!` );
+		}
 		const campaign = this.data.get( campaignName );
 
 		this.validate( campaign );
 
-		const testMatrix = campaign.get( TEST_MATRIX );
-		testMatrix.set( BANNER_DIMENSION, Array.from( campaign.get( BANNERS ).keys() ) );
-
-		return this.createMatrix( testMatrix );
+		return this.createMatrix( campaign );
 	}
 
 
 	/**
-	 * @param {string} campaignName
-	 * @return {Map<string, string>}
+	 * @param {Map<string,any>} campaign
+	 * @return {TestCaseGenerator}
 	 */
-	getBannerUrls( campaignName ) {
-		const campaign = this.data.get( campaignName );
+	createMatrix( campaign ) {
+
+		const testMatrix = campaign.get( TEST_MATRIX );
 		const banners = campaign.get( BANNERS );
 		const previewUrl = campaign.get( PREVIEW_URL );
 
-		const bannerUrls = new Map();
-		banners.forEach( ( banner, key ) => {
-			bannerUrls.set( key, previewUrl.replace( PLACEHOLDER , banner.get( PAGE_NAME ) ) );
-		} );
-		return bannerUrls;
-	}
+		testMatrix.set( BANNER_DIMENSION, Array.from( banners.keys() ) );
 
-	/**
-	 * @param {Map<string,string[]>} dimensions
-	 * @return {TestMatrix}
-	 */
-	createMatrix( dimensions ) {
-		const matrix = new TestMatrix();
+		const matrix = new TestCaseGenerator(
+			this.getBannerPlaceholders( banners ),
+			previewUrl,
+			PLACEHOLDER
+		);
 
-		dimensions.forEach( ( values, key ) => {
+		testMatrix.forEach( ( values, key ) => {
 			matrix.addDimension( key, values );
 		} );
-
+		
 		matrix.build();
 
 		return matrix;
+	}
+
+	/**
+	 * @param banners
+	 * @return {Map<string, string>}
+	 */
+	getBannerPlaceholders( banners ) {
+		let bannerMap = new Map();
+		banners.forEach( (value, key) => {
+			bannerMap.set( key, value.get( PAGE_NAME ) );
+		} );
+		return bannerMap;
 	}
 }

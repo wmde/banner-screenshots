@@ -1,9 +1,9 @@
 import {writeImageData} from "../writeImageData";
 
-export async function browserSpy( browser ) {
-	await browser.url('https://browserspy.dk/browser.php')
-	const filename = `${browser.capabilities.browserName}__${browser.capabilities.platform}__${browser.sessionId}.png`.replace(' ','-').toLowerCase();
+export async function browserSpy( browser, testCase ) {
+	await browser.url(testCase.getBannerUrl());
 
+	const filename = testCase.getScreenshotFilename();
 	const shot = await browser.takeScreenshot();
 	await writeImageData( shot, filename );
 
