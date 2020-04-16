@@ -10,6 +10,9 @@ const PLACEHOLDER = '{{PLACEHOLDER}}';
 
 export class ConfigurationParser {
 
+	/**
+	 * @param {string} data
+	 */
 	constructor( data ) {
 		const tomlData = toml.parse( data );
 		this.data = objectToMap( tomlData );
@@ -39,6 +42,9 @@ export class ConfigurationParser {
 	 * @return {TestCaseGenerator}
 	 */
 	generate( campaignName ) {
+		if ( !this.data.has( campaignName ) ) {
+			throw new Error( `Campaign "${campaignName}" not found in configuration!` );
+		}
 		const campaign = this.data.get( campaignName );
 
 		this.validate( campaign );
@@ -48,7 +54,7 @@ export class ConfigurationParser {
 
 
 	/**
-	 * @param {Map<string,string[]>} campaign
+	 * @param {Map<string,any>} campaign
 	 * @return {TestCaseGenerator}
 	 */
 	createMatrix( campaign ) {
@@ -74,7 +80,10 @@ export class ConfigurationParser {
 		return matrix;
 	}
 
-
+	/**
+	 * @param banners
+	 * @return {Map<string, string>}
+	 */
 	getBannerPlaceholders( banners ) {
 		let bannerMap = new Map();
 		banners.forEach( (value, key) => {

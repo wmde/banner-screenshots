@@ -17,6 +17,11 @@ export class TestCaseGenerator {
 	pageNamePlaceholder;
 	bannerUrl;
 
+	/**
+	 * @param {Map<string,string>} pageNames map short banner names (ctrl, var) to CentralNotice banner names
+	 * @param {string} bannerUrl Url that can contain a placeholder
+	 * @param {string} pageNamePlaceholder Placeholder string for banner names
+	 */
 	constructor( pageNames, bannerUrl, pageNamePlaceholder ) {
 		this.testCases = [];
 		this.dimensions = new Map();
@@ -29,14 +34,15 @@ export class TestCaseGenerator {
 
 	/**
 	 *
-	 * @param {string|number} key
-	 * @param {[]} values
+	 * @param {string} key
+	 * @param {string[]} values
 	 * @returns {TestCaseGenerator}
 	 */
 	addDimension( key, values ) {
 		if( ALLOWED_DIMENSIONS.indexOf( key ) === -1 ) {
 			throw new Error( `Invalid dimension: ${ key }` );
 		}
+		// TODO validate platform keys (list of available resolutions, browser and OS)
 		this.dimensions.set( key, values );
 		return this;
 	}
@@ -58,13 +64,13 @@ export class TestCaseGenerator {
 
 	/**
 	 *
-	 * @param {[]} dimensionKeys
-	 * @param {[]} dimensionValues
-	 * @returns {void | string | *}
+	 * @param {string[]} dimensionKeys
+	 * @param {string[]} dimensionValues
+	 * @returns {string}
 	 */
 	getBannerUrl( dimensionKeys, dimensionValues ) {
-		const index = dimensionKeys.indexOf( BANNER );
-		return this.bannerUrl.replace( this.pageNamePlaceholder, this.pageNames.get( dimensionValues[ index ] ) );
+		const bannerIndex = dimensionKeys.indexOf( BANNER );
+		return this.bannerUrl.replace( this.pageNamePlaceholder, this.pageNames.get( dimensionValues[ bannerIndex ] ) );
 	}
 
 

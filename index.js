@@ -2,12 +2,11 @@ import fs from "fs";
 import partitionAll from 'partition-all';
 import {BrowserFactory, SAUCELABS_CONNECTION} from "./src/BrowserFactory";
 import {CapabilityFactory} from "./src/CapabilityFactory";
-import {BROWSER, OPERATING_SYSTEM, RESOLUTION, TestCaseGenerator} from "./src/TestCaseGenerator";
 import {shootBanner} from "./src/test_functions/shootBanner";
 import {browserSpy} from "./src/test_functions/browserSpy";
 import { ConfigurationParser } from "./src/ConfigurationParser";
 
-
+// TODO read config file as an option and campaign name as an argument
 const config = fs.readFileSync( __dirname + '/campaign_info.toml' );
 const parser = new ConfigurationParser( config );
 const testCaseGenerator = parser.generate( 'desktop' );
