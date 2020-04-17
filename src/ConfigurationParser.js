@@ -1,5 +1,7 @@
+import {BANNER as BANNER_DIMENSION} from "./Dimensions";
+
 const toml = require( 'toml' );
-import {TestCaseGenerator, BANNER as BANNER_DIMENSION} from "./TestCaseGenerator";
+import {TestCaseGenerator} from "./TestCaseGenerator";
 import objectToMap from "./ObjectToMap";
 
 const PREVIEW_URL = 'preview_url';

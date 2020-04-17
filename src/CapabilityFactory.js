@@ -1,4 +1,4 @@
-import {BROWSER, DEVICE, OPERATING_SYSTEM, ORIENTATION, RESOLUTION} from "./TestCaseGenerator";
+import {BROWSER, DEVICE, OPERATING_SYSTEM, ORIENTATION, RESOLUTION} from "./Dimensions";
 
 const OPERATING_SYSTEM_NAMES = new Map( [
 	[ 'win7', 'Windows 7' ],

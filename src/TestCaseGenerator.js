@@ -1,14 +1,6 @@
 import cartesian from './Cartesian';
-import { TestCase } from "./TestCase";
-
-export const BANNER = 'banner';
-export const BROWSER = 'browser';
-export const DEVICE = 'device';
-export const OPERATING_SYSTEM = 'operating_system';
-export const ORIENTATION = 'orientation';
-export const RESOLUTION = 'resolution';
-
-const ALLOWED_DIMENSIONS = [ BANNER, BROWSER, DEVICE, OPERATING_SYSTEM, ORIENTATION, RESOLUTION ];
+import {TestCase} from "./TestCase";
+import {ALLOWED_DIMENSIONS, BANNER, BROWSER, DEVICE, OPERATING_SYSTEM} from "./Dimensions";
 
 export class TestCaseGenerator {
 	testCases;
