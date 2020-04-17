@@ -1,7 +1,7 @@
 import { strict as assert } from 'assert';
-import {TestCaseGenerator, BANNER, RESOLUTION, BROWSER, OPERATING_SYSTEM, DEVICE} from "../../src/TestCaseGenerator";
 import { CapabilityFactory } from "../../src/CapabilityFactory";
 import { TestCase } from "../../src/TestCase";
+import {BANNER, BROWSER, DEVICE, OPERATING_SYSTEM, RESOLUTION} from "../../src/Dimensions";
 
 
 

@@ -1,7 +1,8 @@
+import {BANNER, BROWSER, OPERATING_SYSTEM, RESOLUTION} from "../../src/Dimensions";
+
 const assert = require('assert');
 
 import { TestCase, INVALID_REASON_REQUIRED, INVALID_REASON_BROWSER, INVALID_REASON_RESOLUTION } from "../../src/TestCase";
-import { BANNER, BROWSER, OPERATING_SYSTEM, RESOLUTION } from "../../src/TestCaseGenerator";
 
 describe('TestCase', () => {
 	const dimensions = [OPERATING_SYSTEM, BROWSER, RESOLUTION, BANNER];

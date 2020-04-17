@@ -1,5 +1,6 @@
 import { strict as assert } from 'assert';
-import {TestCaseGenerator, BANNER, DEVICE, BROWSER, OPERATING_SYSTEM} from "../../src/TestCaseGenerator";
+import {TestCaseGenerator} from "../../src/TestCaseGenerator";
+import {BANNER, BROWSER, DEVICE, OPERATING_SYSTEM} from "../../src/Dimensions";
 
 const BANNER_URL = 'http://de.wikipedia.org/{{PLACEHOLDER}}';
 const PLACEHOLDER = '{{PLACEHOLDER}}';

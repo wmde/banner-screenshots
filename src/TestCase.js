@@ -1,4 +1,4 @@
-import { BROWSER, DEVICE, OPERATING_SYSTEM, RESOLUTION } from "./TestCaseGenerator";
+import {BROWSER, DEVICE, OPERATING_SYSTEM, RESOLUTION} from "./Dimensions";
 
 const BROWSERS_EXCLUDED_OPERATING_SYSTEMS = [
 	{
