@@ -10,3 +10,12 @@ To run the tool, you need to set your SauceLabs credentials:
 Then you can run the screenshot tool:
 
     npm -r esm index.js
+    
+
+## Running the unit tests
+
+    npm run test
+
+Use the following command to run individual tests
+
+    node_modules/.bin/mocha -r esm test/specs/name_of_your_test.js 
