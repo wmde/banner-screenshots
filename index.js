@@ -40,6 +40,7 @@ const outputDirectory = path.join( screenshotPath, parser.getCampaignTracking( c
 		await Promise.all( matrixBatches[i].map( shoot ) )
 	}
 
+	// TODO create class/interface for metadata and the structure of the JSON-ified output (used by MetadataSummarizer)
 	const metadata = {
 		createdOn: Date.now(),
 		campaign: parser.getCampaignTracking( campaignName ),
