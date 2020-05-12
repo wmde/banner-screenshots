@@ -24,6 +24,14 @@ To update the metadata summary for the [Shutterbug UI](https://github.com/wmde/s
 Without any parameters, this will search the `banner-shots` directory for campaign directories and process their 
 `metadata.json` files. 
 
+To update the banner data on a remote server, use the `remote_metadata_summary.sh` script:
+
+    ./remote_metadata_summary.sh username@your-server /remote/path/to/banner-shots
+
+This will download all the metadata via scp, generate the summary file and upload the summary file.
+
+The user needs write access in the specified directory!
+
 ## Running the unit tests
 
     npm run test
