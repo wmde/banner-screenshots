@@ -16,6 +16,12 @@ Then you can run the screenshot tool:
 This will create a campaign directory inside the `banner-shots` directory. The campaign directory contains the 
 screenshot images and file `metadata.json` with all the meta data about the test case.
 
+## Different test functions for different banners
+
+Add a different test function to the `src/test_functions/` directory,
+im- and export it in `src/test_functions/index.js` and specify its name in
+`testFunctionName` in `index.js`.
+
 ## Updating the screenshot metadata
 To update the metadata summary for the [Shutterbug UI](https://github.com/wmde/shutterbug), run the command
 
