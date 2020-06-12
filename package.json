@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha -r esm test/specs"
   },
   "keywords": [],
   "author": "",
@@ -19,8 +19,13 @@
   },
   "dependencies": {
     "esm": "^3.2.25",
+    "glob": "^7.1.6",
+    "meow": "^7.0.1",
     "partition-all": "^1.0.1",
     "toml": "^3.0.0",
     "webdriverio": "^5.22.4"
+  },
+  "bin": {
+    "metadata_summary": "metadata_summary.js"
   }
 }
