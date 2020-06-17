@@ -13,4 +13,5 @@
 	  the cases, mark failed test case as failed in the metadata. 
 - [ ] Upload of images and metadata to hosting platform
 - [ ] progress and silent mode: Lower log level for web driver, display test progress
+- [ ] Add CI to check if screenshots are still working
 
