@@ -12,7 +12,7 @@
   "devDependencies": {
     "@wdio/cli": "^5.23.0",
     "@wdio/local-runner": "^5.22.4",
-    "@wdio/mocha-framework": "^6.0.1",
+    "@wdio/mocha-framework": "^6.1.17",
     "@wdio/spec-reporter": "^6.0.1",
     "chromedriver": "^83.0.0",
     "wdio-chromedriver-service": "^5.0.2"
@@ -23,7 +23,7 @@
     "meow": "^7.0.1",
     "partition-all": "^1.0.1",
     "toml": "^3.0.0",
-    "webdriverio": "^5.23.0"
+    "webdriverio": "^6.1.17"
   },
   "bin": {
     "metadata_summary": "metadata_summary.js"
