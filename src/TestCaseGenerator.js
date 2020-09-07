@@ -1,6 +1,6 @@
 import cartesian from './Cartesian';
 import {TestCase} from "./TestCase";
-import {ALLOWED_DIMENSIONS, BANNER, BROWSER, DEVICE, OPERATING_SYSTEM} from "./Dimensions";
+import {ALLOWED_DIMENSIONS, BANNER, DEVICE, PLATFORM} from "./Dimensions";
 
 export class TestCaseGenerator {
 	testCases;
@@ -95,7 +95,7 @@ export class TestCaseGenerator {
 			return;
 		}
 
-		if( !this.dimensions.has( OPERATING_SYSTEM ) || !this.dimensions.has( BROWSER ) ) {
+		if( !this.dimensions.has( PLATFORM ) ) {
 			throw new Error( 'Dimensions are missing a required column, please specify a device name or a combination of browser and OS' );
 		}
 	}

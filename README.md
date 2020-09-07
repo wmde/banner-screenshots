@@ -11,7 +11,7 @@ To run the tool, you need to set your SauceLabs credentials:
 
 Then you can run the screenshot tool:
 
-    npm -r esm index.js
+    node -r esm index.js
     
 This will create a campaign directory inside the `banner-shots` directory. The campaign directory contains the 
 screenshot images and file `metadata.json` with all the meta data about the test case.

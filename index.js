@@ -11,7 +11,7 @@ import {serializeMapToArray} from "./src/serializeMapToArray";
 const METADATA_FILENAME = 'metadata.json';
 
 // TODO read the following parameters from command line options (with campaignName as required argument, everything else optional with default)
-const campaignName = 'desktop02';
+const campaignName = 'desktop';
 const screenshotPath = path.join( __dirname, 'banner-shots' );
 const configName = path.join( __dirname, 'campaign_info.toml' );
 const concurrentRequestLimit = 4;
