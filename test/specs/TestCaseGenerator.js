@@ -1,6 +1,6 @@
 import { strict as assert } from 'assert';
 import {TestCaseGenerator} from "../../src/TestCaseGenerator";
-import {BANNER, BROWSER, DEVICE, OPERATING_SYSTEM} from "../../src/Dimensions";
+import {BANNER, DEVICE, PLATFORM} from "../../src/Dimensions";
 
 const BANNER_URL = 'http://de.wikipedia.org/{{PLACEHOLDER}}';
 const PLACEHOLDER = '{{PLACEHOLDER}}';
@@ -42,17 +42,7 @@ describe('TestMatrix', () => {
 				BANNER_URL,
 				PLACEHOLDER
 			);
-			matrix.addDimension( OPERATING_SYSTEM, [ 'linux' ])
-				.build();
-		}, Error);
-
-		assert.throws(() => {
-			const matrix = new TestCaseGenerator(
-				new Map( PAGE_NAMES ),
-				BANNER_URL,
-				PLACEHOLDER
-			);
-			matrix.addDimension( BROWSER, [ 'edge' ])
+			matrix.addDimension( PLATFORM, [ 'firefox_linux' ])
 				.build();
 		}, Error);
 	} );

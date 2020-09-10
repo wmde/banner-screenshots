@@ -1,38 +1,18 @@
-import {BROWSER, DEVICE, OPERATING_SYSTEM, RESOLUTION} from "./Dimensions";
+import { DEVICE, PLATFORM, RESOLUTION} from "./Dimensions";
 
-const BROWSERS_EXCLUDED_OPERATING_SYSTEMS = [
+const PLATFORM_EXCLUDED_RESOLUTIONS = [
 	{
-		name: 'ie11',
-		excluded: [ 'win10', 'linux', 'macos' ]
+		name: 'firefox_macos',
+		excluded: [ '800x600' ]
 	},
 	{
-		name: 'edge',
-		excluded: [ 'win7', 'linux', 'macos' ]
-	},
-	{
-		name: 'safari',
-		excluded: [ 'win7', 'win10', 'linux' ]
-	},
-	{
-		name: 'chrome',
-		excluded: [ 'win7' ]
-	},
-	{
-		name: 'firefox',
-		excluded: [ 'win7' ]
-	}
-];
-
-const OPERATING_SYSTEMS_EXCLUDED_RESOLUTIONS = [
-	{
-		name: 'macos',
+		name: 'chrome_macos',
 		excluded: [ '800x600' ]
 	}
 ];
 
 export const INVALID_REASON_REQUIRED = 'The required dimensions are missing';
-export const INVALID_REASON_BROWSER = 'This operating system is not compatible with browser';
-export const INVALID_REASON_RESOLUTION = 'This resolution is not compatible with operating system';
+export const INVALID_REASON_RESOLUTION = 'This resolution is not available on this platform';
 
 export class TestCase {
 	valid;
@@ -70,12 +50,6 @@ export class TestCase {
 			return;
 		}
 
-		if( !this.validateBrowser() ) {
-			this.valid = false;
-			this.invalidReason = INVALID_REASON_BROWSER;
-			return;
-		}
-
 		if( !this.validateResolution() ) {
 			this.valid = false;
 			this.invalidReason = INVALID_REASON_RESOLUTION;
@@ -88,31 +62,8 @@ export class TestCase {
 	 */
 	validateRequiredDimensions() {
 		if( this.dimensions.has( DEVICE ) ) return true;
-		return this.dimensions.has( BROWSER ) && this.dimensions.has( OPERATING_SYSTEM );
+		return this.dimensions.has( PLATFORM );
 	}
-
-
-	/**
-	 * @returns {boolean}
-	 */
-	validateBrowser() {
-		const browser = this.dimensions.get( BROWSER );
-		const os = this.dimensions.get( OPERATING_SYSTEM );
-
-		let valid = true;
-		BROWSERS_EXCLUDED_OPERATING_SYSTEMS.forEach( currentBrowser => {
-			if( browser !== currentBrowser.name ) {
-				return;
-			}
-
-			if( currentBrowser.excluded.indexOf( os ) > -1 ) {
-				valid = false;
-			}
-		} );
-
-		return valid;
-	}
-
 
 	/**
 	 *
@@ -122,16 +73,16 @@ export class TestCase {
 		const resolution = this.dimensions.get( RESOLUTION );
 		if( resolution === undefined ) return true;
 
-		const os = this.dimensions.get( OPERATING_SYSTEM );
+		const platform = this.dimensions.get( PLATFORM );
 
 
 		let valid = true;
-		OPERATING_SYSTEMS_EXCLUDED_RESOLUTIONS.forEach( currentOs => {
-			if( os !== currentOs.name ) {
+		PLATFORM_EXCLUDED_RESOLUTIONS.forEach( currentPlatform => {
+			if( platform !== currentPlatform.name ) {
 				return;
 			}
 
-			if( currentOs.excluded.indexOf( resolution ) > -1 ) {
+			if( currentPlatform.excluded.indexOf( resolution ) > -1 ) {
 				valid = false;
 			}
 		} );

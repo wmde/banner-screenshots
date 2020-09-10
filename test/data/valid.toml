@@ -8,6 +8,10 @@ pagename = "B19WMDE_21_191221_ctrl"
 pagename = "B19WMDE_21_191221_var"
 
 [desktop.test_matrix]
-operating_system = ["win10", "win7", "macos", "linux"]
-browser = ["edge", "ie11", "firefox", "safari", "chrome"]
+platform = [ "edge", "ie11", 
+            "firefox_win10", "chrome_win10",
+            "safari",
+            "firefox_macos", "chrome_macos",
+            "firefox_linux", "chrome_linux"
+            ]
 resolution = ["800x600", "1024x768", "1280x960"]
