@@ -27,7 +27,7 @@ im- and export it in `src/test_functions/index.js` and specify its name in
 ## Updating the screenshot metadata
 To update the metadata summary for the [Shutterbug UI](https://github.com/wmde/shutterbug), run the command
 
-    ./metadata_summary.js
+    node -r esm ./metadata_summary.js
 
 Without any parameters, this will search the `banner-shots` directory for campaign directories and process their 
 `metadata.json` files. 
