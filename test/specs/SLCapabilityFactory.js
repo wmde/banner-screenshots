@@ -1,11 +1,11 @@
 import { strict as assert } from 'assert';
-import { CapabilityFactory } from "../../src/CapabilityFactory";
+import { SLCapabilityFactory } from "../../src/SLCapabilityFactory";
 import { TestCase } from "../../src/TestCase";
 import {BANNER, DEVICE, PLATFORM, RESOLUTION} from "../../src/Dimensions";
 
 
 
-describe('getCapabilities', () => {
+describe('getSLCapabilities', () => {
 
 	it( 'builds capabilities for platform and resolution', () => {
 
@@ -15,7 +15,7 @@ describe('getCapabilities', () => {
 			'https://de.wikipedia.org'
 		);
 
-		const factory = new CapabilityFactory( { 'sauce:options': {} } );
+		const factory = new SLCapabilityFactory( { 'sauce:options': {} } );
 		assert.deepEqual( factory.getCapabilities( testCase ), {
 			browserName: 'chrome',
 			platformName: 'macOS 10.14',
@@ -33,7 +33,7 @@ describe('getCapabilities', () => {
 			'https://de.wikipedia.org'
 		);
 
-		const factory = new CapabilityFactory( {} );
+		const factory = new SLCapabilityFactory( {} );
 		assert.deepEqual( factory.getCapabilities( testCase ), { 
 			deviceName: 'iPhone XS Max Simulator', 
 			deviceOrientation: "portrait",

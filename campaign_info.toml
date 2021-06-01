@@ -25,7 +25,7 @@ campaign_tracking='00-test-200416'
 pagename = "B20_WMDE_Test_Desktop"
 
 [test.test_matrix]
-platform = ["win10", "win7" ]
+platform = ["safari" ]
 resolution = ["1280x960"]
 
 
