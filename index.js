@@ -44,7 +44,7 @@ const cli = meow(
 			concurrentRequestLimit: {
 				alias: 'l',
 				type: 'number',
-				default: 4
+				default: 1
 			},
 			testFunctionName: {
 				alias: 't',
