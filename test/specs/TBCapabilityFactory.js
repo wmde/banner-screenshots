@@ -1,11 +1,11 @@
 import { strict as assert } from 'assert';
-import { CapabilityFactory } from "../../src/CapabilityFactory";
+import { CapabilityFactory } from "../../src/TBCapabilityFactory";
 import { TestCase } from "../../src/TestCase";
 import {BANNER, DEVICE, PLATFORM, RESOLUTION} from "../../src/Dimensions";
 
 
 
-describe('getCapabilities', () => {
+describe('getTBCapabilities', () => {
 
 	it( 'builds capabilities for platform and resolution', () => {
 
@@ -15,14 +15,16 @@ describe('getCapabilities', () => {
 			'https://de.wikipedia.org'
 		);
 
-		const factory = new CapabilityFactory( { 'sauce:options': {} } );
+		const factory = new CapabilityFactory( { 'tb:options': {screenrecorder: false} } );
 		assert.deepEqual( factory.getCapabilities( testCase ), {
+			platformName: 'CATALINA',
 			browserName: 'chrome',
-			platformName: 'macOS 10.14',
-			'sauce:options': {
-				screenResolution: '1280x1200'
+			browserVersion: 91,
+			"tb:options": {
+				"screen-resolution": "1280x1200",
+				screenrecorder: false
 			}
-		} );
+		});
 	} );
 
 	it( 'overrides values for platform and resolution when given a device', () => {
@@ -34,13 +36,13 @@ describe('getCapabilities', () => {
 		);
 
 		const factory = new CapabilityFactory( {} );
-		assert.deepEqual( factory.getCapabilities( testCase ), { 
-			deviceName: 'iPhone XS Max Simulator', 
+		assert.deepEqual( factory.getCapabilities( testCase ), {
+			browserName: "safari",
+			browserVersion: "12.1",
+			deviceName: "iPhone XS Max",
 			deviceOrientation: "portrait",
-			platformName: 'iOS', 
-			browserName: 'Safari', 
-			appiumVersion: '1.16.0', 
-			platformVersion: '13.2' 
+			platform: "iOS",
+			platformName: "iOS"
 		} );
 
 	} )

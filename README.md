@@ -4,10 +4,10 @@ This is a tool for taking screenshots of WMDE fundraising banners on wikipedia.o
 
 ## Creating Screenshots
 
-To run the tool, you need to set your SauceLabs credentials:
+To run the tool, you need to set your testingbot credentials. You can get them by logging in on testingbot.com:
 
-    export SAUCE_USERNAME=your_username
-    export SAUCE_KEY=your_api_keys
+    export TB_KEY=<testingbot team account key>
+    export TB_SECRET=<testingbot team account secret>
 
 Then you can run the screenshot tool:
 

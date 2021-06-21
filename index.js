@@ -1,8 +1,8 @@
 import fs from "fs";
 import path from "path";
 import partitionAll from 'partition-all';
-import {BrowserFactory, SAUCELABS_CONNECTION} from "./src/BrowserFactory";
-import {CapabilityFactory} from "./src/CapabilityFactory";
+import { BrowserFactory, CONNECTION, factoryOptions } from "./src/TBBrowserFactory";
+import {CapabilityFactory} from "./src/TBCapabilityFactory";
 import testFunctions from "./src/test_functions";
 import {ConfigurationParser} from "./src/ConfigurationParser";
 import {createImageWriter} from "./src/writeImageData";
@@ -74,7 +74,9 @@ const testCaseGenerator = parser.generate( campaignName );
 const outputDirectory = path.join( screenshotPath, parser.getCampaignTracking( campaignName ) );
 
 (async () => {
-	const browserFactory = new BrowserFactory( SAUCELABS_CONNECTION, new CapabilityFactory( { 'sauce:options': { recordVideo: false } } ) );
+	const browserFactory = new BrowserFactory( CONNECTION,
+		new CapabilityFactory( factoryOptions )
+	);
 	const imageWriter = await createImageWriter( outputDirectory );
 
 	const shoot = async testCase => {
@@ -82,7 +84,7 @@ const outputDirectory = path.join( screenshotPath, parser.getCampaignTracking( c
 		try {
 			browser = await browserFactory.getBrowser( testCase );
 		} catch( e ) {
-			console.log( `Error creating browser instance for banner ${ testCase.getScreenshotFilename() }` );
+			console.log( `Error creating browser instance for banner ${ testCase.getScreenshotFilename() }`, e );
 			// TODO mark testCase as failed
 			return testCase
 		}

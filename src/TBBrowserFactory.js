@@ -1,17 +1,20 @@
 const { remote } = require('webdriverio');
 
-export const SAUCELABS_CONNECTION = {
-	protocol: 'https',
-	host: 'ondemand.saucelabs.com',
-	port: 443,
-	path:'/wd/hub',
-	user: process.env.SAUCE_USERNAME,
-	key: process.env.SAUCE_KEY,
-	"sauce:options": {
-		"recordVideo": false,
-		"screenResolution": "1280x800"
-	}
-};
+export const CONNECTION = {
+	user: process.env.TB_KEY,
+	key: process.env.TB_SECRET,
+	services: [
+		['testingbot', {
+			tbTunnel: false
+		}]
+	],
+	logLevel: "trace",
+	connectionRetryCount: 1
+}
+
+export const factoryOptions = {
+	'tb:options': { screenrecorder: false }
+}
 
 export class BrowserFactory {
 	/**
@@ -27,7 +30,7 @@ export class BrowserFactory {
 	async getBrowser( testCase ) {
 		const browserOptions = Object.assign(
 			this.connectionOptions,
-			{ capabilities: this.capabilityFactory.getCapabilities( testCase ) }
+			{ capabilities: this.capabilityFactory.getCapabilities( testCase )}
 		);
 		return remote( browserOptions );
 	}
