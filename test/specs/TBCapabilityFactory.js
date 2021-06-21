@@ -40,7 +40,7 @@ describe('getTBCapabilities', () => {
 			browserName: "safari",
 			browserVersion: "12.1",
 			deviceName: "iPhone XS Max",
-			deviceOrientation: "portrait",
+			orientation: "portrait",
 			platform: "iOS",
 			platformName: "iOS"
 		} );

@@ -9,13 +9,21 @@ pagename = "B20_WMDE_Test_05_ctrl"
 pagename = "B20_WMDE_Test_05_var"
 
 [desktop.test_matrix]
-platform = [ "edge", "ie11", 
+platform = [ "edge", "ie11",
             "firefox_win10", "chrome_win10",
             "safari",
             "firefox_macos", "chrome_macos",
             "firefox_linux", "chrome_linux"
             ]
-resolution = [ "1024x768", "1280x960"]
+
+resolution = [
+    "800x600",
+    "1024x768",
+    "1280x960",
+    "1600x1200",
+    "1920x1200",
+    "2560x1440"
+]
 
 [test]
 preview_url = 'https://de.wikipedia.org/wiki/Wikipedia:Hauptseite?banner={{PLACEHOLDER}}'
@@ -37,5 +45,32 @@ campaign_tracking='00-mobile-200416'
 pagename = "B20_WMDE_Test_Mobile"
 
 [mobile.test_matrix]
-device = ["iphone_xs_max", "iphone_5s", "samsung_s6", "samsung_s9_plus"]
-orientation = ["portrait"]
+device = [
+    #"samsung_s6",
+    'samsung_s10',
+    'nexus_6',
+    "iphone_xs_max",
+    "iphone_5s",
+    "iphone_se",
+    "iphone_8",
+    "iphone_12_mini",
+    "iphone_7_plus",
+    "iphone_11_pro_max",
+    "ipad_pro_9_7_inch"
+]
+orientation = ["portrait", "landscape"]
+
+
+
+[mobile_test]
+preview_url = 'https://de.m.wikipedia.org/wiki/Wikipedia:Hauptseite?banner={{PLACEHOLDER}}'
+campaign_tracking='00-mobile-test-200416'
+
+[mobile_test.banners.ctrl]
+pagename = "B20_WMDE_Test_Mobile"
+
+[mobile_test.test_matrix]
+device = [
+    "samsung_s10",
+]
+orientation = ["landscape", "portrait"]
