@@ -19,7 +19,7 @@ export class TestCase {
 	invalidReason;
 	dimensions;
 	bannerUrl;
-	screenshotFilename;
+	name;
 
 
 	/**
@@ -31,11 +31,10 @@ export class TestCase {
 	constructor( dimensionKeys, dimensionValues, bannerUrl ) {
 		this.dimensions = new Map( dimensionValues.map( ( v, i ) => [ dimensionKeys[ i ], v ] ) );
 		this.bannerUrl = bannerUrl;
-		this.screenshotFilename = dimensionValues.join('__') + '.png';
+		this.name = dimensionValues.join('__');
 
 		this.validate();
 	}
-
 
 	/**
 	 * @return {void}
@@ -98,6 +97,12 @@ export class TestCase {
 		return this.valid;
 	}
 
+	/**
+	 * @returns {string}
+	 */
+	getName() {
+		return this.name;
+	}
 
 	/**
 	 * @returns {string}
@@ -111,7 +116,7 @@ export class TestCase {
 	 * @returns {string}
 	 */
 	getScreenshotFilename() {
-		return this.screenshotFilename;
+		return this.name + '.png';
 	}
 
 

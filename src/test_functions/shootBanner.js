@@ -18,5 +18,5 @@ export async function shootBanner( browser, testCase, writeImageData ) {
 	const shot = await browser.takeScreenshot();
 	await writeImageData( shot, testCase.getScreenshotFilename() );
 
-	await browser.deleteSession()
+	await browser.closeWindow();
 }

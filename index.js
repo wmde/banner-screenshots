@@ -79,6 +79,16 @@ const outputDirectory = path.join( screenshotPath, parser.getCampaignTracking( c
 	);
 	const imageWriter = await createImageWriter( outputDirectory );
 
+	const browsers =  await browserFactory.getBrowsers( testCaseGenerator.getTestCases() );
+	testCaseGenerator.getTestCases().map(
+		async testCase => {
+			await shootBanner( browsers[ testCase.getName() ], testCase, imageWriter );
+		}
+	);
+
+
+
+	/*
 	const shoot = async testCase => {
 		let browser;
 		try {
@@ -102,6 +112,8 @@ const outputDirectory = path.join( screenshotPath, parser.getCampaignTracking( c
 	for( let i = 0; i< matrixBatches.length; i++ ) {
 		await Promise.all( matrixBatches[i].map( shoot ) )
 	}
+
+	 */
 
 	// TODO iterate over the returned test cases to write the "failed" status into the metadata
 

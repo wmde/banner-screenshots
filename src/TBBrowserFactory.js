@@ -1,3 +1,5 @@
+import { multiremote } from 'webdriverio';
+
 const { remote } = require('webdriverio');
 
 export const CONNECTION = {
@@ -32,6 +34,27 @@ export class BrowserFactory {
 			this.connectionOptions,
 			{ capabilities: this.capabilityFactory.getCapabilities( testCase )}
 		);
+		console.log( browserOptions );
 		return remote( browserOptions );
+	}
+
+
+	async getBrowsers( testCases ) {
+		const connectionOptions = this.connectionOptions;
+		const capabilityFactory = this.capabilityFactory;
+		const capabilityObject = testCases.reduce(
+			( capabilityMap, testCase ) => {
+				capabilityMap[ testCase.getName() ] = Object.assign(
+					{},
+					connectionOptions,
+					{ capabilities: capabilityFactory.getCapabilities( testCase )}
+				);
+				return capabilityMap;
+			},
+			{}
+		);
+
+		console.log( capabilityObject );
+		return multiremote( capabilityObject );
 	}
 }
