@@ -1,4 +1,6 @@
+import path from "path";
 const { multiremote } = require('webdriverio');
+import {createImageWriter} from "./src/writeImageData";
 
 export const CONNECTION = {
 	user: process.env.TB_KEY,
@@ -25,6 +27,8 @@ const capabilities = {
 
 (async () => {
 	const browsers = await multiremote( capabilities );
+	// TODO check with smaller browser set if it works when the directory does not exist
+	const imageWriter = await createImageWriter( path.join( __dirname, 'banner-shots/test' ) );
 
 	const shoot = async browser => {
 		const URL = 'https://de.m.wikipedia.org/wiki/Wikipedia:Hauptseite?banner=B20_WMDE_Test_05_var';
@@ -39,6 +43,8 @@ const capabilities = {
 		} );
 
 		const shot = await browsers[browser].takeScreenshot();
+
+		await imageWriter( shot, browser + '.png');
 
 		await browsers[browser].deleteSession();
 
