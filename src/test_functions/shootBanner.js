@@ -5,6 +5,8 @@
  * @param {function} writeImageData
  * @return {Promise<void>}
  */
+import {TestCaseFinishedState} from "../TestCase";
+
 export async function shootBanner( browser, testCase, writeImageData ) {
 	await browser.url( testCase.getBannerUrl() )
 
@@ -19,4 +21,5 @@ export async function shootBanner( browser, testCase, writeImageData ) {
 	await writeImageData( shot, testCase.getScreenshotFilename() );
 
 	await browser.deleteSession()
+	testCase.updateState( new TestCaseFinishedState( "Successfully took a screenshot" ) );
 }

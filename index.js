@@ -8,6 +8,7 @@ import {ConfigurationParser} from "./src/ConfigurationParser";
 import {createImageWriter} from "./src/writeImageData";
 import {serializeMapToArray} from "./src/serializeMapToArray";
 import meow from 'meow';
+import {TestCaseFailedState} from "./src/TestCase";
 
 const METADATA_FILENAME = 'metadata.json';
 
@@ -44,7 +45,7 @@ const cli = meow(
 			concurrentRequestLimit: {
 				alias: 'l',
 				type: 'number',
-				default: 1
+				default: 5
 			},
 			testFunctionName: {
 				alias: 't',
@@ -74,38 +75,49 @@ const testCaseGenerator = parser.generate( campaignName );
 const outputDirectory = path.join( screenshotPath, parser.getCampaignTracking( campaignName ) );
 
 (async () => {
+	const testCases = testCaseGenerator.getValidTestCases();
 	const browserFactory = new BrowserFactory( CONNECTION,
 		new CapabilityFactory( factoryOptions )
 	);
 	const imageWriter = await createImageWriter( outputDirectory );
 
-	const shoot = async testCase => {
-		let browser;
-		try {
-			browser = await browserFactory.getBrowser( testCase );
-		} catch( e ) {
-			console.log( `Error creating browser instance for banner ${ testCase.getScreenshotFilename() }`, e );
-			// TODO mark testCase as failed
-			return testCase
-		}
+	/**
+	 *
+	 * @param {TestCase} testCase
+	 * @returns {Promise}
+	 */
+	const shoot = async (testCase, browser ) => {
 		try {
 			await shootBanner( browser, testCase, imageWriter );
 		} catch( e ) {
-			console.log( `Error while generating screenshot for banner ${ testCase.getScreenshotFilename() }`, e );
-			// TODO mark testCase as failed
+			console.log("browser error", e);
+			if (testCase.state.error) {
+				console.log("last error", testCase.state.error);
+			}
+			testCase.updateState( new TestCaseFailedState( `Error while generating screenshot for banner ${ testCase.getScreenshotFilename() }. Last known state: ${testCase.state.description}`, e ))
 		}
-		return testCase;
 	};
 
-	// Partition test case array & wait for all async requests to finish, to prevent going over the saucelabs concurrent request limit
-	const matrixBatches = partitionAll( concurrentRequestLimit, testCaseGenerator.getValidTestCases() );
+	const matrixBatches = partitionAll( concurrentRequestLimit, testCases );
 	for( let i = 0; i< matrixBatches.length; i++ ) {
-		await Promise.all( matrixBatches[i].map( shoot ) )
+		const currentTestCaseBatch = matrixBatches[i];
+		const browsers = await browserFactory.getBrowsers( currentTestCaseBatch );
+		try {
+			await Promise.all(currentTestCaseBatch.map( (testCase) => shoot(testCase, browsers[testCase.getName()])))
+		} catch( e ) {
+			console.log("Some errors, but that's probably ok", e);
+		}
+
 	}
 
-	// TODO iterate over the returned test cases to write the "failed" status into the metadata
+	testCases.map( testcase => {
+		console.log( testcase.state.description, testcase.getName() );
+	});
+
+
 
 	// TODO create class/interface for metadata and the structure of the JSON-ified output (used by MetadataSummarizer)
+	/*
 	const metadata = {
 		createdOn: Date.now(),
 		campaign: parser.getCampaignTracking( campaignName ),
@@ -116,6 +128,8 @@ const outputDirectory = path.join( screenshotPath, parser.getCampaignTracking( c
 		path.join( outputDirectory, METADATA_FILENAME ),
 		JSON.stringify( metadata, serializeMapToArray, 4 )
 	);
+
+	 */
 
 })().catch((e) => console.error(e));
 

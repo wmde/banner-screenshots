@@ -14,12 +14,53 @@ const PLATFORM_EXCLUDED_RESOLUTIONS = [
 export const INVALID_REASON_REQUIRED = 'The required dimensions are missing';
 export const INVALID_REASON_RESOLUTION = 'This resolution is not available on this platform';
 
+
+export class TestCasePendingState {
+	failed;
+	description;
+
+	constructor() {
+		this.failed = true;
+		this.description = "Test case is pending"
+	}
+}
+
+export class TestCaseFinishedState {
+	failed;
+	description;
+
+	/**
+	 * @param {string} description
+	 */
+	constructor( description ) {
+		this.failed = false
+		this.description = description
+	}
+}
+
+export class TestCaseFailedState {
+	failed;
+	description;
+	error;
+
+	/**
+	 * @param {string} description
+	 * @param {Error} error
+	 */
+	constructor( description, error ) {
+		this.failed = true;
+		this.description = description;
+		this.error = error;
+	}
+}
+
 export class TestCase {
 	valid;
 	invalidReason;
 	dimensions;
 	bannerUrl;
-	screenshotFilename;
+	name;
+	state;
 
 
 	/**
@@ -31,7 +72,8 @@ export class TestCase {
 	constructor( dimensionKeys, dimensionValues, bannerUrl ) {
 		this.dimensions = new Map( dimensionValues.map( ( v, i ) => [ dimensionKeys[ i ], v ] ) );
 		this.bannerUrl = bannerUrl;
-		this.screenshotFilename = dimensionValues.join('__') + '.png';
+		this.name = dimensionValues.join('__');
+		this.state = new TestCasePendingState();
 
 		this.validate();
 	}
@@ -47,12 +89,14 @@ export class TestCase {
 		if( !this.validateRequiredDimensions() ) {
 			this.valid = false;
 			this.invalidReason = INVALID_REASON_REQUIRED;
+			this.state = new TestCaseFailedState( INVALID_REASON_REQUIRED );
 			return;
 		}
 
 		if( !this.validateResolution() ) {
 			this.valid = false;
 			this.invalidReason = INVALID_REASON_RESOLUTION;
+			this.state = new TestCaseFailedState( INVALID_REASON_RESOLUTION );
 		}
 	}
 
@@ -106,12 +150,18 @@ export class TestCase {
 		return this.bannerUrl;
 	}
 
+	/**
+	 * @returns {string}
+	 */
+	getName() {
+		return this.name;
+	}
 
 	/**
 	 * @returns {string}
 	 */
 	getScreenshotFilename() {
-		return this.screenshotFilename;
+		return this.name  + '.png';
 	}
 
 
@@ -120,5 +170,12 @@ export class TestCase {
 	 */
 	getDimensions() {
 		return this.dimensions;
+	}
+
+	/**
+	 * @param {TestCaseFailedState|TestCaseFinishedState} state
+	 */
+	updateState( state ) {
+		this.state = state;
 	}
 }
