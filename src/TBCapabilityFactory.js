@@ -2,10 +2,10 @@ import {DEVICE, PLATFORM, ORIENTATION, RESOLUTION} from "./Dimensions";
 
 const DEVICE_NAMES = new Map( [
 	//s6 is responding very slowly or not at all
-	//[ 'samsung_s6', {browserName : 'browser',platform : 'Android', browserVersion : '6.0',platformName : 'Android', deviceName : 'Galaxy S6'} ],
+	[ 'samsung_s6', {browserName : 'browser',platform : 'Android', browserVersion : '6.0',platformName : 'Android', deviceName : 'Galaxy S6'} ],
 	[ 'samsung_s10', { browserName : 'Chrome',platform : 'Android', browserVersion : '10.0',platformName : 'Android', deviceName : 'Galaxy S10'} ],
 	//firefox does not seem to be supported by testingbot at the moment
-	//[ 'samsung_s20', { browserName : 'Firefox',platform : 'Android', browserVersion : '10.0',platformName : 'Android', deviceName : 'Galaxy S20'} ],
+	// [ 'samsung_s20', { browserName : 'Firefox',platform : 'Android', browserVersion : '10.0',platformName : 'Android', deviceName : 'Galaxy S20'} ],
 	[ 'nexus_6', { browserName : 'browser',platform : 'Android', browserVersion : '6.0',platformName : 'Android', deviceName : 'Nexus 6'} ],
 
 	[ 'iphone_xs_max', { browserName : 'safari', platform : 'iOS', browserVersion : '12.1', platformName : 'iOS', deviceName : 'iPhone XS Max' } ],
@@ -58,7 +58,7 @@ export class CapabilityFactory {
 			if ( !DEVICE_NAMES.has( device ) ) {
 				throw new Error( `Unsupported device: ${device}` )
 			}
-			capabilityResult = DEVICE_NAMES.get( device );
+			capabilityResult = { ...DEVICE_NAMES.get( device ) };
 			capabilityResult.orientation = dimensions.has( ORIENTATION ) ? dimensions.get( ORIENTATION ).toUpperCase() : 'PORTRAIT';
 			return capabilityResult;
 		}
@@ -69,7 +69,7 @@ export class CapabilityFactory {
 			}
 			capabilityResult = Object.assign( {}, capabilityResult, PLATFORM_NAMES.get( platform ) );
 		}
-		
+
 		if ( dimensions.has( RESOLUTION ) ) {
 			capabilityResult['tb:options']['screen-resolution'] = dimensions.get( RESOLUTION );
 		}

@@ -20,7 +20,7 @@ const PLATFORM_NAMES = new Map( [
 
 		[ 'firefox_macos', { platformName: 'macOS 10.14', browserName: 'firefox' } ],
 		[ 'chrome_macos', { platformName: 'macOS 10.14', browserName: 'chrome' } ],
-		[ 'safari', { platformName: 'macOS 10.14', browserName: 'safari' } ],     
+		[ 'safari', { platformName: 'macOS 10.14', browserName: 'safari' } ],
 ] );
 
 
@@ -52,7 +52,7 @@ export class CapabilityFactory {
 			if ( !DEVICE_NAMES.has( device ) ) {
 				throw new Error( `Unsupported device: ${device}` )
 			}
-			capabilityResult = DEVICE_NAMES.get( device );
+			capabilityResult = { ...DEVICE_NAMES.get( device ) };
 			capabilityResult.deviceOrientation = dimensions.has( ORIENTATION ) ? dimensions.get( ORIENTATION ) : 'portrait';
 			return capabilityResult;
 		}
@@ -63,7 +63,7 @@ export class CapabilityFactory {
 			}
 			capabilityResult = Object.assign( {}, capabilityResult, PLATFORM_NAMES.get( platform ) );
 		}
-		
+
 		if ( dimensions.has( RESOLUTION ) ) {
 			// todo make more flexible than just saucelabs
 			capabilityResult['sauce:options'].screenResolution = dimensions.get( RESOLUTION );
