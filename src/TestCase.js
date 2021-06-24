@@ -38,6 +38,19 @@ export class TestCaseFinishedState {
 	}
 }
 
+export class TestCaseIsRunningState {
+	failed;
+	description;
+
+	/**
+	 * @param {string} description
+	 */
+	constructor( description ) {
+		this.failed = true;
+		this.description = description;
+	}
+}
+
 export class TestCaseFailedState {
 	failed;
 	description;
@@ -173,7 +186,7 @@ export class TestCase {
 	}
 
 	/**
-	 * @param {TestCaseFailedState|TestCaseFinishedState} state
+	 * @param {TestCaseFailedState|TestCaseFinishedState|TestCaseIsRunningState} state
 	 */
 	updateState( state ) {
 		this.state = state;
