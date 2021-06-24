@@ -40,11 +40,10 @@ export class BrowserFactory {
 		const capabilityFactory = this.capabilityFactory;
 		const capabilityObject = testCases.reduce(
 			( capabilityMap, testCase ) => {
-				capabilityMap[ testCase.getName() ] = Object.assign(
-					{},
-					connectionOptions,
-					{ capabilities: capabilityFactory.getCapabilities( testCase )}
-				);
+				capabilityMap[ testCase.getName() ] = {
+					...connectionOptions,
+					capabilities: capabilityFactory.getCapabilities(testCase)
+				};
 				return capabilityMap;
 			},
 			{}

@@ -84,6 +84,7 @@ const outputDirectory = path.join( screenshotPath, parser.getCampaignTracking( c
 	/**
 	 *
 	 * @param {TestCase} testCase
+	 * @param {Browser} browser
 	 * @returns {Promise}
 	 */
 	const shoot = async (testCase, browser ) => {
@@ -94,7 +95,7 @@ const outputDirectory = path.join( screenshotPath, parser.getCampaignTracking( c
 			if (testCase.state.error) {
 				console.log("last error", testCase.state.error);
 			}
-			testCase.updateState( new TestCaseFailedState( `Error while generating screenshot for banner ${ testCase.getScreenshotFilename() }. Last known state: ${testCase.state.description}`, e ))
+			testCase.updateState( new TestCaseFailedState( `Error while generating screenshot for banner ${ testCase.getScreenshotFilename() }.\n  Last known state: ${testCase.state.description}`, e ) )
 		}
 	};
 
@@ -105,7 +106,7 @@ const outputDirectory = path.join( screenshotPath, parser.getCampaignTracking( c
 		try {
 			await Promise.all(currentTestCaseBatch.map( (testCase) => shoot(testCase, browsers[testCase.getName()])))
 		} catch( e ) {
-			console.log("Some errors, but that's probably ok", e);
+			console.log( "At least one test case failed, but but we continue with the next batch. See test case states for details", e );
 		}
 
 	}
@@ -114,7 +115,7 @@ const outputDirectory = path.join( screenshotPath, parser.getCampaignTracking( c
 		console.log( testcase.state.description, testcase.getName() );
 	});
 
-
+	// TODO iterate all testcases and generate metadata from them, including test case state to be displayed in Shutterbug
 
 	// TODO create class/interface for metadata and the structure of the JSON-ified output (used by MetadataSummarizer)
 	/*
