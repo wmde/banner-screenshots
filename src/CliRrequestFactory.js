@@ -1,6 +1,7 @@
 import meow from "meow";
 import path from "path";
 import testFunctions from "./test_functions";
+import {GenerateScreenshotsRequest} from "./ScreenshotGenerator";
 
 export class CliRequestFactory {
 
@@ -34,7 +35,7 @@ export class CliRequestFactory {
 						type: 'string',
 						default: 'banner-shots'
 					},
-					configName: {
+					configPath: {
 						alias: 'c',
 						type: 'string',
 						default: 'campaign_info.toml'
@@ -57,7 +58,7 @@ export class CliRequestFactory {
 		}
 		const campaignName = cli.input[0];
 		const screenshotPath = path.join( this.cwd, cli.flags.screenshotPath.toString() );
-		const configName = path.join( this.cwd, cli.flags.configName.toString() );
+		const configPath = path.join( this.cwd, cli.flags.configPath.toString() );
 		const concurrentRequestLimit = cli.flags.concurrentRequestLimit;
 		const testFunctionName = cli.flags.testFunctionName;
 
@@ -67,12 +68,6 @@ export class CliRequestFactory {
 		}
 		const testFunction = testFunctions[testFunctionName];
 
-		return {
-			concurrentRequestLimit,
-			screenshotPath,
-			configName,
-			campaignName,
-			testFunction
-		}
+		return new GenerateScreenshotsRequest( configPath, screenshotPath, campaignName, concurrentRequestLimit, testFunction );
 	}
 }
