@@ -5,4 +5,4 @@ node_modules
 banner-shots
 
 # Ignore campaign_info.toml, to be able to symlink it locally
-campaign_info.tomp
+campaign_info.toml
