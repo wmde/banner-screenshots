@@ -32,12 +32,10 @@ campaign_tracking='00-test-200416'
 [test.banners.ctrl]
 pagename = "B20_WMDE_Test_05_ctrl"
 
-[test.banners.var]
-pagename = "B20_WMDE_Test_05_var"
 
 [test.test_matrix]
-platform = ["ie11", "firefox_macos", "chrome_linux", "safari" ]
-resolution = ["1024x768", "1280x960"]
+platform = ["firefox_macos", "chrome_linux" ]
+resolution = ["1024x768"]
 
 
 [mobile]

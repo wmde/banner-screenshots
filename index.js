@@ -1,14 +1,13 @@
 import fs from "fs";
 import path from "path";
-import partitionAll from 'partition-all';
 import { BrowserFactory, CONNECTION, factoryOptions } from "./src/TBBrowserFactory";
 import {CapabilityFactory} from "./src/TBCapabilityFactory";
 import testFunctions from "./src/test_functions";
 import {ConfigurationParser} from "./src/ConfigurationParser";
 import {createImageWriter} from "./src/writeImageData";
-import {serializeMapToArray} from "./src/serializeMapToArray";
 import meow from 'meow';
-import {TestCaseFailedState} from "./src/TestCase";
+
+import {TBBatchRunner} from "./src/TBRunTestInBatches";
 
 const METADATA_FILENAME = 'metadata.json';
 
@@ -75,11 +74,12 @@ const testCaseGenerator = parser.generate( campaignName );
 const outputDirectory = path.join( screenshotPath, parser.getCampaignTracking( campaignName ) );
 
 (async () => {
-	const testCases = testCaseGenerator.getValidTestCases();
+	const testCases = testCaseGenerator.getTestCases();
 	const browserFactory = new BrowserFactory( CONNECTION,
 		new CapabilityFactory( factoryOptions )
 	);
 	const imageWriter = await createImageWriter( outputDirectory );
+	const batchRunner = new TBBatchRunner( browserFactory );
 
 	/**
 	 *
@@ -91,25 +91,11 @@ const outputDirectory = path.join( screenshotPath, parser.getCampaignTracking( c
 		try {
 			await shootBanner( browser, testCase, imageWriter );
 		} catch( e ) {
-			console.log("browser error", e);
-			if (testCase.state.error) {
-				console.log("last error", testCase.state.error);
-			}
-			testCase.updateState( new TestCaseFailedState( `Error while generating screenshot for banner ${ testCase.getScreenshotFilename() }.\n  Last known state: ${testCase.state.description}`, e ) )
+			console.log( "browser error", e );
 		}
 	};
 
-	const matrixBatches = partitionAll( concurrentRequestLimit, testCases );
-	for( let i = 0; i< matrixBatches.length; i++ ) {
-		const currentTestCaseBatch = matrixBatches[i];
-		const browsers = await browserFactory.getBrowsers( currentTestCaseBatch );
-		try {
-			await Promise.all(currentTestCaseBatch.map( (testCase) => shoot(testCase, browsers[testCase.getName()])))
-		} catch( e ) {
-			console.log( "At least one test case failed, but but we continue with the next batch. See test case states for details", e );
-		}
-
-	}
+	await batchRunner.runTestsInBatches(concurrentRequestLimit, testCases, shoot);
 
 	testCases.map( testcase => {
 		console.log( testcase.state.description, testcase.getName() );
