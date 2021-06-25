@@ -37,18 +37,45 @@ export class ScreenshotGenerator {
 	/**
 	 *
 	 * @param {GenerateScreenshotsRequest} request
-	 * @returns {Promise<void>}
+	 * @returns {Promise<TestCase[]>}
 	 */
 	async generateScreenshots( request ) {
+		const { outputDirectory, testCases } = this.initialize( request );
+		await this.generateInBatches( testCases, request, outputDirectory );
+		await this.writeMetaData( testCases, outputDirectory );
+
+		return testCases;
+	}
+
+	/**
+	 * @private
+	 * @param {GenerateScreenshotsRequest} request
+	 * @returns {{testCases: TestCase[], outputDirectory: string}}
+	 */
+	initialize( request ) {
 		const config = fs.readFileSync( request.configPath );
 		const parser = new ConfigurationParser( config.toString() );
 		const outputDirectory = path.join( request.screenshotPath, parser.getCampaignTracking( request.campaignName ) );
-		const imageWriter = await createImageWriter( outputDirectory );
 		const testCaseGenerator = parser.generate( request.campaignName );
 		const testCases = testCaseGenerator.getTestCases();
 
+		return {
+			testCases,
+			outputDirectory
+		}
+	}
+
+	/**
+	 * @private
+	 * @param {Array<TestCase>} testCases
+	 * @param {GenerateScreenshotsRequest} request
+	 * @param {string} outputDirectory
+	 * @returns {Promise<void>}
+	 */
+	async generateInBatches( testCases, request, outputDirectory ) {
+		const imageWriter = await createImageWriter( outputDirectory );
+
 		/**
-		 *
 		 * @param {TestCase} testCase
 		 * @param {Browser} browser
 		 * @returns {Promise}
@@ -61,12 +88,12 @@ export class ScreenshotGenerator {
 			}
 		};
 
-		await this.batchRunner.runTestsInBatches( request.concurrentRequestLimit, testCases, testFunctionWithImageWriter);
+		await this.batchRunner.runTestsInBatches( request.concurrentRequestLimit, testCases, testFunctionWithImageWriter );
+	}
 
-		testCases.map( testcase => {
-			console.log( testcase.state.description, testcase.getName() );
-		});
+	async writeMetaData(testCases, outputDirectory) {
 
+		// TODO create TestCaseSerializer that converts TestCase into a format that's expected by Shutterbug (e.g. filename is broken at the moment)
 		// TODO create class/interface for metadata and the structure of the JSON-ified output (used by MetadataSummarizer)
 		/*
 		const metadata = {
@@ -82,5 +109,4 @@ export class ScreenshotGenerator {
 
 		 */
 	}
-
 }
