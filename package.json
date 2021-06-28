@@ -16,7 +16,7 @@
     "@wdio/spec-reporter": "7.6.1",
     "@wdio/testingbot-service": "^7.7.4",
     "chromedriver": "^91.0.1",
-    "wdio-chromedriver-service": "^7.1.0"
+    "wdio-chromedriver-service": "^7.1.1"
   },
   "dependencies": {
     "esm": "^3.2.25",
