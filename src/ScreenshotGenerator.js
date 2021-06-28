@@ -2,6 +2,10 @@ import fs from "fs";
 import {ConfigurationParser} from "./ConfigurationParser";
 import path from "path";
 import {createImageWriter} from "./writeImageData";
+import {serializeMapToArray} from "./serializeMapToArray";
+import {TestCaseSerializer} from "./TestcaseMetadata";
+
+const METADATA_FILENAME = 'metadata.json';
 
 export class GenerateScreenshotsRequest {
 	campaignName;
@@ -40,9 +44,9 @@ export class ScreenshotGenerator {
 	 * @returns {Promise<TestCase[]>}
 	 */
 	async generateScreenshots( request ) {
-		const { outputDirectory, testCases } = this.initialize( request );
+		const { trackingName, outputDirectory, testCases, dimensions } = this.initialize( request );
 		await this.generateInBatches( testCases, request, outputDirectory );
-		await this.writeMetaData( testCases, outputDirectory );
+		this.writeMetaData( testCases, outputDirectory, trackingName, dimensions );
 
 		return testCases;
 	}
@@ -50,18 +54,21 @@ export class ScreenshotGenerator {
 	/**
 	 * @private
 	 * @param {GenerateScreenshotsRequest} request
-	 * @returns {{testCases: TestCase[], outputDirectory: string}}
+	 * @returns {{testCases: TestCase[], outputDirectory: string, trackingName: string, dimensions: Map<string,string[]>}}
 	 */
 	initialize( request ) {
 		const config = fs.readFileSync( request.configPath );
 		const parser = new ConfigurationParser( config.toString() );
-		const outputDirectory = path.join( request.screenshotPath, parser.getCampaignTracking( request.campaignName ) );
+		const trackingName = parser.getCampaignTracking( request.campaignName );
+		const outputDirectory = path.join( request.screenshotPath, trackingName );
 		const testCaseGenerator = parser.generate( request.campaignName );
 		const testCases = testCaseGenerator.getTestCases();
 
 		return {
+			trackingName,
 			testCases,
-			outputDirectory
+			outputDirectory,
+			dimensions: testCaseGenerator.dimensions
 		}
 	}
 
@@ -91,22 +98,24 @@ export class ScreenshotGenerator {
 		await this.batchRunner.runTestsInBatches( request.concurrentRequestLimit, testCases, testFunctionWithImageWriter );
 	}
 
-	async writeMetaData(testCases, outputDirectory) {
-
-		// TODO create TestCaseSerializer that converts TestCase into a format that's expected by Shutterbug (e.g. filename is broken at the moment)
-		// TODO create class/interface for metadata and the structure of the JSON-ified output (used by MetadataSummarizer)
-		/*
+	/**
+	 * @param {TestCase[]} testCases
+	 * @param {string} outputDirectory
+	 * @param {string} trackingName
+	 * @param {Map<string,string[]>} dimensions
+	 */
+	writeMetaData( testCases, outputDirectory, trackingName, dimensions ) {
+		const testCaseSerializer = new TestCaseSerializer();
 		const metadata = {
 			createdOn: Date.now(),
-			campaign: parser.getCampaignTracking( campaignName ),
-			dimensions: testCaseGenerator.dimensions,
-			testCases: testCaseGenerator.getTestCases() // get all test cases to be able to generate a grid
+			campaign: trackingName,
+			dimensions: dimensions,
+			testCases: testCaseSerializer.serializeTestCases( testCases )
 		};
+
 		fs.writeFileSync(
 			path.join( outputDirectory, METADATA_FILENAME ),
 			JSON.stringify( metadata, serializeMapToArray, 4 )
 		);
-
-		 */
 	}
 }
