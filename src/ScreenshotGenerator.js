@@ -7,7 +7,7 @@ import {TestCaseSerializer} from "./TestcaseMetadata";
 
 const METADATA_FILENAME = 'metadata.json';
 
-export class GenerateScreenshotsRequest {
+export class ScreenshotsRequest {
 	campaignName;
 	configPath;
 	screenshotPath;
@@ -40,7 +40,7 @@ export class ScreenshotGenerator {
 
 	/**
 	 *
-	 * @param {GenerateScreenshotsRequest} request
+	 * @param {ScreenshotsRequest} request
 	 * @returns {Promise<TestCase[]>}
 	 */
 	async generateScreenshots( request ) {
@@ -53,7 +53,7 @@ export class ScreenshotGenerator {
 
 	/**
 	 * @private
-	 * @param {GenerateScreenshotsRequest} request
+	 * @param {ScreenshotsRequest} request
 	 * @returns {{testCases: TestCase[], outputDirectory: string, trackingName: string, dimensions: Map<string,string[]>}}
 	 */
 	initialize( request ) {
@@ -75,7 +75,7 @@ export class ScreenshotGenerator {
 	/**
 	 * @private
 	 * @param {Array<TestCase>} testCases
-	 * @param {GenerateScreenshotsRequest} request
+	 * @param {ScreenshotsRequest} request
 	 * @param {string} outputDirectory
 	 * @returns {Promise<void>}
 	 */

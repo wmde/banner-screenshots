@@ -1,7 +1,7 @@
 import meow from "meow";
 import path from "path";
 import testFunctions from "./test_functions";
-import {GenerateScreenshotsRequest} from "./ScreenshotGenerator";
+import {ScreenshotsRequest} from "./ScreenshotGenerator";
 
 export class CliRequestFactory {
 
@@ -68,6 +68,6 @@ export class CliRequestFactory {
 		}
 		const testFunction = testFunctions[testFunctionName];
 
-		return new GenerateScreenshotsRequest( configPath, screenshotPath, campaignName, concurrentRequestLimit, testFunction );
+		return new ScreenshotsRequest( configPath, screenshotPath, campaignName, concurrentRequestLimit, testFunction );
 	}
 }
