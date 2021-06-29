@@ -21,7 +21,7 @@ screenshotGenerator.generateScreenshots( requestFactory.getRequestParameters() )
 						invalid: counts.invalid + 1
 					}
 				}
-				if ( testcase.state.failed ) {
+				if ( !testcase.state.finished ) {
 					return {
 						...counts,
 						error: counts.error + 1,

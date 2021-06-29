@@ -14,46 +14,46 @@ const PLATFORM_EXCLUDED_RESOLUTIONS = [
 export const INVALID_REASON_REQUIRED = 'The required dimensions are missing';
 export const INVALID_REASON_RESOLUTION = 'This resolution is not available on this platform';
 
-
-export class TestCasePendingState {
-	failed;
+class AbstractState {
+	finished;
 	description;
 
 	constructor() {
-		this.failed = true;
+		this.finished = false;
+	}
+}
+
+export class TestCasePendingState extends AbstractState {
+
+	constructor() {
+		super();
 		this.description = "Test case is pending"
 	}
 }
 
-export class TestCaseFinishedState {
-	failed;
-	description;
-
+export class TestCaseFinishedState extends AbstractState {
 	/**
 	 * @param {string} description
 	 */
 	constructor( description ) {
-		this.failed = false
+		super()
+		this.finished = true;
 		this.description = description
 	}
 }
 
-export class TestCaseIsRunningState {
-	failed;
-	description;
-
+export class TestCaseIsRunningState extends AbstractState {
 	/**
 	 * @param {string} description
 	 */
 	constructor( description ) {
-		this.failed = true;
+		super();
+		this.finished = false;
 		this.description = description;
 	}
 }
 
-export class TestCaseFailedState {
-	failed;
-	description;
+export class TestCaseFailedState extends AbstractState {
 	error;
 
 	/**
@@ -61,7 +61,7 @@ export class TestCaseFailedState {
 	 * @param {Error} error
 	 */
 	constructor( description, error ) {
-		this.failed = true;
+		super();
 		this.description = description;
 		this.error = error;
 	}

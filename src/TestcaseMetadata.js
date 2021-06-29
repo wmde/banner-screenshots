@@ -11,7 +11,7 @@ export class TestCaseSerializer {
 			dimensions: testCase.getDimensions(),
 			bannerUrl: testCase.getBannerUrl(),
 			screenshotFilename: testCase.getScreenshotFilename(),
-			message: testCase.state.failed ? testCase.state.description : ""
+			message: testCase.state.finished ? "" : testCase.state.description
 		}) );
 	}
 }
