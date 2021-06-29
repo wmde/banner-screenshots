@@ -8,7 +8,8 @@ export const CONNECTION = {
 			tbTunnel: false
 		}]
 	],
-	logLevel: "trace",
+	// Set to "info" or trace to see everything the library is doing
+	logLevel: "warn",
 	connectionRetryCount: 1
 }
 
