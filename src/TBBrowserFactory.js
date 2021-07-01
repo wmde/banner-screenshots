@@ -1,4 +1,4 @@
-const { remote } = require('webdriverio');
+import { remote, multiremote } from 'webdriverio';
 
 export const CONNECTION = {
 	user: process.env.TB_KEY,
@@ -8,7 +8,8 @@ export const CONNECTION = {
 			tbTunnel: false
 		}]
 	],
-	logLevel: "trace",
+	// Set to "info" or trace to see everything the library is doing
+	logLevel: "warn",
 	connectionRetryCount: 1
 }
 
@@ -34,4 +35,22 @@ export class BrowserFactory {
 		);
 		return remote( browserOptions );
 	}
+
+	async getBrowsers( testCases ) {
+		const connectionOptions = this.connectionOptions;
+		const capabilityFactory = this.capabilityFactory;
+		const capabilityObject = testCases.reduce(
+			( capabilityMap, testCase ) => {
+				capabilityMap[ testCase.getName() ] = {
+					...connectionOptions,
+					capabilities: capabilityFactory.getCapabilities(testCase)
+				};
+				return capabilityMap;
+			},
+			{}
+		);
+
+		return multiremote( capabilityObject );
+	}
+
 }

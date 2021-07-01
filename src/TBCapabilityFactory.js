@@ -1,10 +1,21 @@
 import {DEVICE, PLATFORM, ORIENTATION, RESOLUTION} from "./Dimensions";
 
 const DEVICE_NAMES = new Map( [
+	//s6 is responding very slowly or not at all
+	[ 'samsung_s6', {browserName : 'browser',platform : 'Android', browserVersion : '6.0',platformName : 'Android', deviceName : 'Galaxy S6'} ],
+	[ 'samsung_s10', { browserName : 'Chrome',platform : 'Android', browserVersion : '10.0',platformName : 'Android', deviceName : 'Galaxy S10'} ],
+	//firefox does not seem to be supported by testingbot at the moment
+	// [ 'samsung_s20', { browserName : 'Firefox',platform : 'Android', browserVersion : '10.0',platformName : 'Android', deviceName : 'Galaxy S20'} ],
+	[ 'nexus_6', { browserName : 'browser',platform : 'Android', browserVersion : '6.0',platformName : 'Android', deviceName : 'Nexus 6'} ],
+
 	[ 'iphone_xs_max', { browserName : 'safari', platform : 'iOS', browserVersion : '12.1', platformName : 'iOS', deviceName : 'iPhone XS Max' } ],
 	[ 'iphone_5s', { browserName : 'safari', platform : 'iOS', browserVersion : '12.1', platformName : 'iOS', deviceName : 'iPhone 5s' } ],
-	[ 'samsung_s6', {browserName : 'browser',platform : 'Android', browserVersion : '6.0',platformName : 'Android', deviceName : 'Galaxy S6'} ],
-	[ 'samsung_s9_plus', { browserName : 'Chrome',platform : 'Android', browserVersion : '9.0',platformName : 'Android', deviceName : 'Galaxy S9'} ],
+	[ 'iphone_se', { browserName : 'safari', platform : 'iOS', browserVersion : '11.4', platformName : 'iOS', deviceName : 'iPhone SE' } ],
+	[ 'iphone_8', { browserName : 'safari', platform : 'iOS', browserVersion : '14.0', platformName : 'iOS', deviceName : 'iPhone 8' } ],
+	[ 'iphone_12_mini', { browserName : 'safari', platform : 'iOS', browserVersion : '14.2', platformName : 'iOS', deviceName : 'iPhone 12 mini' } ],
+	[ 'iphone_7_plus', { browserName : 'safari', platform : 'iOS', browserVersion : '11.4', platformName : 'iOS', deviceName : 'iPhone 7 Plus' } ],
+	[ 'iphone_11_pro_max', { browserName : 'safari', platform : 'iOS', browserVersion : '13.4', platformName : 'iOS', deviceName : 'iPhone 11 Pro Max' } ],
+	[ 'ipad_pro_9_7_inch', { browserName : 'safari', platform : 'iOS', browserVersion : '14.2', platformName : 'iOS', deviceName : 'iPad Pro (9.7-inch)' } ],
 ]);
 
 const PLATFORM_NAMES = new Map( [
@@ -21,7 +32,6 @@ const PLATFORM_NAMES = new Map( [
 	[ 'firefox_macos', { platformName: 'CATALINA', browserName: 'firefox', browserVersion: 89 } ],
 	[ 'safari', { platformName: 'CATALINA', browserName: 'safari', browserVersion: 13 } ],
 ]);
-
 
 export class CapabilityFactory {
 	/**
@@ -48,8 +58,8 @@ export class CapabilityFactory {
 			if ( !DEVICE_NAMES.has( device ) ) {
 				throw new Error( `Unsupported device: ${device}` )
 			}
-			capabilityResult = DEVICE_NAMES.get( device );
-			capabilityResult.deviceOrientation = dimensions.has( ORIENTATION ) ? dimensions.get( ORIENTATION ) : 'portrait';
+			capabilityResult = { ...DEVICE_NAMES.get( device ) };
+			capabilityResult.orientation = dimensions.has( ORIENTATION ) ? dimensions.get( ORIENTATION ).toUpperCase() : 'PORTRAIT';
 			return capabilityResult;
 		}
 		else {
@@ -59,7 +69,7 @@ export class CapabilityFactory {
 			}
 			capabilityResult = Object.assign( {}, capabilityResult, PLATFORM_NAMES.get( platform ) );
 		}
-		
+
 		if ( dimensions.has( RESOLUTION ) ) {
 			capabilityResult['tb:options']['screen-resolution'] = dimensions.get( RESOLUTION );
 		}
