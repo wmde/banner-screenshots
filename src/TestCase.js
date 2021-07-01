@@ -58,7 +58,7 @@ export class TestCaseFailedState extends AbstractState {
 
 	/**
 	 * @param {string} description
-	 * @param {Error} error
+	 * @param {Error|null} error
 	 */
 	constructor( description, error ) {
 		super();
@@ -102,14 +102,14 @@ export class TestCase {
 		if( !this.validateRequiredDimensions() ) {
 			this.valid = false;
 			this.invalidReason = INVALID_REASON_REQUIRED;
-			this.state = new TestCaseFailedState( INVALID_REASON_REQUIRED );
+			this.updateState( new TestCaseFailedState( INVALID_REASON_REQUIRED, null ) );
 			return;
 		}
 
 		if( !this.validateResolution() ) {
 			this.valid = false;
 			this.invalidReason = INVALID_REASON_RESOLUTION;
-			this.state = new TestCaseFailedState( INVALID_REASON_RESOLUTION );
+			this.updateState( new TestCaseFailedState( INVALID_REASON_RESOLUTION, null ) );
 		}
 	}
 

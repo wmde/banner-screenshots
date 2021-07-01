@@ -1,6 +1,6 @@
 import { BrowserFactory, CONNECTION, factoryOptions } from "./src/TBBrowserFactory";
 import {CapabilityFactory} from "./src/TBCapabilityFactory";
-import {TBBatchRunner} from "./src/TBRunTestInBatches";
+import {TBBatchRunner} from "./src/TBBatchRunner";
 import {CliRequestFactory} from "./src/CliRrequestFactory";
 import {ScreenshotGenerator} from "./src/ScreenshotGenerator";
 
