@@ -1,4 +1,6 @@
 #!/usr/bin/env node -r esm
+// this interpeter call does not work on linux machines: 
+// https://unix.stackexchange.com/questions/63979/shebang-line-with-usr-bin-env-command-argument-fails-on-linux
 
 import glob from 'glob'
 import * as path from 'path';

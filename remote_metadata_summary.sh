@@ -1,4 +1,5 @@
 #!/bin/sh
+# needs bash on linux machines to work properly
 
 if [ -z "$1" ]; then
   echo "You must provide the remote server name!"
