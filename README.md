@@ -11,7 +11,7 @@ To run the tool, you need to set your testingbot credentials. You can get them b
 
 Then you can run the screenshot tool:
 
-    node -r esm index.js -c ../fundraising-banners/campaign_info.toml <CAMPAIGN_NAME>
+    node index.js -c ../fundraising-banners/campaign_info.toml <CAMPAIGN_NAME>
 
 The `-c` parameter is for locating the campaign configuration from the
 [`wmde/fundraising-banners`
@@ -89,7 +89,7 @@ im- and export it in `src/test_functions/index.js` and specify its name in
 ## Updating the screenshot metadata
 To update the metadata summary for the [Shutterbug UI](https://github.com/wmde/shutterbug), run the command
 
-    node -r esm ./metadata_summary.js
+    node ./metadata_summary.js
 
 Without any parameters, this will search the `banner-shots` directory for campaign directories and process their 
 `metadata.json` files. 
@@ -108,4 +108,4 @@ The user needs write access in the specified directory!
 
 Use the following command to run individual tests
 
-    node_modules/.bin/mocha -r esm test/specs/name_of_your_test.js 
+    npx mocha test/specs/name_of_your_test.js 
