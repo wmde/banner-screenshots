@@ -1,4 +1,4 @@
-const assert = require('assert')
+import { strict as assert } from 'assert';
 
 describe('webdriver.io page', () => {
     xit('should have the right title', () => {
