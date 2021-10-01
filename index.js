@@ -1,15 +1,16 @@
-import { BrowserFactory, CONNECTION, factoryOptions } from "./src/TBBrowserFactory";
-import {CapabilityFactory} from "./src/TBCapabilityFactory";
-import {TBBatchRunner} from "./src/TBBatchRunner";
-import {CliRequestFactory} from "./src/CliRequestFactory";
-import {ScreenshotGenerator} from "./src/ScreenshotGenerator";
+import { URL } from 'url';
+import { BrowserFactory, CONNECTION, factoryOptions } from "./src/TBBrowserFactory.js";
+import {CapabilityFactory} from "./src/TBCapabilityFactory.js";
+import {TBBatchRunner} from "./src/TBBatchRunner.js";
+import {CliRequestFactory} from "./src/CliRequestFactory.js";
+import {ScreenshotGenerator} from "./src/ScreenshotGenerator.js";
 
 const browserFactory = new BrowserFactory( CONNECTION,
 	new CapabilityFactory( factoryOptions )
 );
 const batchRunner = new TBBatchRunner( browserFactory );
 const screenshotGenerator = new ScreenshotGenerator( batchRunner );
-const requestFactory = new CliRequestFactory( __dirname );
+const requestFactory = new CliRequestFactory( new URL( '.', import.meta.url ).pathname );
 
 screenshotGenerator.generateScreenshots( requestFactory.getRequestParameters() )
 	.then ( testcases => {

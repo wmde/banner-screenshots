@@ -1,10 +1,10 @@
-#!/usr/bin/env node -r esm
+#!/usr/bin/env node
 
 import glob from 'glob'
 import * as path from 'path';
 import * as fs from 'fs';
 import meow from "meow";
-import MetadataSummarizer from "./src/MetadataSummarizer";
+import MetadataSummarizer from "./src/MetadataSummarizer.js";
 
 const SUMMARY_FILENAME = 'metadata_summary.json';
 

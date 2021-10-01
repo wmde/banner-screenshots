@@ -1,5 +1,5 @@
-import { shootBanner } from './shootBanner';
-import { shootBanner as shootOldBanner } from './shootOldBanner';
+import { shootBanner } from './shootBanner.js';
+import { shootBanner as shootOldBanner } from './shootOldBanner.js';
 
 export const testFunctions = {
 	shootBanner,

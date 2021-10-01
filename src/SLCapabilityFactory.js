@@ -1,4 +1,4 @@
-import {DEVICE, PLATFORM, ORIENTATION, RESOLUTION} from "./Dimensions";
+import {DEVICE, PLATFORM, ORIENTATION, RESOLUTION} from "./Dimensions.js";
 
 const DEVICE_NAMES = new Map( [
 	[ 'iphone_xs_max', { deviceName: 'iPhone XS Max Simulator', platformName: 'iOS', browserName: 'Safari', appiumVersion: '1.16.0', platformVersion: '13.2' } ],

@@ -1,8 +1,8 @@
-import {BANNER as BANNER_DIMENSION} from "./Dimensions";
+import {BANNER as BANNER_DIMENSION} from "./Dimensions.js";
 
-const toml = require( 'toml' );
-import {TestCaseGenerator} from "./TestCaseGenerator";
-import objectToMap from "./ObjectToMap";
+import toml from 'toml';
+import {TestCaseGenerator} from "./TestCaseGenerator.js";
+import objectToMap from "./ObjectToMap.js";
 
 // Campaign keys
 const PREVIEW_URL = 'preview_url';

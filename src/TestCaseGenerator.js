@@ -1,6 +1,6 @@
-import cartesian from './Cartesian';
-import {TestCase} from "./TestCase";
-import {ALLOWED_DIMENSIONS, BANNER, DEVICE, PLATFORM} from "./Dimensions";
+import cartesian from './Cartesian.js';
+import {TestCase} from "./TestCase.js";
+import {ALLOWED_DIMENSIONS, BANNER, DEVICE, PLATFORM} from "./Dimensions.js";
 
 export class TestCaseGenerator {
 	testCases;

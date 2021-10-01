@@ -5,7 +5,7 @@
  * @param {function} writeImageData
  * @return {Promise<void>}
  */
-import {TestCaseFinishedState, TestCaseIsRunningState} from "../TestCase";
+import {TestCaseFinishedState, TestCaseIsRunningState} from "../TestCase.js";
 
 export async function shootBanner( browser, testCase, writeImageData ) {
 	testCase.updateState( new TestCaseIsRunningState( "Testcase started" ) );
