@@ -30,7 +30,8 @@ const cli = meow(
 				type: 'string',
 				default: SUMMARY_FILENAME
 			}
-		}
+		},
+		importMeta: import.meta
 	} );
 
 
