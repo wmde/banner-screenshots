@@ -15,7 +15,7 @@
     "@wdio/mocha-framework": "^7.13.2",
     "@wdio/spec-reporter": "7.13.2",
     "@wdio/testingbot-service": "^7.13.2",
-    "chromedriver": "^93.0.1",
+    "chromedriver": "^94.0.0",
     "wdio-chromedriver-service": "^7.2.0"
   },
   "dependencies": {
