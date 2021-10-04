@@ -1,7 +1,7 @@
 import meow from "meow";
 import path from "path";
-import testFunctions from "./test_functions";
-import {ScreenshotsRequest} from "./ScreenshotGenerator";
+import testFunctions from "./test_functions/index.js";
+import {ScreenshotsRequest} from "./ScreenshotGenerator.js";
 
 export class CliRequestFactory {
 
@@ -56,9 +56,11 @@ export class CliRequestFactory {
 			console.log( `ERROR: Please provide an existing campaign name! \nSee --help for usage instructions.` );
 			process.exit( 2 );
 		}
+		console.log("cwd is ", this.cwd)
 		const campaignName = cli.input[0];
 		const screenshotPath = path.join( this.cwd, cli.flags.screenshotPath.toString() );
 		const configPath = path.join( this.cwd, cli.flags.configPath.toString() );
+		console.log("configPath is ", configPath)
 		const concurrentRequestLimit = cli.flags.concurrentRequestLimit;
 		const testFunctionName = cli.flags.testFunctionName;
 

@@ -1,7 +1,8 @@
-const assert = require('assert');
-const fs = require('fs');
-import {ConfigurationParser} from '../../src/ConfigurationParser';
-import { TestCaseGenerator } from "../../src/TestCaseGenerator";
+import { strict as assert } from 'assert';
+import fs from 'fs';
+import { URL } from 'url'; 
+import {ConfigurationParser} from '../../src/ConfigurationParser.js';
+import { TestCaseGenerator } from "../../src/TestCaseGenerator.js";
 
 const CAMPAIGN = 'desktop';
 const VALID_TOML = '/../data/valid.toml';
@@ -10,6 +11,8 @@ const MISSING_PREVIEW_URL_TOML = '/../data/missing_preview_url.toml';
 const MISSING_TEST_MATRIX_TOML = '/../data/missing_test_matrix.toml';
 
 describe('CampaignScreenshotGenerator', () => {
+
+	const __dirname = new URL( '.', import.meta.url ).pathname;
 
 	it('throws exception on toml parse error', () => {
 		assert.throws( () => {

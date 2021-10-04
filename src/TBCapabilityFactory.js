@@ -1,4 +1,4 @@
-import {DEVICE, PLATFORM, ORIENTATION, RESOLUTION} from "./Dimensions";
+import {DEVICE, PLATFORM, ORIENTATION, RESOLUTION} from "./Dimensions.js";
 
 const DEVICE_NAMES = new Map( [
 	//s6 is responding very slowly or not at all

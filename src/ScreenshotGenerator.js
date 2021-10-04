@@ -1,9 +1,9 @@
 import fs from "fs";
-import {ConfigurationParser} from "./ConfigurationParser";
+import {ConfigurationParser} from "./ConfigurationParser.js";
 import path from "path";
-import {createImageWriter} from "./writeImageData";
-import {serializeMapToArray} from "./serializeMapToArray";
-import {TestCaseSerializer} from "./TestcaseMetadata";
+import {createImageWriter} from "./writeImageData.js";
+import {serializeMapToArray} from "./serializeMapToArray.js";
+import {TestCaseSerializer} from "./TestcaseMetadata.js";
 
 const METADATA_FILENAME = 'metadata.json';
 

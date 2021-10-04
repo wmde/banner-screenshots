@@ -1,5 +1,5 @@
 import { strict as assert } from 'assert';
-import MetadataSummarizer from "../../src/MetadataSummarizer";
+import MetadataSummarizer from "../../src/MetadataSummarizer.js";
 
 function createMetaData( fieldGenerator ) {
 	const metaData = [];

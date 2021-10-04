@@ -4,11 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha -r esm test/specs"
+    "test": "mocha test/specs"
   },
+  "type": "module",
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "engines": {
+    "node": ">=15.0"
+  },
   "devDependencies": {
     "@wdio/cli": "^7.14.0",
     "@wdio/local-runner": "~7.13.2",
@@ -19,9 +23,8 @@
     "wdio-chromedriver-service": "^7.2.0"
   },
   "dependencies": {
-    "esm": "^3.2.25",
     "glob": "^7.2.0",
-    "meow": "^9.0",
+    "meow": "^10.0",
     "partition-all": "^1.0.1",
     "promise-queue": "^2.2.5",
     "toml": "^3.0.0",

@@ -1,8 +1,6 @@
-import {BANNER, RESOLUTION, PLATFORM} from "../../src/Dimensions";
-
-const assert = require('assert');
-
-import { TestCase, INVALID_REASON_REQUIRED, INVALID_REASON_RESOLUTION } from "../../src/TestCase";
+import { strict as assert } from 'assert';
+import {BANNER, RESOLUTION, PLATFORM} from "../../src/Dimensions.js";
+import { TestCase, INVALID_REASON_REQUIRED, INVALID_REASON_RESOLUTION } from "../../src/TestCase.js";
 
 describe('TestCase', () => {
 	const dimensions = [PLATFORM, RESOLUTION, BANNER];

@@ -1,4 +1,4 @@
-import { DEVICE, PLATFORM, RESOLUTION} from "./Dimensions";
+import { DEVICE, PLATFORM, RESOLUTION} from "./Dimensions.js";
 
 const PLATFORM_EXCLUDED_RESOLUTIONS = [
 	{
