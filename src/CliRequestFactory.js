@@ -50,7 +50,8 @@ export class CliRequestFactory {
 						type: 'string',
 						default: 'shootBanner'
 					}
-				}
+				},
+				importMeta: import.meta
 			} );
 		if (typeof cli.input[0] !== 'string' ) {
 			console.log( `ERROR: Please provide an existing campaign name! \nSee --help for usage instructions.` );
