@@ -13,7 +13,7 @@ export class CliRequestFactory {
 		const cli = meow(
 			`
 	Usage
-		node -r esm index.js [OPTION...] <CAMPAIGN_NAME>
+		node index.js [OPTION...] <CAMPAIGN_NAME>
 
 		<CAMPAIGN_NAME>			Name of the campaign to create screenshots of
 		
@@ -24,7 +24,7 @@ export class CliRequestFactory {
 		--testFunctionName, -t		Name of the test function, default: "shootBanner"
 		
 	Examples
-	$ node -r esm index.js desktop
+	$ node index.js desktop
 	`,
 			{
 				description: 'Create screenshots of a certain banner campaign',
@@ -50,7 +50,8 @@ export class CliRequestFactory {
 						type: 'string',
 						default: 'shootBanner'
 					}
-				}
+				},
+				importMeta: import.meta
 			} );
 		if (typeof cli.input[0] !== 'string' ) {
 			console.log( `ERROR: Please provide an existing campaign name! \nSee --help for usage instructions.` );
