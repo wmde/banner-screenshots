@@ -16,6 +16,9 @@ const DEVICE_NAMES = new Map( [
 	[ 'iphone_7_plus', { browserName : 'safari', platform : 'iOS', browserVersion : '11.4', platformName : 'iOS', deviceName : 'iPhone 7 Plus' } ],
 	[ 'iphone_11_pro_max', { browserName : 'safari', platform : 'iOS', browserVersion : '13.4', platformName : 'iOS', deviceName : 'iPhone 11 Pro Max' } ],
 	[ 'ipad_pro_9_7_inch', { browserName : 'safari', platform : 'iOS', browserVersion : '14.2', platformName : 'iOS', deviceName : 'iPad Pro (9.7-inch)' } ],
+	[ 'ipad', { browserName : 'safari', platform : 'BIGSUR', browserVersion : '14.2', platformName : 'iOS', deviceName : 'iPad (8th generation)' } ],
+	[ 'ipad_mini', { browserName : 'safari', platform : 'MONTEREY', browserVersion : '15.0', platformName : 'iOS', deviceName : 'iPad mini (6th generation)' } ],
+	[ 'ipad_pro_12_inc', { browserName : 'safari', platform : 'MONTEREY', browserVersion : '15.0', platformName : 'iOS', deviceName : 'iPad Pro (12.9-inch) (5th generation)' } ],
 ]);
 
 const PLATFORM_NAMES = new Map( [
