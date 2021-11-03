@@ -1,7 +1,7 @@
 import fs from "fs";
+import ampqlib from 'amqplib';
 import {ConfigurationParser} from "./ConfigurationParser";
 import path from "path";
-import {createImageWriter} from "./writeImageData.js";
 import {serializeMapToArray} from "./serializeMapToArray.js";
 import {TestCaseSerializer} from "./TestcaseMetadata.js";
 
@@ -34,20 +34,34 @@ export class ScreenshotsRequest {
 
 export class ScreenshotGenerator {
 
-	constructor( batchRunner ) {
-		this.batchRunner = batchRunner;
-	}
-
 	/**
 	 *
 	 * @param {ScreenshotsRequest} request
 	 * @returns {Promise<TestCase[]>}
 	 */
-	async generateScreenshots( request ) {
-		const { trackingName, outputDirectory, testCases, dimensions } = this.initialize( request );
-		await this.generateInBatches( testCases, request, outputDirectory );
-		this.writeMetaData( testCases, outputDirectory, trackingName, dimensions );
 
+	async generateQueuedScreenshots( request ) {
+		const { trackingName, outputDirectory, testCases, dimensions } = this.initialize( request );
+		const q = 'tasks';
+		const conn = await ampqlib.connect('amqp://localhost');
+		const ch = await conn.createChannel(conn);
+		await ch.assertQueue(q);
+
+		// TODO assert "metadata" queue and send "initmetadata" message
+
+		await Promise.all(testCases.map(tc => {
+				const msg = {
+					dimensionKeys: Array.from(tc.dimensions.keys()),
+					dimensionValues: Array.from(tc.dimensions.values()),
+					bannerUrl: tc.bannerUrl,
+					testFunction: request.testFunction,
+					trackingName,
+					outputDirectory
+				}
+				return ch.sendToQueue(q, Buffer.from(JSON.stringify(msg)));
+			  }))
+		await ch.close();
+		await conn.close();
 		return testCases;
 	}
 
@@ -73,36 +87,11 @@ export class ScreenshotGenerator {
 	}
 
 	/**
-	 * @private
-	 * @param {Array<TestCase>} testCases
-	 * @param {ScreenshotsRequest} request
-	 * @param {string} outputDirectory
-	 * @returns {Promise<void>}
-	 */
-	async generateInBatches( testCases, request, outputDirectory ) {
-		const imageWriter = await createImageWriter( outputDirectory );
-
-		/**
-		 * @param {TestCase} testCase
-		 * @param {Browser} browser
-		 * @returns {Promise}
-		 */
-		const testFunctionWithImageWriter = async (testCase, browser ) => {
-			try {
-				await request.testFunction( browser, testCase, imageWriter );
-			} catch( e ) {
-				console.log( "browser error", e );
-			}
-		};
-
-		await this.batchRunner.runTestsInBatches( request.concurrentRequestLimit, testCases, testFunctionWithImageWriter );
-	}
-
-	/**
 	 * @param {TestCase[]} testCases
 	 * @param {string} outputDirectory
 	 * @param {string} trackingName
 	 * @param {Map<string,string[]>} dimensions
+	 * @todo move into worker script
 	 */
 	writeMetaData( testCases, outputDirectory, trackingName, dimensions ) {
 		const testCaseSerializer = new TestCaseSerializer();

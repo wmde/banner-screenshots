@@ -25,6 +25,7 @@
     "wdio-chromedriver-service": "^7.2.6"
   },
   "dependencies": {
+    "amqplib": "^0.8.0",
     "commander": "^8.3.0",
     "partition-all": "^1.0.1",
     "promise-queue": "^2.2.5",
