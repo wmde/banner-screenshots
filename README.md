@@ -11,7 +11,7 @@ To run the tool, you need to set your testingbot credentials. You can get them b
 
 Then you can run the screenshot tool:
 
-    node index.js -c ../fundraising-banners/campaign_info.toml <CAMPAIGN_NAME>
+    node queue_tests.js -c ../fundraising-banners/campaign_info.toml <CAMPAIGN_NAME>
 
 The `-c` parameter is for locating the campaign configuration from the
 [`wmde/fundraising-banners`

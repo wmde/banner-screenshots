@@ -23,6 +23,7 @@
     "wdio-chromedriver-service": "^7.2.0"
   },
   "dependencies": {
+    "amqplib": "^0.8.0",
     "glob": "^7.2.0",
     "meow": "^10.0",
     "partition-all": "^1.0.1",
