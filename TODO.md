@@ -1,11 +1,3 @@
-# TODOs Message Queue refactoring
-- [ ] Move queue names into constants
-- [ ] Delete BatchRunner and getBrowsers method
-- [ ] Add metadata queue and processor
-	- [ ] Initialize metadata file when creating tests
-	- [ ] Update metadata file when test returns. Write last known status
-		into metadata.
-
 # TODOs
 - [ ] Add tests for ScreenshotGenerator
 - [ ] Collect start and end time of each test, write it to metadata and console output
