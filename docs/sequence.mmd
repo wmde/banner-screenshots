@@ -1,0 +1,16 @@
+sequenceDiagram
+    participant queue_screenshots.js
+    participant Test Case Queue
+    participant test_worker.js
+    participant Testingbot
+    queue_screenshots.js->>+Test Case Queue: multiple msg.test_case
+    activate Test Case Queue
+    queue_screenshots.js->>+Metadata Queue: msg.initialize_metadata
+    Metadata Queue->>+metadata_worker.js: msg.initialize_metadata
+    Test Case Queue->>+test_worker.js: msg.test_case
+    deactivate Test Case Queue
+    test_worker.js->>+Testingbot: instructions what to do
+    Testingbot->>-test_worker.js: screenshot
+    test_worker.js->>-Metadata Queue: test result (success/fail) (msg.update_test)
+    Metadata Queue->>-metadata_worker.js: msg.update_test
+
