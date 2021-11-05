@@ -2,19 +2,17 @@ import cartesian from './Cartesian.js';
 import {TestCase} from "./TestCase.js";
 import {ALLOWED_DIMENSIONS, BANNER, DEVICE, PLATFORM} from "./Dimensions.js";
 
+/**
+ * This is a builder class that creates TestCase instances from a list of dimensions
+ */
 export class TestCaseGenerator {
-	testCases;
-	dimensions;
-	pageNames;
-	pageNamePlaceholder;
-	bannerUrl;
+	testCases: TestCase[];
+	dimensions: Map<string, string[]>;
+	pageNames: Map<string, string>;
+	pageNamePlaceholder: string;
+	bannerUrl: string;
 
-	/**
-	 * @param {Map<string,string>} pageNames map short banner names (ctrl, var) to CentralNotice banner names
-	 * @param {string} bannerUrl Url that can contain a placeholder
-	 * @param {string} pageNamePlaceholder Placeholder string for banner names
-	 */
-	constructor( pageNames, bannerUrl, pageNamePlaceholder ) {
+	constructor( pageNames: Map<string,string>, bannerUrl: string, pageNamePlaceholder: string ) {
 		this.testCases = [];
 		this.dimensions = new Map();
 
@@ -24,29 +22,22 @@ export class TestCaseGenerator {
 	}
 
 
-	/**
-	 *
-	 * @param {string} key
-	 * @param {string[]} values
-	 * @returns {TestCaseGenerator}
-	 */
-	addDimension( key, values ) {
+	addDimension( key: string, values: string[] ): TestCaseGenerator {
 		if( ALLOWED_DIMENSIONS.indexOf( key ) === -1 ) {
 			throw new Error( `Invalid dimension: ${ key }` );
 		}
-		// TODO validate platform keys (list of available resolutions, browser and OS)
 		this.dimensions.set( key, values );
 		return this;
 	}
 
 
-	build() {
+	build(): void {
 		this.validate();
 
 		const matrix = cartesian.apply( this, Array.from( this.dimensions.values() ) );
 		const dimensionKeys = Array.from( this.dimensions.keys() );
 
-		matrix.forEach( dimensionValues => {
+		matrix.forEach( (dimensionValues: string[]): void => {
 			this.testCases.push(
 				new TestCase( dimensionKeys, dimensionValues, this.getBannerUrl( dimensionKeys, dimensionValues ) )
 			);
@@ -54,43 +45,16 @@ export class TestCaseGenerator {
 	}
 
 
-	/**
-	 *
-	 * @param {string[]} dimensionKeys
-	 * @param {string[]} dimensionValues
-	 * @returns {string}
-	 */
-	getBannerUrl( dimensionKeys, dimensionValues ) {
+	getBannerUrl( dimensionKeys: string[], dimensionValues: string[] ): string {
 		const bannerIndex = dimensionKeys.indexOf( BANNER );
 		return this.bannerUrl.replace( this.pageNamePlaceholder, this.pageNames.get( dimensionValues[ bannerIndex ] ) );
 	}
 
-
-	/**
-	 * @returns void
-	 */
-	validate() {
-		this.validateRequired();
+	private validate(): void {
 		this.validateDimensions();
 	}
 
-
-	/**
-	 * @returns void
-	 */
-	validateRequired() {
-		if( typeof this.pageNames === "undefined" ||
-			typeof this.pageNamePlaceholder === "undefined" ||
-			typeof this.bannerUrl === "undefined" ) {
-			throw new Error( 'You must supply banner url information before building' );
-		}
-	}
-
-
-	/**
-	 * @returns void
-	 */
-	validateDimensions() {
+	private validateDimensions(): void {
 		if( this.dimensions.has( DEVICE ) ) {
 			return;
 		}
@@ -101,18 +65,12 @@ export class TestCaseGenerator {
 	}
 
 	
-	/**
-	 * @returns {TestCase[]}
-	 */
-	getTestCases() {
+	getTestCases(): TestCase[] {
 		return this.testCases;
 	}
 
 
-	/**
-	 * @returns {TestCase[]}
-	 */
-	getValidTestCases() {
+	getValidTestCases(): TestCase[] {
 		return this.testCases.filter( testCase => testCase.isValid() );
 	}
 
