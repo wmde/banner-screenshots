@@ -14,16 +14,16 @@ const PLATFORM_EXCLUDED_RESOLUTIONS = [
 export const INVALID_REASON_REQUIRED = 'The required dimensions are missing';
 export const INVALID_REASON_RESOLUTION = 'This resolution is not available on this platform';
 
-class AbstractState {
-	finished;
-	description;
+abstract class TestCaseState {
+	finished: boolean;
+	description: string;
 
 	constructor() {
 		this.finished = false;
 	}
 }
 
-export class TestCasePendingState extends AbstractState {
+export class TestCasePendingState extends TestCaseState {
 
 	constructor() {
 		super();
@@ -31,36 +31,26 @@ export class TestCasePendingState extends AbstractState {
 	}
 }
 
-export class TestCaseFinishedState extends AbstractState {
-	/**
-	 * @param {string} description
-	 */
-	constructor( description ) {
+export class TestCaseFinishedState extends TestCaseState {
+	constructor( description: string ) {
 		super()
 		this.finished = true;
 		this.description = description
 	}
 }
 
-export class TestCaseIsRunningState extends AbstractState {
-	/**
-	 * @param {string} description
-	 */
-	constructor( description ) {
+export class TestCaseIsRunningState extends TestCaseState {
+	constructor( description: string ) {
 		super();
 		this.finished = false;
 		this.description = description;
 	}
 }
 
-export class TestCaseFailedState extends AbstractState {
-	error;
+export class TestCaseFailedState extends TestCaseState {
+	error?: Error;
 
-	/**
-	 * @param {string} description
-	 * @param {Error|null} error
-	 */
-	constructor( description, error ) {
+	constructor( description: string, error?: Error ) {
 		super();
 		this.description = description;
 		this.error = error;
@@ -68,21 +58,14 @@ export class TestCaseFailedState extends AbstractState {
 }
 
 export class TestCase {
-	valid;
-	invalidReason;
-	dimensions;
-	bannerUrl;
-	name;
-	state;
+	valid: boolean;
+	invalidReason: string;
+	dimensions: Map<string,string>;
+	bannerUrl: string;
+	name: string;
+	state: TestCaseState;
 
-
-	/**
-	 *
-	 * @param {[]} dimensionKeys
-	 * @param {[]} dimensionValues
-	 * @param {string} bannerUrl
-	 */
-	constructor( dimensionKeys, dimensionValues, bannerUrl ) {
+	constructor( dimensionKeys: string[], dimensionValues: string[], bannerUrl: string ) {
 		this.dimensions = new Map( dimensionValues.map( ( v, i ) => [ dimensionKeys[ i ], v ] ) );
 		this.bannerUrl = bannerUrl;
 		this.name = dimensionValues.join('__');
@@ -92,10 +75,8 @@ export class TestCase {
 	}
 
 
-	/**
-	 * @return {void}
-	 */
-	validate() {
+	// TODO Since this is platform-specific the validation and changing of the state should be moved to a different interface
+	private validate(): void {
 		this.valid = true;
 		this.invalidReason = '';
 
@@ -114,19 +95,12 @@ export class TestCase {
 	}
 
 
-	/**
-	 * @returns {boolean}
-	 */
-	validateRequiredDimensions() {
+	validateRequiredDimensions(): boolean {
 		if( this.dimensions.has( DEVICE ) ) return true;
 		return this.dimensions.has( PLATFORM );
 	}
 
-	/**
-	 *
-	 * @returns {boolean}
-	 */
-	validateResolution() {
+	validateResolution(): boolean {
 		const resolution = this.dimensions.get( RESOLUTION );
 		if( resolution === undefined ) return true;
 
@@ -148,47 +122,29 @@ export class TestCase {
 	}
 
 
-	/**
-	 * @returns {boolean}
-	 */
-	isValid() {
+	isValid(): boolean {
 		return this.valid;
 	}
 
 
-	/**
-	 * @returns {string}
-	 */
-	getBannerUrl() {
+	getBannerUrl(): string {
 		return this.bannerUrl;
 	}
 
-	/**
-	 * @returns {string}
-	 */
-	getName() {
+	getName(): string {
 		return this.name;
 	}
 
-	/**
-	 * @returns {string}
-	 */
-	getScreenshotFilename() {
+	getScreenshotFilename(): string {
 		return this.name  + '.png';
 	}
 
 
-	/**
-	 * @returns {Map}
-	 */
-	getDimensions() {
+	getDimensions(): Map<string, string> {
 		return this.dimensions;
 	}
 
-	/**
-	 * @param {TestCaseFailedState|TestCaseFinishedState|TestCaseIsRunningState} state
-	 */
-	updateState( state ) {
+	updateState( state: TestCaseState ) {
 		this.state = state;
 	}
 }
