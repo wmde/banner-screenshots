@@ -1,4 +1,3 @@
-import { URL } from 'url';
 import { BrowserFactory, CONNECTION, factoryOptions } from "./src/TBBrowserFactory.js";
 import {CapabilityFactory} from "./src/TBCapabilityFactory.js";
 import {TBBatchRunner} from "./src/TBBatchRunner.js";
@@ -10,7 +9,7 @@ const browserFactory = new BrowserFactory( CONNECTION,
 );
 const batchRunner = new TBBatchRunner( browserFactory );
 const screenshotGenerator = new ScreenshotGenerator( batchRunner );
-const requestFactory = new CliRequestFactory( new URL( '.', import.meta.url ).pathname );
+const requestFactory = new CliRequestFactory( process.cwd() );
 
 screenshotGenerator.generateScreenshots( requestFactory.getRequestParameters() )
 	.then ( testcases => {
