@@ -6,6 +6,7 @@
   },
   "include": [
 	  "./src/**/*",
-	  "./index.js"
+	  "./test/**/*",
+	  "./index.ts"
   ]
 }

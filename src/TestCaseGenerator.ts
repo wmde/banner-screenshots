@@ -1,6 +1,6 @@
-import cartesian from './Cartesian.js';
-import {TestCase} from "./TestCase.js";
-import {ALLOWED_DIMENSIONS, BANNER, DEVICE, PLATFORM} from "./Dimensions.js";
+import cartesian from './Cartesian';
+import {TestCase} from "./TestCase";
+import {ALLOWED_DIMENSIONS, BANNER, DEVICE, PLATFORM} from "./Dimensions";
 
 /**
  * This is a builder class that creates TestCase instances from a list of dimensions
