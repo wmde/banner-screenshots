@@ -1,9 +1,10 @@
 import fs from "fs";
-import ampqlib from 'amqplib';
+
 import {ConfigurationParser} from "./ConfigurationParser.js";
 import path from "path";
 import {serializeMapToArray} from "./serializeMapToArray.js";
 import {TestCaseSerializer} from "./TestcaseMetadata.js";
+import RabbitMQProducer from "./MessageQueue/RabbitMQProducer.js";
 
 const METADATA_FILENAME = 'metadata.json';
 
@@ -42,12 +43,10 @@ export class ScreenshotGenerator {
 
 	async generateQueuedScreenshots( request ) {
 		const { trackingName, outputDirectory, testCases, dimensions } = this.initialize( request );
-		const q = 'tasks';
-		const conn = await ampqlib.connect('amqp://localhost');
-		const ch = await conn.createChannel(conn);
-		await ch.assertQueue(q);
 
-		// TODO assert "metadata" queue and send "initmetadata" message
+		const queue = new RabbitMQProducer();
+
+		// TODO send "initmetadata" message
 
 		await Promise.all(testCases.map(tc => {
 				const msg = {
@@ -57,11 +56,10 @@ export class ScreenshotGenerator {
 					testFunction: request.testFunction,
 					trackingName,
 					outputDirectory
-				}
-				return ch.sendToQueue(q, Buffer.from(JSON.stringify(msg)));
+				};
+				return queue.sendTestCase( msg );
 			  }))
-		await ch.close();
-		await conn.close();
+		await queue.disconnect();
 		return testCases;
 	}
 
