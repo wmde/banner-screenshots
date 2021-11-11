@@ -1,5 +1,5 @@
 import fs from "fs";
-import {ConfigurationParser} from "./ConfigurationParser.js";
+import {ConfigurationParser} from "./ConfigurationParser";
 import path from "path";
 import {createImageWriter} from "./writeImageData.js";
 import {serializeMapToArray} from "./serializeMapToArray.js";

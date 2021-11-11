@@ -25,8 +25,8 @@
     "wdio-chromedriver-service": "^7.2.6"
   },
   "dependencies": {
+    "commander": "^8.3.0",
     "glob": "^7.2.0",
-    "meow": "^10.0",
     "partition-all": "^1.0.1",
     "promise-queue": "^2.2.5",
     "toml": "^3.0.0",
