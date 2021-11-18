@@ -1,7 +1,7 @@
 import { BrowserFactory, CONNECTION, factoryOptions } from "./src/TBBrowserFactory.js";
 import {CapabilityFactory} from "./src/TBCapabilityFactory.js";
 import {TBBatchRunner} from "./src/TBBatchRunner.js";
-import {CliRequestFactory} from "./src/CliRequestFactory.js";
+import {CliRequestFactory} from "./src/CliRequestFactory";
 import {ScreenshotGenerator} from "./src/ScreenshotGenerator.js";
 
 const browserFactory = new BrowserFactory( CONNECTION,

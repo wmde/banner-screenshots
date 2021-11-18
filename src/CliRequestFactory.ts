@@ -20,7 +20,6 @@ export class CliRequestFactory {
 			.option('-t --testFunctionName <name>', 'Name of the test function', 'shootBanner' )
 			.argument( '<CAMPAIGN_NAME>')
 			.action( (campaign) => {
-				console.log("campaign is", campaign )
 				campaignName = campaign
 			})
 			program.showHelpAfterError();
@@ -30,7 +29,6 @@ export class CliRequestFactory {
 		const screenshotPath = path.isAbsolute( screenshotPathOpt) ? screenshotPathOpt : path.join( this.cwd, screenshotPathOpt );
 		const configPathOpt = program.opts().configName;
 		const configPath = path.isAbsolute( configPathOpt) ? configPathOpt : path.join( this.cwd, configPathOpt );
-		console.log("configPath is ", configPath)
 		let concurrentRequestLimit = parseInt( program.opts().concurrentRequestLimit, 10 );
 		if ( isNaN( concurrentRequestLimit) || concurrentRequestLimit < 1 ) {
 			concurrentRequestLimit = 1;
