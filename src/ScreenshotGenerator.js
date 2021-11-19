@@ -3,7 +3,7 @@ import {ConfigurationParser} from "./ConfigurationParser";
 import path from "path";
 import {serializeMapToArray} from "./serializeMapToArray.js";
 import {TestCaseSerializer} from "./TestcaseMetadata.js";
-import RabbitMQProducer from "./MessageQueue/RabbitMQProducer.js";
+import RabbitMQProducer from "./MessageQueue/RabbitMQProducer";
 
 const METADATA_FILENAME = 'metadata.json';
 

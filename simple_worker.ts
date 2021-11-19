@@ -1,5 +1,5 @@
 // A simple "message echo" worker to test the server
-import RabbitMQConsumer from "./src/MessageQueue/RabbitMQConsumer.js";
+import RabbitMQConsumer from "./src/MessageQueue/RabbitMQConsumer";
 import {TestCaseMessage} from "./src/MessageQueue/Messages";
 
 const TASK_DELAY = 3000;

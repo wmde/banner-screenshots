@@ -1,4 +1,4 @@
-import {TestCaseMessage} from "./Messages";
+import { MetadataInitMessage, MetadataSummaryMessage, MetadataUpdateMessage, TestCaseMessage } from "./Messages";
 
 // Abstract class, should be an interface in TypeScript
 export default class QueueProducer {
@@ -6,16 +6,15 @@ export default class QueueProducer {
 		throw new Error("Not Implemented");
 	}
 
-	// TODO metadataInitMessage contains an array of test cases, the campaign name
-	async sendInitializeMetadata( metadataInitMessage ) {
+	async sendInitializeMetadata( metadataInitMessage: MetadataInitMessage ) {
 		throw new Error("Not Implemented");
 	}
 
-	async sendMetadataUpdate( newTestCaseStatusMessage ) {
+	async sendMetadataUpdate( newTestCaseStatusMessage: MetadataUpdateMessage ) {
 		throw new Error("Not Implemented");
 	}
-	// TODO metadataMessage contains test case name and output path
-	async sendMetadataSummary( metadataMessage ) {
+
+	async sendMetadataSummary( metadataMessage: MetadataSummaryMessage ) {
 		throw new Error("Not Implemented");
 	}
 

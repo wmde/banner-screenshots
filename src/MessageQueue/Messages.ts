@@ -1,3 +1,5 @@
+import { TestCase } from "../TestCase";
+
 export interface TestCaseMessage {
     dimensionKeys: string[];
     dimensionValues: string[];
@@ -8,3 +10,23 @@ export interface TestCaseMessage {
 }
 
 export type TestCaseMessageHandler = (TestCaseMessage) => Promise<void>;
+
+export interface MetadataUpdateMessage {
+    msgType: 'update';
+    testCase: TestCase;
+}
+
+export interface MetadataInitMessage {
+    msgType: 'init';
+    testCases: TestCase[];
+    campaignName: string;
+}
+
+export interface MetadataSummaryMessage {
+    msgType: 'summary';
+    campaignName: string;
+    outputDirectory: string;
+}
+
+export type MetadataMessage = MetadataUpdateMessage |  MetadataInitMessage | MetadataSummaryMessage;
+export type MetadataMessageHandler = (MetadataMessage) => Promise<void>;

@@ -1,19 +1,12 @@
-import {TestCaseMessageHandler } from "./Messages";
+import { MetadataMessageHandler, TestCaseMessageHandler } from "./Messages";
 
 export default class QueueConsumer {
-	/**
-	 * @param {function} onScreenshotMessage
-	 * @return never
-	 */
-	consumeScreenshotQueue( onScreenshotMessage: TestCaseMessageHandler ) {
+
+	consumeScreenshotQueue( onScreenshotMessage: TestCaseMessageHandler ): Promise<void> {
 		throw new Error("Not Implemented");
 	}
 
-	/**
-	 * @param {function} onMetaDataMessage
-	 * @return never
-	 */
-	consumeMetaDataQueue( onMetaDataMessage ) {
+	consumeMetaDataQueue( onMetaDataMessage: MetadataMessageHandler ): never {
 		throw new Error("Not Implemented");
 	}
 }

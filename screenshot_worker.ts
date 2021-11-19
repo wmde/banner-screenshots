@@ -3,7 +3,7 @@ import {shootBanner} from './src/test_functions/shootBanner.js'
 import { BrowserFactory, CONNECTION, factoryOptions } from "./src/TBBrowserFactory.js";
 import {CapabilityFactory} from "./src/TBCapabilityFactory.js";
 import {createImageWriter} from "./src/writeImageData.js";
-import RabbitMQConsumer from "./src/MessageQueue/RabbitMQConsumer.js";
+import RabbitMQConsumer from "./src/MessageQueue/RabbitMQConsumer";
 import {TestCaseMessage} from "./src/MessageQueue/Messages";
 
 const browserFactory = new BrowserFactory( CONNECTION,
