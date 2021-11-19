@@ -14,6 +14,7 @@ const consumer = new RabbitMQConsumer();
 // TODO
 // console.log("Connection established, hit Ctrl-C to quit worker");
 
+// TODO create ScreenshotMessage type
 consumer.consumeScreenshotQueue( async (msgData) => {
 	  console.log("processing message", msgData);
 	const writeImageData = await createImageWriter( msgData.outputDirectory );

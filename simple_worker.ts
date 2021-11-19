@@ -11,7 +11,7 @@ const consumer = new RabbitMQConsumer();
 consumer.consumeScreenshotQueue( async function(msg) {
   	console.log("processing message", msg);
 	console.log('started at', new Date())
-	return new Promise( (resolve) => setTimeout( () => {
+	return new Promise<void>( (resolve) => setTimeout( () => {
 		  console.log("processing finished at", new Date());
 		  resolve();
 	  }, TASK_DELAY ) );
