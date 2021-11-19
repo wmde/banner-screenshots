@@ -1,6 +1,6 @@
 import { Command } from 'commander';
 import * as path from "path";
-import testFunctions from "./test_functions";
+import testFunctions from "./test_functions/index";
 import {ScreenshotsRequest} from "./ScreenshotGenerator";
 
 export class CliRequestFactory {
@@ -24,7 +24,7 @@ export class CliRequestFactory {
 			})
 			program.showHelpAfterError();
 		program.parse();
-		
+
 		const screenshotPathOpt = program.opts().screenshotPath;
 		const screenshotPath = path.isAbsolute( screenshotPathOpt) ? screenshotPathOpt : path.join( this.cwd, screenshotPathOpt );
 		const configPathOpt = program.opts().configName;
