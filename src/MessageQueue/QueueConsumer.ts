@@ -1,9 +1,11 @@
+import {TestCaseMessageHandler } from "./Messages";
+
 export default class QueueConsumer {
 	/**
 	 * @param {function} onScreenshotMessage
 	 * @return never
 	 */
-	consumeScreenshotQueue( onScreenshotMessage ) {
+	consumeScreenshotQueue( onScreenshotMessage: TestCaseMessageHandler ) {
 		throw new Error("Not Implemented");
 	}
 

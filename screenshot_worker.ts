@@ -4,6 +4,7 @@ import { BrowserFactory, CONNECTION, factoryOptions } from "./src/TBBrowserFacto
 import {CapabilityFactory} from "./src/TBCapabilityFactory.js";
 import {createImageWriter} from "./src/writeImageData.js";
 import RabbitMQConsumer from "./src/MessageQueue/RabbitMQConsumer.js";
+import {TestCaseMessage} from "./src/MessageQueue/Messages";
 
 const browserFactory = new BrowserFactory( CONNECTION,
 	new CapabilityFactory( factoryOptions )
@@ -15,7 +16,7 @@ const consumer = new RabbitMQConsumer();
 // console.log("Connection established, hit Ctrl-C to quit worker");
 
 // TODO create ScreenshotMessage type
-consumer.consumeScreenshotQueue( async (msgData) => {
+consumer.consumeScreenshotQueue( async (msgData: TestCaseMessage) => {
 	  console.log("processing message", msgData);
 	const writeImageData = await createImageWriter( msgData.outputDirectory );
 	const testCase = new TestCase(msgData.dimensionKeys, msgData.dimensionValues, msgData.bannerUrl);

@@ -48,6 +48,7 @@ export class ScreenshotGenerator {
 		// TODO send "initmetadata" message
 
 		await Promise.all(testCases.map(tc => {
+				/// TODO type with TestCaseMessage
 				const msg = {
 					dimensionKeys: Array.from(tc.dimensions.keys()),
 					dimensionValues: Array.from(tc.dimensions.values()),

@@ -1,4 +1,4 @@
-import QueueProducer from "./QueueProducer.js";
+import QueueProducer from "./QueueProducer.ts";
 import ampqlib from "amqplib";
 import { SCREENSHOT_QUEUE } from './queue_names.js';
 

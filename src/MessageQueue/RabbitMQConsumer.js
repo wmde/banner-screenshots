@@ -29,6 +29,7 @@ export default class RabbitMQConsumer extends QueueConsumer {
 		this.ch.consume( SCREENSHOT_QUEUE, async function ( queuedScreenshotMessage ) {
 			if ( queuedScreenshotMessage !== null ){
 				const msgData = JSON.parse(queuedScreenshotMessage.content.toString());
+
 				await onScreenshotMessage( msgData );
 			}
 			channel.ack( queuedScreenshotMessage );
