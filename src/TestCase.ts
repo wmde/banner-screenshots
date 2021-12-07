@@ -1,4 +1,4 @@
-import { DEVICE, PLATFORM, RESOLUTION} from "./Dimensions.js";
+import { DEVICE, PLATFORM, RESOLUTION } from "./Dimensions.js";
 
 const PLATFORM_EXCLUDED_RESOLUTIONS = [
 	{
@@ -58,20 +58,25 @@ export class TestCaseFailedState extends TestCaseState {
 }
 
 export class TestCase {
-	valid: boolean;
-	invalidReason: string;
-	dimensions: Map<string,string>;
-	bannerUrl: string;
-	name: string;
-	state: TestCaseState;
+	private valid: boolean;
+	private invalidReason: string;
+	private dimensions: Map<string,string>;
+	private bannerUrl: string;
+	private name: string;
+	private state: TestCaseState;
 
-	constructor( dimensionKeys: string[], dimensionValues: string[], bannerUrl: string ) {
-		this.dimensions = new Map( dimensionValues.map( ( v, i ) => [ dimensionKeys[ i ], v ] ) );
-		this.bannerUrl = bannerUrl;
-		this.name = dimensionValues.join('__');
-		this.state = new TestCasePendingState();
+	private constructor() {
+	}
 
-		this.validate();
+	public static create( dimensionKeys: string[], dimensionValues: string[], bannerUrl: string ): TestCase {
+		const testCase = new TestCase();
+		testCase.dimensions = new Map( dimensionValues.map( ( v, i ) => [ dimensionKeys[ i ], v ] ) );
+		testCase.bannerUrl = bannerUrl;
+		testCase.name = dimensionValues.join('__');
+		testCase.state = new TestCasePendingState();
+
+		testCase.validate();
+		return testCase;
 	}
 
 
@@ -146,5 +151,9 @@ export class TestCase {
 
 	updateState( state: TestCaseState ) {
 		this.state = state;
+	}
+
+	getLastStateDescription(): string {
+		return this.state.description;
 	}
 }

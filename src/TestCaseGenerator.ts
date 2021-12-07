@@ -39,7 +39,7 @@ export class TestCaseGenerator {
 
 		matrix.forEach( (dimensionValues: string[]): void => {
 			this.testCases.push(
-				new TestCase( dimensionKeys, dimensionValues, this.getBannerUrl( dimensionKeys, dimensionValues ) )
+				TestCase.create( dimensionKeys, dimensionValues, this.getBannerUrl( dimensionKeys, dimensionValues ) )
 			);
 		} );
 	}
@@ -64,7 +64,7 @@ export class TestCaseGenerator {
 		}
 	}
 
-	
+
 	getTestCases(): TestCase[] {
 		return this.testCases;
 	}

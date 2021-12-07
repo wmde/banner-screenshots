@@ -6,7 +6,7 @@ describe('TestCase', () => {
 	const dimensions = [PLATFORM, RESOLUTION, BANNER];
 
 	it('is valid with correct data', () => {
-		const testCase = new TestCase(
+		const testCase = TestCase.create(
 			dimensions,
 			[ 'chrome_linux', '1280x960', 'ctrl' ],
 			'https://de.wikipedia.org'
@@ -16,30 +16,30 @@ describe('TestCase', () => {
 	});
 
 	it('is not valid with incorrect data', () => {
-		const testCase = new TestCase(
+		const testCase = TestCase.create(
 			[],
 			[],
 			'https://de.wikipedia.org'
 		);
 
 		assert.ok( !testCase.isValid() );
-		assert.strictEqual( testCase.invalidReason, INVALID_REASON_REQUIRED );
+		assert.strictEqual( testCase.getLastStateDescription(), INVALID_REASON_REQUIRED );
 	});
 
 	it('is not valid when operating system does not allow resolution', () => {
-		const testCase = new TestCase(
+		const testCase = TestCase.create(
 			dimensions,
 			[ 'chrome_macos', '800x600', 'ctrl' ],
 			'https://de.wikipedia.org'
 		);
 
 		assert.ok( !testCase.isValid() );
-		assert.strictEqual( testCase.invalidReason, INVALID_REASON_RESOLUTION );
+		assert.strictEqual( testCase.getLastStateDescription(), INVALID_REASON_RESOLUTION );
 	});
 
 	it('creates screenshot name', () => {
 
-		const testCase = new TestCase(
+		const testCase = TestCase.create(
 			dimensions,
 			[ 'chrome_win7', '1280x960', 'ctrl' ],
 			'https://de.wikipedia.org'
