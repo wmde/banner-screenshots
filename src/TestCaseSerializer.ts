@@ -1,4 +1,5 @@
 import {
+    TestCase,
     TestCaseFailedState,
     TestCaseFinishedState,
     TestCaseIsRunningState,
@@ -9,6 +10,15 @@ interface SerializedTestCaseState {
     stateName: string;
     description?: string;
     error?: string;
+}
+
+interface SerializedTestCase {
+    dimensionKeys: string[],
+    dimensionValues: string[],
+    bannerUrl: string,
+    state?: SerializedTestCaseState,
+    screenshotFilename?: string,
+    valid?: boolean
 }
 
 type SerializableStates = TestCasePendingState|TestCaseFailedState|TestCaseFinishedState|TestCaseIsRunningState;
@@ -39,5 +49,18 @@ export function unserializeTestCaseState( stateObj: SerializedTestCaseState ): S
             return new TestCaseFailedState( stateObj.description || DEFAULT_DESCRIPTION, err );
         default:
             throw new Error( 'Unknown state type: ' + stateObj.stateName );
+    }
+}
+
+export function serializeTestCase( testCase: TestCase ): SerializedTestCase {
+    const dimensions = testCase.getDimensions();
+    const state = Reflect.get(testCase, 'state')
+    return {
+        dimensionKeys: Array.from( dimensions.keys() ),
+        dimensionValues: Array.from( dimensions.values() ),
+        bannerUrl: testCase.getBannerUrl(),
+        state: serializeTestCaseState( state ),
+        screenshotFilename: testCase.getScreenshotFilename(),
+        valid: state.stateName !== 'failed'
     }
 }

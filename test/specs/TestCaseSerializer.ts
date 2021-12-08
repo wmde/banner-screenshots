@@ -1,11 +1,18 @@
 import { strict as assert } from 'assert';
 import {
+    TestCase,
     TestCaseFailedState,
     TestCaseFinishedState,
     TestCaseIsRunningState,
     TestCasePendingState
 } from "../../src/TestCase";
-import {DEFAULT_DESCRIPTION, serializeTestCaseState, unserializeTestCaseState} from "../../src/TestCaseSerializer";
+import {
+    DEFAULT_DESCRIPTION,
+    serializeTestCase,
+    serializeTestCaseState,
+    unserializeTestCaseState
+} from "../../src/TestCaseSerializer";
+import {BANNER, DEVICE, PLATFORM, RESOLUTION} from "../../src/Dimensions.js";
 
 describe('serializeTestCaseState', () => {
     it( 'serializes pending state', () => {
@@ -109,6 +116,27 @@ describe('unserializeTestCaseState', () => {
 
     it('fails when state name has unknown value not set', () => {
         assert.throws(() => unserializeTestCaseState({stateName: 'of emergency'}))
+    } );
+} );
+
+describe('serializeTestCase', () => {
+    it('serializes a test case', () => {
+        const testCase = TestCase.create(
+            [PLATFORM, BANNER, RESOLUTION],
+            ['firefox', 'ctrl', '1200x960'],
+            'https://example.com/'
+        );
+
+        assert.deepEqual(
+            serializeTestCase( testCase ),
+            {
+                dimensionKeys: [PLATFORM, BANNER, RESOLUTION],
+                dimensionValues: ['firefox', 'ctrl', '1200x960'],
+                bannerUrl: 'https://example.com/',
+                state: { stateName: 'pending', description: 'Test case is pending' },
+                screenshotFilename: 'firefox__ctrl__1200x960.png',
+                valid: true
+        } );
     } );
 } );
 
