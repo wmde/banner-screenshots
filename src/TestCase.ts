@@ -24,6 +24,7 @@ abstract class TestCaseState {
 }
 
 export class TestCasePendingState extends TestCaseState {
+	stateName = "pending" as const;
 
 	constructor() {
 		super();
@@ -32,6 +33,8 @@ export class TestCasePendingState extends TestCaseState {
 }
 
 export class TestCaseFinishedState extends TestCaseState {
+	stateName = "finished" as const;
+
 	constructor( description: string ) {
 		super()
 		this.finished = true;
@@ -40,6 +43,8 @@ export class TestCaseFinishedState extends TestCaseState {
 }
 
 export class TestCaseIsRunningState extends TestCaseState {
+	stateName = "running" as const;
+
 	constructor( description: string ) {
 		super();
 		this.finished = false;
@@ -48,6 +53,7 @@ export class TestCaseIsRunningState extends TestCaseState {
 }
 
 export class TestCaseFailedState extends TestCaseState {
+	stateName =  "failed" as const;
 	error?: Error;
 
 	constructor( description: string, error?: Error ) {
