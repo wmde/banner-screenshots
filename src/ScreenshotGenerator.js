@@ -4,6 +4,7 @@ import path from "path";
 import {serializeMapToArray} from "./serializeMapToArray.js";
 import {TestCaseSerializer} from "./TestcaseMetadata.js";
 import RabbitMQProducer from "./MessageQueue/RabbitMQProducer";
+import {serializeTestCase} from "./TestCaseSerializer";
 
 const METADATA_FILENAME = 'metadata.json';
 
@@ -47,18 +48,16 @@ export class ScreenshotGenerator {
 
 		// TODO send "initmetadata" message
 
-		await Promise.all(testCases.map(tc => {
+		await Promise.all( testCases.map( tc => {
 				/// TODO type with TestCaseMessage
 				const msg = {
-					dimensionKeys: Array.from(tc.dimensions.keys()),
-					dimensionValues: Array.from(tc.dimensions.values()),
-					bannerUrl: tc.bannerUrl,
+					testCase: serializeTestCase( tc ),
 					testFunction: request.testFunction,
 					trackingName,
 					outputDirectory
 				};
 				return queue.sendTestCase( msg );
-			  }))
+			  } ) )
 		await queue.disconnect();
 		return testCases;
 	}

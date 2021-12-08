@@ -12,7 +12,7 @@ interface SerializedTestCaseState {
     error?: string;
 }
 
-interface SerializedTestCase {
+export interface SerializedTestCase {
     dimensionKeys: string[],
     dimensionValues: string[],
     bannerUrl: string,

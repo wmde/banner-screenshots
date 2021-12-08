@@ -1,9 +1,7 @@
-import { TestCase } from "../TestCase";
+import {SerializedTestCase} from "../TestCaseSerializer";
 
 export interface TestCaseMessage {
-    dimensionKeys: string[];
-    dimensionValues: string[];
-    bannerUrl: string;
+    testCase: SerializedTestCase;
     outputDirectory: string;
     testFunction: string;
     trackingName: string;
@@ -13,12 +11,12 @@ export type TestCaseMessageHandler = (TestCaseMessage) => Promise<void>;
 
 export interface MetadataUpdateMessage {
     msgType: 'update';
-    testCase: TestCase;
+    testCase: SerializedTestCase;
 }
 
 export interface MetadataInitMessage {
     msgType: 'init';
-    testCases: TestCase[];
+    testCases: SerializedTestCase[];
     campaignName: string;
 }
 
