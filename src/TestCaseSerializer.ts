@@ -36,13 +36,13 @@ export function serializeTestCaseState( state: SerializableStates ): SerializedT
 
 export const DEFAULT_DESCRIPTION = 'UNKNOWN DESCRIPTION - check serializer and data';
 
+export function isSerializedTestCaseState( data: any ): data is SerializedTestCase {
+    return typeof data === 'object' && !!data.stateName;
+}
+
 export function unserializeTestCaseState( stateObj: SerializedTestCaseState ): SerializableStates {
-    // Runtime type checks for transpiled unserializer
-    if (typeof stateObj !== 'object' ) {
-        throw new Error( "Serialized test case state must be an object" );
-    }
-    if ( !stateObj.hasOwnProperty('stateName')) {
-        throw new Error( `Serialized test case state is missing require property "stateName"`)
+    if ( !isSerializedTestCaseState( stateObj ) ) {
+        throw new Error( 'Invalid state object')
     }
 
     switch ( stateObj.stateName ) {
@@ -70,16 +70,19 @@ export function serializeTestCase( testCase: TestCase ): SerializedTestCase {
     }
 }
 
+export function isSerializedTestCase( data: any ): data is SerializedTestCase {
+    return (typeof data) === 'object' && ['dimensionKeys', 'dimensionValues', 'bannerUrl'].reduce(
+        (isValid: boolean, propName: string ): boolean => {
+            return isValid && ( data.hasOwnProperty(propName) && !!data[propName] );
+        },
+        true
+    );
+}
+
 export function unserializeTestCase( testCaseObj: SerializedTestCase ): TestCase {
-    // Runtime type checks for transpiled unserializer
-    if (typeof testCaseObj !== 'object' ) {
-        throw new Error( "Serialized test case must be an object" );
+    if (!isSerializedTestCase( testCaseObj ) ) {
+        throw new Error( 'Invalid test case data' );
     }
-    ['dimensionKeys', 'dimensionValues', 'bannerUrl'].forEach( propName => {
-        if (!testCaseObj.hasOwnProperty(propName)) {
-            throw new Error( `Serialized test case is missing required property ${propName}` );
-        }
-    } );
 
     const testCase = TestCase.create(
         testCaseObj.dimensionKeys,

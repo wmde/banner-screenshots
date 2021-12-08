@@ -1,10 +1,19 @@
-import {SerializedTestCase} from "../TestCaseSerializer";
+import {isSerializedTestCase, SerializedTestCase} from "../TestCaseSerializer";
 
 export interface TestCaseMessage {
     testCase: SerializedTestCase;
     outputDirectory: string;
     testFunction: string;
     trackingName: string;
+}
+
+export function isTestCaseMessage( data: any ): data is TestCaseMessage {
+    return typeof data === 'object' &&
+        !!data.testCase &&
+        !!data.outputDirectory &&
+        !!data.testFunction &&
+        !!data.trackingName &&
+        isSerializedTestCase( data.testCase );
 }
 
 export type TestCaseMessageHandler = (TestCaseMessage) => Promise<void>;

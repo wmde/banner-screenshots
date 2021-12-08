@@ -1,6 +1,7 @@
 import QueueConsumer from './QueueConsumer';
 import ampqlib, {Channel, Connection} from "amqplib";
 import { SCREENSHOT_QUEUE } from './queue_names';
+import {isTestCaseMessage} from "./Messages";
 
 export default class RabbitMQConsumer extends QueueConsumer {
 
@@ -28,8 +29,12 @@ export default class RabbitMQConsumer extends QueueConsumer {
 		await this.channel.consume( SCREENSHOT_QUEUE, async function ( queuedScreenshotMessage ) {
 			if ( queuedScreenshotMessage !== null ){
 				const msgData = JSON.parse(queuedScreenshotMessage.content.toString());
+				if ( isTestCaseMessage( msgData ) ) {
+					throw new Error( 'Got invalid message data: ' + queuedScreenshotMessage )
+				}
 
 				await onScreenshotMessage( msgData );
+				
 			}
 			channel.ack( queuedScreenshotMessage );
 		} );
