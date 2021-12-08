@@ -9,7 +9,7 @@ import {
 import {
     DEFAULT_DESCRIPTION,
     serializeTestCase,
-    serializeTestCaseState,
+    serializeTestCaseState, unserializeTestCase,
     unserializeTestCaseState
 } from "../../src/TestCaseSerializer";
 import {BANNER, DEVICE, PLATFORM, RESOLUTION} from "../../src/Dimensions.js";
@@ -137,6 +137,76 @@ describe('serializeTestCase', () => {
                 screenshotFilename: 'firefox__ctrl__1200x960.png',
                 valid: true
         } );
+    } );
+} );
+
+describe('unserializeTestCase', () => {
+    it('unserializes a test case', () => {
+        const expectedTestCase = TestCase.create(
+            [PLATFORM, BANNER, RESOLUTION],
+            ['firefox', 'ctrl', '1200x960'],
+            'https://example.com/'
+        );
+
+        assert.deepEqual(
+            unserializeTestCase( {
+                dimensionKeys: [PLATFORM, BANNER, RESOLUTION],
+                dimensionValues: ['firefox', 'ctrl', '1200x960'],
+                bannerUrl: 'https://example.com/',
+                state: { stateName: 'pending', description: 'Test case is pending' },
+                screenshotFilename: 'firefox__ctrl__1200x960.png',
+                valid: true
+            } ),
+            expectedTestCase,
+        );
+    } );
+
+    it('ignores valid state and file name in serialized data', () => {
+        const expectedTestCase = TestCase.create(
+            [PLATFORM, BANNER, RESOLUTION],
+            ['firefox', 'ctrl', '1200x960'],
+            'https://example.com/'
+        );
+        expectedTestCase.updateState(new TestCaseFailedState( "The circuit's dead there's something wrong" ));
+
+        const testCase = unserializeTestCase( {
+                dimensionKeys: [PLATFORM, BANNER, RESOLUTION],
+                dimensionValues: ['firefox', 'ctrl', '1200x960'],
+                bannerUrl: 'https://example.com/',
+                state: { stateName: 'failed', description: "The circuit's dead there's something wrong" },
+                screenshotFilename: 'Not_A_Valid_File_Name.png',
+                valid: true
+            } );
+
+        assert.equal( testCase.isValid(), false );
+        assert.equal( testCase.getScreenshotFilename(), 'firefox__ctrl__1200x960.png' );
+    } );
+
+    it( 'fails when serialized data is invalid', () => {
+        const faultyData = [
+            [ '{}', 'String' ],
+            [ 0, 'Number' ],
+            [ true, 'Boolean' ],
+            [ {}, 'Empty object' ],
+            [ {dimensionValues: ['firefox'], bannerUrl: 'https://example.com/', }, 'missing dimension keus' ],
+            [ {dimensionKeys: [PLATFORM], bannerUrl: 'https://example.com/', }, 'missing dimension values' ],
+            [ {dimensionKeys: [PLATFORM], dimensionValues: ['firefox'] }, 'missing banner url' ]
+        ];
+
+        faultyData.forEach( ([misshapenObj, description]) => {
+            // @ts-ignore-errors
+            assert.throws(() => unserializeTestCase(misshapenObj), null, `${description} should cause an error`)
+        } );
+    } );
+
+    it( 'creates pending state when state is missing', () => {
+        const testCase = unserializeTestCase( {
+            dimensionKeys: [PLATFORM],
+            dimensionValues: ['firefox'],
+            bannerUrl: 'https://example.com/',
+        } );
+
+        assert.equal( testCase.getLastStateDescription(), 'Test case is pending' );
     } );
 } );
 

@@ -38,7 +38,7 @@ export const DEFAULT_DESCRIPTION = 'UNKNOWN DESCRIPTION - check serializer and d
 
 export function unserializeTestCaseState( stateObj: SerializedTestCaseState ): SerializableStates {
     if ( !stateObj.hasOwnProperty('stateName')) {
-        throw new Error("No stateName property found")
+        throw new Error(`Serialized test case state is missing require property "stateName"`)
     }
     switch ( stateObj.stateName ) {
         case "pending": return new TestCasePendingState();
@@ -61,6 +61,26 @@ export function serializeTestCase( testCase: TestCase ): SerializedTestCase {
         bannerUrl: testCase.getBannerUrl(),
         state: serializeTestCaseState( state ),
         screenshotFilename: testCase.getScreenshotFilename(),
-        valid: state.stateName !== 'failed'
+        valid: testCase.isValid()
     }
+}
+
+export function unserializeTestCase( testCaseObj: SerializedTestCase ): TestCase {
+    if (typeof testCaseObj !== 'object' ) {
+        throw new Error("Serialized test case must be an object" );
+    }
+    ['dimensionKeys', 'dimensionValues', 'bannerUrl'].forEach( propName => {
+        if (!testCaseObj.hasOwnProperty(propName)) {
+            throw new Error( `Serialized test case is missing required property ${propName}` );
+        }
+    } )
+    const testCase = TestCase.create(
+        testCaseObj.dimensionKeys,
+        testCaseObj.dimensionValues,
+        testCaseObj.bannerUrl
+    );
+    if ( testCaseObj.state ) {
+      testCase.updateState( unserializeTestCaseState( testCaseObj.state ) );
+    }
+    return testCase;
 }
