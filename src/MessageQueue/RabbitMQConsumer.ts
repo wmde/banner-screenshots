@@ -34,7 +34,7 @@ export default class RabbitMQConsumer extends QueueConsumer {
 				}
 
 				await onScreenshotMessage( msgData );
-				
+
 			}
 			channel.ack( queuedScreenshotMessage );
 		} );

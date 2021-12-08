@@ -74,6 +74,9 @@ export class TestCase {
 
 	public static create( dimensionKeys: string[], dimensionValues: string[], bannerUrl: string ): TestCase {
 		const testCase = new TestCase();
+		if (dimensionKeys.length !== dimensionValues.length ) {
+			throw new Error( 'You must provide the same number of dimension keys and values' );
+		}
 		testCase.dimensions = new Map( dimensionValues.map( ( v, i ) => [ dimensionKeys[ i ], v ] ) );
 		testCase.bannerUrl = bannerUrl;
 		testCase.name = dimensionValues.join('__');

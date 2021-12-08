@@ -47,4 +47,12 @@ describe('TestCase', () => {
 
 		assert.strictEqual( 'chrome_win7__1280x960__ctrl.png', testCase.getScreenshotFilename() );
 	});
+
+	it('cannot be created when dimension keys and values have different number of elements', () => {
+		assert.throws(() => TestCase.create(
+			[PLATFORM],
+			['firefox', '1024x768'],
+			'https://de.wikipedia.org'
+		))
+	} )
 });
