@@ -114,6 +114,19 @@ describe('unserializeTestCaseState', () => {
         assert.throws(() => unserializeTestCaseState({}))
     } );
 
+    it('fails when serialized data is not an object', () => {
+        const faultyData = [
+            [ '{"stateName":"pending"}', 'unserialized String' ],
+            [ '', 'empty String' ],
+            [ 0, 'Number' ],
+            [ true, 'Boolean' ],
+        ];
+        faultyData.forEach( ([misshapenObj, description]) => {
+            // @ts-ignore-errors
+            assert.throws(() => unserializeTestCaseState(misshapenObj), null, `${description} should cause an error`)
+        } );
+    } );
+
     it('fails when state name has unknown value not set', () => {
         assert.throws(() => unserializeTestCaseState({stateName: 'of emergency'}))
     } );
