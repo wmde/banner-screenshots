@@ -65,7 +65,6 @@ export class TestCaseFailedState extends TestCaseState {
 
 export class TestCase {
 	private valid: boolean;
-	private invalidReason: string;
 	private dimensions: Map<string,string>;
 	private bannerUrl: string;
 	private name: string;
@@ -89,18 +88,15 @@ export class TestCase {
 	// TODO Since this is platform-specific the validation and changing of the state should be moved to a different interface
 	private validate(): void {
 		this.valid = true;
-		this.invalidReason = '';
 
 		if( !this.validateRequiredDimensions() ) {
 			this.valid = false;
-			this.invalidReason = INVALID_REASON_REQUIRED;
 			this.updateState( new TestCaseFailedState( INVALID_REASON_REQUIRED, null ) );
 			return;
 		}
 
 		if( !this.validateResolution() ) {
 			this.valid = false;
-			this.invalidReason = INVALID_REASON_RESOLUTION;
 			this.updateState( new TestCaseFailedState( INVALID_REASON_RESOLUTION, null ) );
 		}
 	}

@@ -30,7 +30,6 @@ describe( 'MetadataSummarizer', () => {
 							// ... not important
 						],
 						"valid": true,
-						"invalidReason": "",
 						"bannerUrl": "https://de.wikipedia.org/wiki/Wikipedia:Hauptseite?banner=B20_WMDE_Test_Desktop",
 						"screenshotFilename": "win10__edge__1280x960__ctrl.png"
 					},
