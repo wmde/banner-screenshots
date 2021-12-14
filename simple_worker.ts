@@ -7,9 +7,7 @@ const config = EnvironmentConfig.create();
 
 const TASK_DELAY = 3000;
 
-const consumer = new RabbitMQConsumer( config.queueUrl );
-
-// console.log("Connection established, hit Ctrl-C to quit worker");
+const consumer = new RabbitMQConsumer( config.queueUrl, "Connection established, hit Ctrl-C to quit worker" );
 
 // "consume" will run in an endless loop, where the client waits for new messages
 consumer.consumeScreenshotQueue( async function( msg: TestCaseMessage ) {

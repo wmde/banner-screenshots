@@ -19,9 +19,7 @@ const browserFactory = new BrowserFactory( connectionOptions,
 	new CapabilityFactory( factoryOptions )
 );
 
-const consumer = new RabbitMQConsumer( config.queueUrl );
-
-console.log("Connection established, hit Ctrl-C to quit worker");
+const consumer = new RabbitMQConsumer( config.queueUrl, "Connection established, hit Ctrl-C to quit worker" );
 
 // TODO create ScreenshotMessage type
 consumer.consumeScreenshotQueue( async (msgData: TestCaseMessage) => {

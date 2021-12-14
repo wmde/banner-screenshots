@@ -6,12 +6,14 @@ import {isTestCaseMessage} from "./Messages";
 export default class RabbitMQConsumer extends QueueConsumer {
 
 	private readonly queueUrl: string;
+	private readonly readyMessage: string;
 	private conn: Connection;
 	private channel: Channel;
 
-	constructor( queueUrl: string ) {
+	constructor( queueUrl: string, readyMessage = '' ) {
 		super();
 		this.queueUrl = queueUrl;
+		this.readyMessage = readyMessage;
 	}
 
 	async initialize() {
@@ -30,7 +32,9 @@ export default class RabbitMQConsumer extends QueueConsumer {
 		// Since our processing function is async, we have to wait with fetching
 		// until we have acknowledged the message
 		await channel.prefetch(1);
-		// TODO check if we have a pre-consume function and execute it, to avoid the impression of the process "hanging"
+		if ( this.readyMessage ) {
+			console.log( this.readyMessage );
+		}
 		await this.channel.consume( SCREENSHOT_QUEUE, async function ( queuedScreenshotMessage ) {
 			if ( queuedScreenshotMessage !== null ){
 				const msgData = JSON.parse(queuedScreenshotMessage.content.toString());
