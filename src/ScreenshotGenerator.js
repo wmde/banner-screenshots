@@ -19,15 +19,13 @@ export class ScreenshotsRequest {
 	 * @param {string} configPath Path to campaign configuration
 	 * @param {string} screenshotPath Path to screenshots
 	 * @param {string} campaignName campaign configuration section name, e.g. "desktop" or "mobile"
-	 * @param {number} concurrentRequestLimit Maximum of concurrent requests to test service
-	 * @param {function} testFunction Code of test function
+	 * @param {string} testFunctionName Name of test function
 	 */
-	constructor(configPath, screenshotPath, campaignName, concurrentRequestLimit, testFunction) {
+	constructor(configPath, screenshotPath, campaignName, testFunctionName ) {
 		this.configPath = configPath;
 		this.screenshotPath = screenshotPath;
 		this.campaignName = campaignName;
-		this.concurrentRequestLimit = concurrentRequestLimit;
-		this.testFunction = testFunction;
+		this.testFunction = testFunctionName;
 	}
 }
 

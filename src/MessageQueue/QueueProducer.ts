@@ -1,6 +1,6 @@
 import { MetadataInitMessage, MetadataSummaryMessage, MetadataUpdateMessage, TestCaseMessage } from "./Messages";
 
-// Abstract class, should be an interface in TypeScript
+// Abstract class, should be an interface (or several interfaces) in TypeScript
 export default class QueueProducer {
 	async sendTestCase( testCaseMessage: TestCaseMessage ) {
 		throw new Error("Not Implemented");

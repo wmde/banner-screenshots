@@ -1,6 +1,6 @@
 import { Command } from 'commander';
 import * as path from "path";
-import testFunctions from "./test_functions/index";
+import { testFunctionExists } from "./test_functions";
 import {ScreenshotsRequest} from "./ScreenshotGenerator";
 
 export class CliRequestFactory {
@@ -16,7 +16,6 @@ export class CliRequestFactory {
 		program
 			.option('-s --screenshotPath <path>', 'Path to directory containing campaign directories with metadata', 'banner-shots')
 			.option('-c --configName <file>', 'Path to the campaign config file (toml)', 'campaign_info.toml' )
-			.option('-l --concurrentRequestLimit <limit>', 'Amount of concurrent requests to screenshot provider', '4' )
 			.option('-t --testFunctionName <name>', 'Name of the test function', 'shootBanner' )
 			.argument( '<CAMPAIGN_NAME>')
 			.action( (campaign) => {
@@ -29,18 +28,13 @@ export class CliRequestFactory {
 		const screenshotPath = path.isAbsolute( screenshotPathOpt) ? screenshotPathOpt : path.join( this.cwd, screenshotPathOpt );
 		const configPathOpt = program.opts().configName;
 		const configPath = path.isAbsolute( configPathOpt) ? configPathOpt : path.join( this.cwd, configPathOpt );
-		let concurrentRequestLimit = parseInt( program.opts().concurrentRequestLimit, 10 );
-		if ( isNaN( concurrentRequestLimit) || concurrentRequestLimit < 1 ) {
-			concurrentRequestLimit = 1;
-		}
-		const testFunctionName = program.opts().testFunctionName;
 
-		if (typeof testFunctions[testFunctionName] !== 'function' ) {
+		const testFunctionName = program.opts().testFunctionName;
+		if (!testFunctionExists(testFunctionName ) ) {
 			console.log( `Unknown test function "${ testFunctionName }"` );
 			process.exit( 2 );
 		}
-		const testFunction = testFunctions[testFunctionName];
 
-		return new ScreenshotsRequest( configPath, screenshotPath, campaignName, concurrentRequestLimit, testFunction );
+		return new ScreenshotsRequest( configPath, screenshotPath, campaignName, testFunctionName );
 	}
 }
