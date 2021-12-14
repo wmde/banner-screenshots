@@ -3,7 +3,6 @@ import {ConfigurationParser} from "./ConfigurationParser";
 import path from "path";
 import {serializeMapToArray} from "./serializeMapToArray.js";
 import {TestCaseSerializer} from "./TestcaseMetadata.js";
-import RabbitMQProducer from "./MessageQueue/RabbitMQProducer";
 import {serializeTestCase} from "./TestCaseSerializer";
 
 const METADATA_FILENAME = 'metadata.json';
@@ -32,8 +31,19 @@ export class ScreenshotsRequest {
 	}
 }
 
-
+/**
+ * This class is a use case that takes a ScreenshotsRequest, generates
+ * a test matrix from it and sends screenshot and metadata commands to the queues.
+ *
+ */
 export class ScreenshotGenerator {
+
+	/**
+	 * @param {QueueProducer} queueProducer
+	 */
+	constructor( queueProducer ) {
+		this.queue = queueProducer;
+	}
 
 	/**
 	 *
@@ -43,8 +53,6 @@ export class ScreenshotGenerator {
 
 	async generateQueuedScreenshots( request ) {
 		const { trackingName, outputDirectory, testCases, dimensions } = this.initialize( request );
-
-		const queue = new RabbitMQProducer();
 
 		// TODO send "initmetadata" message
 
@@ -56,9 +64,10 @@ export class ScreenshotGenerator {
 					trackingName,
 					outputDirectory
 				};
-				return queue.sendTestCase( msg );
+				return this.queue.sendTestCase( msg );
 			  } ) )
-		await queue.disconnect();
+		await this.queue.disconnect();
+		// TODO better return type objects: testcases + metadata file name
 		return testCases;
 	}
 

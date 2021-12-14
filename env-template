@@ -1,0 +1,7 @@
+# Connection Url for RabbitMQ
+# If you're running this in a Docker environment, replace localhost with the container name
+QUEUE_URL=ampq://localhost
+
+# Testingbot API credentials. Log in to your account at testingbot.com to see them
+TB_KEY=<testingbot team account key>
+TB_SECRET=<testingbot team account secret>

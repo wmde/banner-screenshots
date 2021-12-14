@@ -4,8 +4,14 @@ import { SCREENSHOT_QUEUE } from './queue_names';
 
 export default class RabbitMQProducer extends QueueProducer {
 
-	conn: Connection;
-	channel: Channel;
+	private readonly queueUrl: string;
+	private conn: Connection;
+	private channel: Channel;
+
+	constructor( queueUrl: string ) {
+		super();
+		this.queueUrl = queueUrl;
+	}
 
 	/**
 	 * @private
@@ -14,7 +20,7 @@ export default class RabbitMQProducer extends QueueProducer {
 	async initialize() {
 		if (!this.conn) {
 			// TODO get URL from constructor
-			this.conn = await ampqlib.connect('amqp://localhost');
+			this.conn = await ampqlib.connect( this.queueUrl );
 		}
 		if (!this.channel) {
 			this.channel = await this.conn.createChannel();

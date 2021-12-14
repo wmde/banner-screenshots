@@ -1,8 +1,8 @@
 import { remote, multiremote } from 'webdriverio';
 
-export const CONNECTION = {
-	user: process.env.TB_KEY,
-	key: process.env.TB_SECRET,
+export const DEFAULT_CONNECTION_PARAMS = {
+	user: '',
+	key: '',
 	services: [
 		['testingbot', {
 			tbTunnel: false
@@ -33,6 +33,9 @@ export class BrowserFactory {
 			this.connectionOptions,
 			{ capabilities: this.capabilityFactory.getCapabilities( testCase )}
 		);
+		if (!this.connectionOptions.user || !this.connectionOptions.key ) {
+			throw new Error( 'user and key must not be empty' );
+		}
 		return remote( browserOptions );
 	}
 

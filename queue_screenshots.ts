@@ -1,8 +1,12 @@
 import {CliRequestFactory} from "./src/CliRequestFactory";
 import {ScreenshotGenerator} from "./src/ScreenshotGenerator.js";
 import {TestCase} from "./src/TestCase";
+import EnvironmentConfig from "./src/EnvironmentConfig";
+import RabbitMQProducer from "./src/MessageQueue/RabbitMQProducer";
 
-const screenshotGenerator = new ScreenshotGenerator();
+const config = EnvironmentConfig.create();
+const queue = new RabbitMQProducer( config.queueUrl );
+const screenshotGenerator = new ScreenshotGenerator( queue );
 const requestFactory = new CliRequestFactory( process.cwd() );
 
 const requestParameters = requestFactory.getRequestParameters();

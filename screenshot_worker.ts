@@ -1,20 +1,27 @@
-import {TestCase} from './src/TestCase.js';
 import {shootBanner} from './src/test_functions/shootBanner.js'
-import { BrowserFactory, CONNECTION, factoryOptions } from "./src/TBBrowserFactory.js";
+import { BrowserFactory, DEFAULT_CONNECTION_PARAMS, factoryOptions } from "./src/TBBrowserFactory.js";
 import {CapabilityFactory} from "./src/TBCapabilityFactory.js";
 import {createImageWriter} from "./src/writeImageData.js";
 import RabbitMQConsumer from "./src/MessageQueue/RabbitMQConsumer";
 import {TestCaseMessage} from "./src/MessageQueue/Messages";
 import {unserializeTestCase} from "./src/TestCaseSerializer";
+import EnvironmentConfig from "./src/EnvironmentConfig";
 
-const browserFactory = new BrowserFactory( CONNECTION,
+const config = EnvironmentConfig.create();
+
+const connectionOptions = {
+	...DEFAULT_CONNECTION_PARAMS,
+	user: config.testingBotApiKey,
+	key: config.testingBotApiSecret
+}
+
+const browserFactory = new BrowserFactory( connectionOptions,
 	new CapabilityFactory( factoryOptions )
 );
 
-const consumer = new RabbitMQConsumer();
+const consumer = new RabbitMQConsumer( config.queueUrl );
 
-// TODO
-// console.log("Connection established, hit Ctrl-C to quit worker");
+console.log("Connection established, hit Ctrl-C to quit worker");
 
 // TODO create ScreenshotMessage type
 consumer.consumeScreenshotQueue( async (msgData: TestCaseMessage) => {

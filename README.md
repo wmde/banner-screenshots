@@ -2,21 +2,35 @@
 
 This is a tool for taking screenshots of WMDE fundraising banners on wikipedia.org in different browsers and resolutions.
 
+## Initial setup
+
+You need a running [RabbitMQ](https://www.rabbitmq.com/) instance. On your local machine you can start it in a Docker container with the following command:
+
+    docker run -d -p 5672:5672 rabbitmq
+
+This will expose the default port of 5672 on your local machine.
+
+You need to create the configuration file named `.env`. You can file an example of the contents in [`env-template`](env-template).
+You need to put the full URL to the RabbitMQ server and your testingbot credentials into the file. 
+You can get the credentials by logging in on testingbot.com.
+
+You need to start the screenshot worker and metadata worker like this:
+
+    npx ts-node screenshot_worker.ts
+    npx ts-node metadata_worker.ts
+
+TODO create docker-compose file that replaces this section of the README
+
 ## Creating Screenshots
 
-To run the tool, you need to set your testingbot credentials. You can get them by logging in on testingbot.com:
+Run the screenshot tool with the following command
 
-    export TB_KEY=<testingbot team account key>
-    export TB_SECRET=<testingbot team account secret>
-
-Then you can run the screenshot tool:
-
-    node queue_tests.js -c ../fundraising-banners/campaign_info.toml <CAMPAIGN_NAME>
+    npx ts-node queue_screenshots.ts -c ../fundraising-banners/campaign_info.toml <CAMPAIGN_NAME>
 
 The `-c` parameter is for locating the campaign configuration from the
 [`wmde/fundraising-banners`
 repository](https://github.com/wmde/fundraising-banners).
-`<CAMPAIGN_NAME>` must be one one the configuration keys of that
+`<CAMPAIGN_NAME>` must be one of the configuration keys of that
 configuration file, e.g. `desktop` or `mobile`.
 
 The screenshot tool will create a directory inside the `banner-shots` directory. The campaign directory contains the 
