@@ -1,17 +1,12 @@
 import fs from "fs";
 import {ConfigurationParser} from "./ConfigurationParser";
 import path from "path";
-import {serializeMapToArray} from "./serializeMapToArray.js";
-import {TestCaseSerializer} from "./TestcaseMetadata.js";
-import {serializeTestCase} from "./Model/TestCaseSerializer";
-
-const METADATA_FILENAME = 'metadata.json';
+import { serializeTestCase } from "./Model/TestCaseSerializer";
 
 export class ScreenshotsRequest {
 	campaignName;
 	configPath;
 	screenshotPath;
-	concurrentRequestLimit;
 	testFunction;
 
 	/**
@@ -88,27 +83,5 @@ export class ScreenshotGenerator {
 			outputDirectory,
 			dimensions: testCaseGenerator.dimensions
 		}
-	}
-
-	/**
-	 * @param {TestCase[]} testCases
-	 * @param {string} outputDirectory
-	 * @param {string} trackingName
-	 * @param {Map<string,string[]>} dimensions
-	 * @todo move into worker script
-	 */
-	writeMetaData( testCases, outputDirectory, trackingName, dimensions ) {
-		const testCaseSerializer = new TestCaseSerializer();
-		const metadata = {
-			createdOn: Date.now(),
-			campaign: trackingName,
-			dimensions: dimensions,
-			testCases: testCaseSerializer.serializeTestCases( testCases )
-		};
-
-		fs.writeFileSync(
-			path.join( outputDirectory, METADATA_FILENAME ),
-			JSON.stringify( metadata, serializeMapToArray, 4 )
-		);
 	}
 }
