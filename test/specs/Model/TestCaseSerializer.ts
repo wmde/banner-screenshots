@@ -34,11 +34,16 @@ describe('serializeTestCaseState', () => {
     } );
 
     it( 'serialized failed state', () => {
-        const state = new TestCaseFailedState('Could not reticulate the splines', Error('Reticulation not allowed, bad spline!') );
+        const failedState = new TestCaseFailedState('Could not reticulate the splines', Error( 'Reticulation not allowed, bad spline!' ) );
+        const failedStateWithoutError = new TestCaseFailedState('Could not reticulate the splines' );
 
         assert.deepEqual(
-            serializeTestCaseState( state),
-            { stateName: "failed", description: 'Could not reticulate the splines', error: 'Reticulation not allowed, bad spline!'}
+            serializeTestCaseState( failedState ),
+            { stateName: "failed", description: 'Could not reticulate the splines', error: 'Reticulation not allowed, bad spline!' }
+        );
+        assert.deepEqual(
+            serializeTestCaseState( failedStateWithoutError ),
+            { stateName: "failed", description: 'Could not reticulate the splines' }
         );
     } );
 

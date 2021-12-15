@@ -28,7 +28,7 @@ export function serializeTestCaseState( state: SerializableStates ): SerializedT
         stateName: state.stateName,
         description: state.description
     };
-    if (state.stateName === 'failed') {
+    if (state.stateName === 'failed' && state.error?.message ) {
         serialized.error = state.error.message;
     }
     return serialized;
