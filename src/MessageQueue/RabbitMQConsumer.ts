@@ -38,7 +38,7 @@ export default class RabbitMQConsumer extends QueueConsumer {
 		await this.channel.consume( SCREENSHOT_QUEUE, async function ( queuedScreenshotMessage ) {
 			if ( queuedScreenshotMessage !== null ){
 				const msgData = JSON.parse(queuedScreenshotMessage.content.toString());
-				if ( isTestCaseMessage( msgData ) ) {
+				if ( !isTestCaseMessage( msgData ) ) {
 					throw new Error( 'Got invalid message data: ' + queuedScreenshotMessage )
 				}
 
