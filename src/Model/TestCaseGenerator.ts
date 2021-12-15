@@ -1,4 +1,4 @@
-import cartesian from './Cartesian';
+import cartesian from '../Cartesian';
 import {TestCase} from "./TestCase";
 import {ALLOWED_DIMENSIONS, BANNER, DEVICE, PLATFORM} from "./Dimensions";
 

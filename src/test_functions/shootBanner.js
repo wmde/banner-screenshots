@@ -1,5 +1,5 @@
-import { RESOLUTION } from "../Dimensions.js";
-import {TestCaseFinishedState, TestCaseIsRunningState} from "../TestCase";
+import { RESOLUTION } from "../Model/Dimensions.js";
+import {TestCaseFinishedState, TestCaseIsRunningState} from "../Model/TestCase";
 
 /**
  *

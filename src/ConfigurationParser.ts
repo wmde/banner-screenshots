@@ -1,7 +1,7 @@
-import {BANNER as BANNER_DIMENSION} from "./Dimensions";
+import {BANNER as BANNER_DIMENSION} from "./Model/Dimensions";
 
 import { parse as parseTOML} from 'toml';
-import {TestCaseGenerator} from "./TestCaseGenerator";
+import {TestCaseGenerator} from "./Model/TestCaseGenerator";
 import objectToMap from "./ObjectToMap";
 
 // Campaign keys
@@ -78,7 +78,7 @@ export class ConfigurationParser {
 		testMatrix.forEach( ( values, key ) => {
 			matrix.addDimension( key, values );
 		} );
-		
+
 		matrix.build();
 
 		return matrix;

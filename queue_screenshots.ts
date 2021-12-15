@@ -1,6 +1,6 @@
 import {CliRequestFactory} from "./src/CliRequestFactory";
 import {ScreenshotGenerator} from "./src/ScreenshotGenerator.js";
-import {TestCase} from "./src/TestCase";
+import {TestCase} from "./src/Model/TestCase";
 import EnvironmentConfig from "./src/EnvironmentConfig";
 import RabbitMQProducer from "./src/MessageQueue/RabbitMQProducer";
 

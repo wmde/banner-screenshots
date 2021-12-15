@@ -5,14 +5,14 @@ import {
     TestCaseFinishedState,
     TestCaseIsRunningState,
     TestCasePendingState
-} from "../../src/TestCase";
+} from "../../../src/Model/TestCase";
 import {
     DEFAULT_DESCRIPTION,
     serializeTestCase,
     serializeTestCaseState, unserializeTestCase,
     unserializeTestCaseState
-} from "../../src/TestCaseSerializer";
-import {BANNER, DEVICE, PLATFORM, RESOLUTION} from "../../src/Dimensions.js";
+} from "../../../src/Model/TestCaseSerializer";
+import {BANNER, DEVICE, PLATFORM, RESOLUTION} from "../../../src/Model/Dimensions.js";
 
 describe('serializeTestCaseState', () => {
     it( 'serializes pending state', () => {

@@ -1,4 +1,4 @@
-import {PLATFORM} from "../../../src/Dimensions";
+import {PLATFORM} from "../../../src/Model/Dimensions";
 import {strict as assert} from "assert";
 import {isTestCaseMessage} from "../../../src/MessageQueue/Messages";
 

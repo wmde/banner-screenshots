@@ -1,7 +1,7 @@
 import { strict as assert } from 'assert';
 import * as fs from 'fs';
 import {ConfigurationParser} from '../../src/ConfigurationParser';
-import { TestCaseGenerator } from "../../src/TestCaseGenerator";
+import { TestCaseGenerator } from "../../src/Model/TestCaseGenerator";
 
 const CAMPAIGN = 'desktop';
 const VALID_TOML = '/../data/valid.toml';

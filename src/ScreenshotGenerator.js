@@ -3,7 +3,7 @@ import {ConfigurationParser} from "./ConfigurationParser";
 import path from "path";
 import {serializeMapToArray} from "./serializeMapToArray.js";
 import {TestCaseSerializer} from "./TestcaseMetadata.js";
-import {serializeTestCase} from "./TestCaseSerializer";
+import {serializeTestCase} from "./Model/TestCaseSerializer";
 
 const METADATA_FILENAME = 'metadata.json';
 

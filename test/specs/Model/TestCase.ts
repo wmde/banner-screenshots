@@ -1,6 +1,6 @@
 import { strict as assert } from 'assert';
-import {BANNER, RESOLUTION, PLATFORM} from "../../src/Dimensions";
-import { TestCase, INVALID_REASON_REQUIRED, INVALID_REASON_RESOLUTION } from "../../src/TestCase"
+import {BANNER, RESOLUTION, PLATFORM} from "../../../src/Model/Dimensions";
+import { TestCase, INVALID_REASON_REQUIRED, INVALID_REASON_RESOLUTION } from "../../../src/Model/TestCase"
 
 describe('TestCase', () => {
 	const dimensions = [PLATFORM, RESOLUTION, BANNER];

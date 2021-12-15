@@ -1,4 +1,4 @@
-import {isSerializedTestCase, SerializedTestCase} from "../TestCaseSerializer";
+import {isSerializedTestCase, SerializedTestCase} from "../Model/TestCaseSerializer";
 
 export interface TestCaseMessage {
     testCase: SerializedTestCase;

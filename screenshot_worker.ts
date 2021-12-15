@@ -3,7 +3,7 @@ import {CapabilityFactory} from "./src/TBCapabilityFactory.js";
 import {createImageWriter} from "./src/writeImageData.js";
 import RabbitMQConsumer from "./src/MessageQueue/RabbitMQConsumer";
 import {TestCaseMessage} from "./src/MessageQueue/Messages";
-import {unserializeTestCase} from "./src/TestCaseSerializer";
+import {unserializeTestCase} from "./src/Model/TestCaseSerializer";
 import EnvironmentConfig from "./src/EnvironmentConfig";
 import { getTestFunction } from "./src/test_functions";
 
