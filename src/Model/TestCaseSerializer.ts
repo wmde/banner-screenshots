@@ -5,6 +5,7 @@ import {
     TestCaseIsRunningState,
     TestCasePendingState,
 } from "./TestCase";
+import {Dimension, isValidDimension} from "./Dimension";
 
 interface SerializedTestCaseState {
     stateName: string;
@@ -84,8 +85,16 @@ export function unserializeTestCase( testCaseObj: SerializedTestCase ): TestCase
         throw new Error( 'Invalid test case data' );
     }
 
+    const dimensions = testCaseObj.dimensionKeys.reduce( (seenDimensions: Dimension[], currentDimension: string ) => {
+        if (!isValidDimension(currentDimension)) {
+            throw new Error( `${currentDimension} is not a valid dimension name.` )
+        }
+        seenDimensions.push( currentDimension );
+        return seenDimensions;
+    }, [] );
+
     const testCase = TestCase.create(
-        testCaseObj.dimensionKeys,
+        dimensions,
         testCaseObj.dimensionValues,
         testCaseObj.bannerUrl
     );

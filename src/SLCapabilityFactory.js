@@ -1,4 +1,4 @@
-import {DEVICE, PLATFORM, ORIENTATION, RESOLUTION} from "./Model/Dimensions.js";
+import { Dimension } from "./Model/Dimension.ts";
 
 const DEVICE_NAMES = new Map( [
 	[ 'iphone_xs_max', { deviceName: 'iPhone XS Max Simulator', platformName: 'iOS', browserName: 'Safari', appiumVersion: '1.16.0', platformVersion: '13.2' } ],
@@ -47,26 +47,25 @@ export class CapabilityFactory {
 			capabilityResult['sauce:options'] = Object.assign( {}, this.defaultCapabilities['sauce:options'] );
 		}
 
-		if ( dimensions.has( DEVICE ) ) {
-			const device = dimensions.get( DEVICE );
+		if ( dimensions.has( Dimension.DEVICE ) ) {
+			const device = dimensions.get( Dimension.DEVICE );
 			if ( !DEVICE_NAMES.has( device ) ) {
 				throw new Error( `Unsupported device: ${device}` )
 			}
 			capabilityResult = { ...DEVICE_NAMES.get( device ) };
-			capabilityResult.deviceOrientation = dimensions.has( ORIENTATION ) ? dimensions.get( ORIENTATION ) : 'portrait';
+			capabilityResult.deviceOrientation = dimensions.has( Dimension.ORIENTATION ) ? dimensions.get( Dimension.ORIENTATION ) : 'portrait';
 			return capabilityResult;
 		}
 		else {
-			const platform = dimensions.get( PLATFORM );
+			const platform = dimensions.get( Dimension.PLATFORM );
 			if ( !PLATFORM_NAMES.has( platform ) ) {
 				throw new Error( `Unsupported platform: ${platform}` )
 			}
 			capabilityResult = Object.assign( {}, capabilityResult, PLATFORM_NAMES.get( platform ) );
 		}
 
-		if ( dimensions.has( RESOLUTION ) ) {
-			// todo make more flexible than just saucelabs
-			capabilityResult['sauce:options'].screenResolution = dimensions.get( RESOLUTION );
+		if ( dimensions.has( Dimension.RESOLUTION ) ) {
+			capabilityResult['sauce:options'].screenResolution = dimensions.get( Dimension.RESOLUTION );
 		}
 
 		// SauceLabs supports only older browsers with one resolution on Linux & uses an old protocol for that

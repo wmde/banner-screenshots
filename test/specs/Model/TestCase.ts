@@ -1,9 +1,9 @@
 import { strict as assert } from 'assert';
-import {BANNER, RESOLUTION, PLATFORM} from "../../../src/Model/Dimensions";
+import { Dimension } from "../../../src/Model/Dimension";
 import { TestCase, INVALID_REASON_REQUIRED, INVALID_REASON_RESOLUTION } from "../../../src/Model/TestCase"
 
 describe('TestCase', () => {
-	const dimensions = [PLATFORM, RESOLUTION, BANNER];
+	const dimensions = [Dimension.PLATFORM, Dimension.RESOLUTION, Dimension.BANNER];
 
 	it('is valid with correct data', () => {
 		const testCase = TestCase.create(
@@ -50,7 +50,7 @@ describe('TestCase', () => {
 
 	it('cannot be created when dimension keys and values have different number of elements', () => {
 		assert.throws(() => TestCase.create(
-			[PLATFORM],
+			[Dimension.PLATFORM],
 			['firefox', '1024x768'],
 			'https://de.wikipedia.org'
 		))

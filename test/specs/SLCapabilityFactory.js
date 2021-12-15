@@ -1,7 +1,7 @@
 import { strict as assert } from 'assert';
 import { CapabilityFactory } from "../../src/SLCapabilityFactory.js";
 import { TestCase } from "../../src/Model/TestCase.ts";
-import {BANNER, DEVICE, PLATFORM, RESOLUTION} from "../../src/Model/Dimensions.js";
+import {BANNER, DEVICE, PLATFORM, RESOLUTION} from "../../src/Model/Dimension.ts";
 
 
 

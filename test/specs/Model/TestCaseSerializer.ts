@@ -12,7 +12,7 @@ import {
     serializeTestCaseState, unserializeTestCase,
     unserializeTestCaseState
 } from "../../../src/Model/TestCaseSerializer";
-import {BANNER, DEVICE, PLATFORM, RESOLUTION} from "../../../src/Model/Dimensions.js";
+import { Dimension } from "../../../src/Model/Dimension";
 
 describe('serializeTestCaseState', () => {
     it( 'serializes pending state', () => {
@@ -140,7 +140,7 @@ describe('unserializeTestCaseState', () => {
 describe('serializeTestCase', () => {
     it('serializes a test case', () => {
         const testCase = TestCase.create(
-            [PLATFORM, BANNER, RESOLUTION],
+            [Dimension.PLATFORM, Dimension.BANNER, Dimension.RESOLUTION],
             ['firefox', 'ctrl', '1200x960'],
             'https://example.com/'
         );
@@ -148,7 +148,7 @@ describe('serializeTestCase', () => {
         assert.deepEqual(
             serializeTestCase( testCase ),
             {
-                dimensionKeys: [PLATFORM, BANNER, RESOLUTION],
+                dimensionKeys: ['platform', 'banner', 'resolution'],
                 dimensionValues: ['firefox', 'ctrl', '1200x960'],
                 bannerUrl: 'https://example.com/',
                 state: { stateName: 'pending', description: 'Test case is pending' },
@@ -161,14 +161,14 @@ describe('serializeTestCase', () => {
 describe('unserializeTestCase', () => {
     it('unserializes a test case', () => {
         const expectedTestCase = TestCase.create(
-            [PLATFORM, BANNER, RESOLUTION],
+            [Dimension.PLATFORM, Dimension.BANNER, Dimension.RESOLUTION],
             ['firefox', 'ctrl', '1200x960'],
             'https://example.com/'
         );
 
         assert.deepEqual(
             unserializeTestCase( {
-                dimensionKeys: [PLATFORM, BANNER, RESOLUTION],
+                dimensionKeys: ['platform', 'banner', 'resolution'],
                 dimensionValues: ['firefox', 'ctrl', '1200x960'],
                 bannerUrl: 'https://example.com/',
                 state: { stateName: 'pending', description: 'Test case is pending' },
@@ -181,14 +181,14 @@ describe('unserializeTestCase', () => {
 
     it('ignores valid state and file name in serialized data', () => {
         const expectedTestCase = TestCase.create(
-            [PLATFORM, BANNER, RESOLUTION],
+            [Dimension.PLATFORM, Dimension.BANNER, Dimension.RESOLUTION],
             ['firefox', 'ctrl', '1200x960'],
             'https://example.com/'
         );
         expectedTestCase.updateState(new TestCaseFailedState( "The circuit's dead there's something wrong" ));
 
         const testCase = unserializeTestCase( {
-                dimensionKeys: [PLATFORM, BANNER, RESOLUTION],
+                dimensionKeys: ['platform', 'banner', 'resolution'],
                 dimensionValues: ['firefox', 'ctrl', '1200x960'],
                 bannerUrl: 'https://example.com/',
                 state: { stateName: 'failed', description: "The circuit's dead there's something wrong" },
@@ -206,9 +206,10 @@ describe('unserializeTestCase', () => {
             [ 0, 'Number' ],
             [ true, 'Boolean' ],
             [ {}, 'Empty object' ],
-            [ {dimensionValues: ['firefox'], bannerUrl: 'https://example.com/', }, 'missing dimension keus' ],
-            [ {dimensionKeys: [PLATFORM], bannerUrl: 'https://example.com/', }, 'missing dimension values' ],
-            [ {dimensionKeys: [PLATFORM], dimensionValues: ['firefox'] }, 'missing banner url' ]
+            [ {dimensionValues: ['firefox'], bannerUrl: 'https://example.com/', }, 'missing dimension keys' ],
+            [ {dimensionKeys: ['platform'], bannerUrl: 'https://example.com/', }, 'missing dimension values' ],
+            [ {dimensionKeys: ['platform'], dimensionValues: ['firefox'] }, 'missing banner url' ],
+            [ {dimensionKeys: ['operating_system'], dimensionValues: ['Windows'], bannerUrl: 'https://example.com/' }, 'unsupported dimension' ]
         ];
 
         faultyData.forEach( ([misshapenObj, description]) => {
@@ -219,7 +220,7 @@ describe('unserializeTestCase', () => {
 
     it( 'creates pending state when state is missing', () => {
         const testCase = unserializeTestCase( {
-            dimensionKeys: [PLATFORM],
+            dimensionKeys: ['platform'],
             dimensionValues: ['firefox'],
             bannerUrl: 'https://example.com/',
         } );

@@ -1,4 +1,4 @@
-import { RESOLUTION } from "../Model/Dimensions.js";
+import { Dimension } from "../Model/Dimension";
 import {TestCaseFinishedState, TestCaseIsRunningState} from "../Model/TestCase";
 
 /**
@@ -11,8 +11,8 @@ import {TestCaseFinishedState, TestCaseIsRunningState} from "../Model/TestCase";
 export async function shootBanner( browser, testCase, writeImageData ) {
 	testCase.updateState( new TestCaseIsRunningState( "Testcase started" ) );
 
-	if (testCase.dimensions.has(RESOLUTION)) {
-		const [width, height] = testCase.dimensions.get(RESOLUTION).split("x", 2);
+	if (testCase.dimensions.has( Dimension.RESOLUTION )) {
+		const [width, height] = testCase.dimensions.get( Dimension.RESOLUTION ).split( "x", 2 );
 		await browser.setWindowSize(Number(width), Number(height));
 	}
 

@@ -1,4 +1,4 @@
-import { DEVICE, PLATFORM, RESOLUTION } from "./Dimensions.js";
+import { Dimension } from "./Dimension";
 
 const PLATFORM_EXCLUDED_RESOLUTIONS = [
 	{
@@ -72,7 +72,7 @@ export class TestCase {
 	private constructor() {
 	}
 
-	public static create( dimensionKeys: string[], dimensionValues: string[], bannerUrl: string ): TestCase {
+	public static create( dimensionKeys: Dimension[], dimensionValues: string[], bannerUrl: string ): TestCase {
 		const testCase = new TestCase();
 		if (dimensionKeys.length !== dimensionValues.length ) {
 			throw new Error( 'You must provide the same number of dimension keys and values' );
@@ -102,15 +102,15 @@ export class TestCase {
 
 
 	validateRequiredDimensions(): boolean {
-		if( this.dimensions.has( DEVICE ) ) return true;
-		return this.dimensions.has( PLATFORM );
+		if( this.dimensions.has( Dimension.DEVICE ) ) return true;
+		return this.dimensions.has( Dimension.PLATFORM );
 	}
 
 	validateResolution(): boolean {
-		const resolution = this.dimensions.get( RESOLUTION );
+		const resolution = this.dimensions.get( Dimension.RESOLUTION );
 		if( resolution === undefined ) return true;
 
-		const platform = this.dimensions.get( PLATFORM );
+		const platform = this.dimensions.get( Dimension.PLATFORM );
 
 
 		let valid = true;

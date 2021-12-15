@@ -1,4 +1,4 @@
-import {BANNER as BANNER_DIMENSION} from "./Model/Dimensions";
+import { Dimension } from "./Model/Dimension";
 
 import { parse as parseTOML} from 'toml';
 import {TestCaseGenerator} from "./Model/TestCaseGenerator";
@@ -18,7 +18,7 @@ const PLACEHOLDER = '{{PLACEHOLDER}}';
 
 
 /**
- * Create a test case buildr (TestCaseGenerator) from a campagn TOML file
+ * Create a test case builder (TestCaseGenerator) from a campaign TOML file
  *
  * @todo The pattern of converting the raw JavaScript object that comes
  * from parsing TOML to a Map containing `any` values should be replaced
@@ -67,7 +67,7 @@ export class ConfigurationParser {
 		const banners = campaign.get( BANNERS );
 		const previewUrl = campaign.get( PREVIEW_URL );
 
-		testMatrix.set( BANNER_DIMENSION, Array.from( banners.keys() ) );
+		testMatrix.set( Dimension.BANNER, Array.from( banners.keys() ) );
 
 		const matrix = new TestCaseGenerator(
 			this.getBannerPlaceholders( banners ),
