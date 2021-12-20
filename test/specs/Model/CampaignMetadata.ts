@@ -2,7 +2,7 @@ import { strict as assert } from 'assert';
 
 import {Dimension} from "../../../src/Model/Dimension";
 import {TestCase} from "../../../src/Model/TestCase";
-import CampaignMetadata from "../../../src/Model/Metadata";
+import CampaignMetadata from "../../../src/Model/CampaignMetadata";
 
 describe( 'CampaignMetadata', () => {
     // Fixtures
