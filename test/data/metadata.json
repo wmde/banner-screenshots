@@ -1,0 +1,54 @@
+{
+  "createdOn": "2021-12-24T00:00:00.000Z",
+  "campaign": "test_campaign",
+  "dimensions": [
+    [
+      "device",
+      [
+        "iPhone 99"
+      ]
+    ],
+    [
+      "banner",
+      [
+        "CTRL"
+      ]
+    ]
+  ],
+  "testCases": [
+    {
+      "dimensionKeys": [
+        "device",
+        "banner"
+      ],
+      "dimensionValues": [
+        "iPhone 99",
+        "CTRL"
+      ],
+      "bannerUrl": "https>//example.com/banner",
+      "state": {
+        "stateName": "pending",
+        "description": "Test case is pending"
+      },
+      "screenshotFilename": "iPhone 99__CTRL.png",
+      "valid": true
+    },
+    {
+      "dimensionKeys": [
+        "device",
+        "banner"
+      ],
+      "dimensionValues": [
+        "iPhone 99",
+        "VAR"
+      ],
+      "bannerUrl": "https>//example.com/banner",
+      "state": {
+        "stateName": "pending",
+        "description": "Test case is pending"
+      },
+      "screenshotFilename": "iPhone 99__VAR.png",
+      "valid": true
+    }
+  ]
+}
