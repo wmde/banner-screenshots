@@ -39,11 +39,18 @@ export default class RabbitMQConsumer extends QueueConsumer {
 			if ( queuedScreenshotMessage !== null ){
 				const msgData = JSON.parse(queuedScreenshotMessage.content.toString());
 				if ( !isTestCaseMessage( msgData ) ) {
-					throw new Error( 'Got invalid message data: ' + queuedScreenshotMessage )
+					console.log( 'consumeScreenshotQueue received invalid message data: ', msgData );
+					channel.reject( queuedScreenshotMessage, false );
+					return;
 				}
 
-				await onScreenshotMessage( msgData );
-
+				try {
+					await onScreenshotMessage( msgData );
+				} catch ( e ) {
+					console.log( 'There was an error creating the screenshot', e, msgData );
+					channel.reject( queuedScreenshotMessage, false );
+					return;
+				}
 			}
 			channel.ack( queuedScreenshotMessage );
 		} );
@@ -62,12 +69,15 @@ export default class RabbitMQConsumer extends QueueConsumer {
 			if ( queuedMetadataMessage !== null ){
 				const msgData = JSON.parse( queuedMetadataMessage.content.toString() );
 
-				// TODO checking
-				// if ( !isMetadataMessage( msgData ) ) {
-				// 	throw new Error( 'Got invalid message data: ' + queuedMetadataMessage )
-				// }
+				// TODO check type of msgData similar to what we do in consumeScreenshotQueue
 
-				await onMetaDataMessage( msgData );
+				try {
+					await onMetaDataMessage( msgData );
+				} catch ( e ) {
+					console.log( 'There was an error handling the metadata', e, msgData );
+					channel.reject( queuedMetadataMessage, false );
+					return;
+				}
 			}
 			channel.ack( queuedMetadataMessage );
 		} );
