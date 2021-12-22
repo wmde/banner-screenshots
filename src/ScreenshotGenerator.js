@@ -2,6 +2,7 @@ import fs from "fs";
 import {ConfigurationParser} from "./ConfigurationParser";
 import path from "path";
 import { serializeTestCase } from "./Model/TestCaseSerializer";
+import {serializeDimensionsToEntries} from "./Model/MetadataSerializer";
 
 export class ScreenshotsRequest {
 	campaignName;
@@ -46,19 +47,24 @@ export class ScreenshotGenerator {
 
 	async generateQueuedScreenshots( request ) {
 		const { trackingName, outputDirectory, testCases, dimensions } = this.initialize( request );
+		const serializedTestCases = testCases.map( serializeTestCase );
 
-		// TODO send "initmetadata" message
+		await this.queue.sendInitializeMetadata( {
+			msgType: 'init',
+			testCases: serializedTestCases,
+			dimensions: serializeDimensionsToEntries( dimensions ),
+			campaignName: trackingName
+		} );
 
-		await Promise.all( testCases.map( tc => {
-				/// TODO type with TestCaseMessage
+		await Promise.all( serializedTestCases.map( tc => {
 				const msg = {
-					testCase: serializeTestCase( tc ),
+					testCase: tc,
 					testFunction: request.testFunction,
 					trackingName,
 					outputDirectory
 				};
 				return this.queue.sendTestCase( msg );
-			  } ) )
+			  } ) );
 		await this.queue.disconnect();
 		// TODO better return type objects: testcases + metadata file name
 		return testCases;
@@ -67,7 +73,7 @@ export class ScreenshotGenerator {
 	/**
 	 * @private
 	 * @param {ScreenshotsRequest} request
-	 * @returns {{testCases: TestCase[], outputDirectory: string, trackingName: string, dimensions: Map<string,string[]>}}
+	 * @returns {{testCases: TestCase[], outputDirectory: string, trackingName: string, dimensions: Dimensions}}
 	 */
 	initialize( request ) {
 		const config = fs.readFileSync( request.configPath );

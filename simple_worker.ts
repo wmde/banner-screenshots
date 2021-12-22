@@ -5,7 +5,7 @@ import EnvironmentConfig from "./src/EnvironmentConfig";
 
 const config = EnvironmentConfig.create();
 
-const TASK_DELAY = 3000;
+const TASK_DELAY = 500;
 
 const consumer = new RabbitMQConsumer( config.queueUrl, "Connection established, hit Ctrl-C to quit worker" );
 

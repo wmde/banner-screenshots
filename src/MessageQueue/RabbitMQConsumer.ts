@@ -1,7 +1,7 @@
 import QueueConsumer from './QueueConsumer';
 import ampqlib, {Channel, Connection} from "amqplib";
-import { SCREENSHOT_QUEUE } from './queue_names';
-import {isTestCaseMessage} from "./Messages";
+import {METADATA_QUEUE, SCREENSHOT_QUEUE} from './queue_names';
+import {isTestCaseMessage, MetadataMessageHandler} from "./Messages";
 
 export default class RabbitMQConsumer extends QueueConsumer {
 
@@ -46,6 +46,30 @@ export default class RabbitMQConsumer extends QueueConsumer {
 
 			}
 			channel.ack( queuedScreenshotMessage );
+		} );
+	}
+
+
+	async consumeMetaDataQueue(onMetaDataMessage: MetadataMessageHandler): Promise<void> {
+		await this.initialize();
+		await this.channel.assertQueue( METADATA_QUEUE );
+		const channel = this.channel;
+		await channel.prefetch(1);
+		if ( this.readyMessage ) {
+			console.log( this.readyMessage );
+		}
+		await this.channel.consume( METADATA_QUEUE, async function ( queuedMetadataMessage ) {
+			if ( queuedMetadataMessage !== null ){
+				const msgData = JSON.parse( queuedMetadataMessage.content.toString() );
+
+				// TODO checking
+				// if ( !isMetadataMessage( msgData ) ) {
+				// 	throw new Error( 'Got invalid message data: ' + queuedMetadataMessage )
+				// }
+
+				await onMetaDataMessage( msgData );
+			}
+			channel.ack( queuedMetadataMessage );
 		} );
 	}
 }

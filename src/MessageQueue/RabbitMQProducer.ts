@@ -1,6 +1,7 @@
 import QueueProducer from "./QueueProducer";
 import ampqlib, {Channel, Connection} from "amqplib";
-import { SCREENSHOT_QUEUE } from './queue_names';
+import {METADATA_QUEUE, SCREENSHOT_QUEUE} from './queue_names';
+import {MetadataInitMessage} from "./Messages";
 
 export default class RabbitMQProducer extends QueueProducer {
 
@@ -32,6 +33,14 @@ export default class RabbitMQProducer extends QueueProducer {
 		await this.channel.assertQueue(SCREENSHOT_QUEUE);
 		this.channel.sendToQueue(SCREENSHOT_QUEUE, Buffer.from(
 			JSON.stringify(testCaseMessage)
+		));
+	}
+
+	async sendInitializeMetadata(metadataInitMessage: MetadataInitMessage): Promise<void> {
+		await this.initialize();
+		await this.channel.assertQueue(METADATA_QUEUE);
+		this.channel.sendToQueue(METADATA_QUEUE, Buffer.from(
+			JSON.stringify(metadataInitMessage)
 		));
 	}
 

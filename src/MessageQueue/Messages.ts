@@ -1,4 +1,5 @@
 import {isSerializedTestCase, SerializedTestCase} from "../Model/TestCaseSerializer";
+import {DimensionEntries} from "../Model/MetadataSerializer";
 
 export interface TestCaseMessage {
     testCase: SerializedTestCase;
@@ -27,12 +28,12 @@ export interface MetadataInitMessage {
     msgType: 'init';
     testCases: SerializedTestCase[];
     campaignName: string;
+    dimensions: DimensionEntries;
 }
 
 export interface MetadataSummaryMessage {
     msgType: 'summary';
     campaignName: string;
-    outputDirectory: string;
 }
 
 export type MetadataMessage = MetadataUpdateMessage |  MetadataInitMessage | MetadataSummaryMessage;

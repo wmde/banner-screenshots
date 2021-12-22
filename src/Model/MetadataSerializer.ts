@@ -2,7 +2,7 @@ import CampaignMetadata from "./CampaignMetadata";
 import {Dimension, Dimensions} from "./Dimension";
 import {SerializedTestCase, serializeTestCase, unserializeTestCase} from "./TestCaseSerializer";
 
-type DimensionEntries = Array<[string, string[]]>;
+export type DimensionEntries = Array<[string, string[]]>;
 
 export interface SerializedCampaignMetadata {
     createdOn: string;
@@ -24,7 +24,7 @@ function isDimensionValue( dimensionCandidate: any ): dimensionCandidate is keyo
     return Dimension[dimensionCandidate.toUpperCase() as keyof typeof Dimension] !== undefined;
 }
 
-function serializeDimensionsToEntries( dimensions: Dimensions ): DimensionEntries {
+export function serializeDimensionsToEntries( dimensions: Dimensions ): DimensionEntries {
     const result: DimensionEntries = [];
     for( const [dimension, values] of dimensions.entries() ) {
         result.push( [ String(dimension), values ] );
@@ -39,7 +39,7 @@ export function unserializeDimension( dimensionName: any ): Dimension {
     return Dimension[dimensionName.toUpperCase() as keyof typeof Dimension]
 }
 
-function unserializeEntriesToDimensions( entries: DimensionEntries ): Dimensions {
+export function unserializeEntriesToDimensions( entries: DimensionEntries ): Dimensions {
     return new Map(
         entries.map(
             ([dimensionName, values]) => [ unserializeDimension( dimensionName ), values ]

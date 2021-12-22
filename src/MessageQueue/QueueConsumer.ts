@@ -6,7 +6,7 @@ export default class QueueConsumer {
 		throw new Error("Not Implemented");
 	}
 
-	consumeMetaDataQueue( onMetaDataMessage: MetadataMessageHandler ): never {
+	consumeMetaDataQueue( onMetaDataMessage: MetadataMessageHandler ): Promise<void> {
 		throw new Error("Not Implemented");
 	}
 }
