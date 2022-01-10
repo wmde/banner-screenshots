@@ -20,7 +20,7 @@
     "@wdio/spec-reporter": "7.14.1",
     "@wdio/testingbot-service": "^7.16.13",
     "chromedriver": "^94.0.0",
-    "wdio-chromedriver-service": "^7.2.0"
+    "wdio-chromedriver-service": "^7.2.6"
   },
   "dependencies": {
     "glob": "^7.2.0",
