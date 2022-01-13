@@ -20,8 +20,16 @@ export default class CampaignMetadata {
 
     getTestCase( name ): TestCase {
         if ( !this.testCases.has( name ) ) {
-            throw new Error( `Test case ${name} not found` );
+            throw new Error( `Test case "${name}" not found` );
         }
         return this.testCases.get( name );
+    }
+
+    updateTestCase( testCase: TestCase ): void {
+        let name = testCase.getName();
+        if ( !this.testCases.has( name ) ) {
+            throw new Error( `Test case "${name}" not part of this data set` );
+        }
+        this.testCases.set( name, testCase );
     }
 }
