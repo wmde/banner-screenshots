@@ -22,7 +22,7 @@ describe( 'serializeCampaignMetadata', () => {
     it( 'serializes dimensions', () => {
         const serialized =  serializeCampaignMetadata( Fixtures.campaignMetadata );
         const expectedDimensions = [
-            [ 'device', ['iPhone 99'] ],
+            [ 'device', ['iPhone_99'] ],
             [ 'banner', ['CTRL'] ],
         ];
 
@@ -43,7 +43,7 @@ describe( 'unserializeCampaignMetadata', () => {
         createdOn: '2021-12-24T00:00:00.000Z',
         campaign: 'test_campaign',
         dimensions: [
-            [ 'device', ['iPhone 99'] ],
+            [ 'device', ['iPhone_99'] ],
             [ 'banner', ['CTRL'] ],
         ],
         testCases: [
@@ -77,7 +77,7 @@ describe( 'unserializeCampaignMetadata', () => {
         assert.equal( newMeta.dimensions.size, 2 );
         assert.ok( newMeta.dimensions.has( Dimension.DEVICE ) );
         assert.ok( newMeta.dimensions.has( Dimension.BANNER ) );
-        assert.deepEqual( newMeta.dimensions.get( Dimension.DEVICE ), ['iPhone 99'] );
+        assert.deepEqual( newMeta.dimensions.get( Dimension.DEVICE ), ['iPhone_99'] );
         assert.deepEqual( newMeta.dimensions.get( Dimension.BANNER ), ['CTRL'] );
     } );
 

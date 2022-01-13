@@ -5,7 +5,7 @@
     [
       "device",
       [
-        "iPhone 99"
+        "iPhone_99"
       ]
     ],
     [
@@ -22,15 +22,15 @@
         "banner"
       ],
       "dimensionValues": [
-        "iPhone 99",
+        "iPhone_99",
         "CTRL"
       ],
-      "bannerUrl": "https>//example.com/banner",
+      "bannerUrl": "https://example.com/banner",
       "state": {
         "stateName": "pending",
         "description": "Test case is pending"
       },
-      "screenshotFilename": "iPhone 99__CTRL.png",
+      "screenshotFilename": "iPhone_99__CTRL.png",
       "valid": true
     },
     {
@@ -39,15 +39,15 @@
         "banner"
       ],
       "dimensionValues": [
-        "iPhone 99",
+        "iPhone_99",
         "VAR"
       ],
-      "bannerUrl": "https>//example.com/banner",
+      "bannerUrl": "https://example.com/banner",
       "state": {
         "stateName": "pending",
         "description": "Test case is pending"
       },
-      "screenshotFilename": "iPhone 99__VAR.png",
+      "screenshotFilename": "iPhone_99__VAR.png",
       "valid": true
     }
   ]
