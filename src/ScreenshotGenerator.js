@@ -65,7 +65,6 @@ export class ScreenshotGenerator {
 				};
 				return this.queue.sendTestCase( msg );
 			  } ) );
-		await this.queue.disconnect();
 		// TODO better return type objects: testcases + metadata file name
 		return testCases;
 	}

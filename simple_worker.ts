@@ -5,13 +5,15 @@ import EnvironmentConfig from "./src/EnvironmentConfig";
 import {TestCase, TestCaseFinishedState} from "./src/Model/TestCase";
 import RabbitMQProducer from "./src/MessageQueue/RabbitMQProducer";
 import {serializeTestCase, unserializeTestCase} from "./src/Model/TestCaseSerializer";
+import RabbitMQConnection from "./src/MessageQueue/RabbitMQConnection";
 
 const config = EnvironmentConfig.create();
 
 const TASK_DELAY = 500;
 
-const consumer = new RabbitMQConsumer( config.queueUrl, "Connection established, hit Ctrl-C to quit worker" );
-const producer = new RabbitMQProducer( config.queueUrl );
+const queueConnection = new RabbitMQConnection( config.queueUrl );
+const consumer = new RabbitMQConsumer( queueConnection, "Connection established, hit Ctrl-C to quit worker" );
+const producer = new RabbitMQProducer( queueConnection );
 
 async function sendMetadataUpdate( testCase: TestCase, campaignName: string  ): Promise<void> {
 	await producer.sendMetadataUpdate( {

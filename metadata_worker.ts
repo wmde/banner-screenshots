@@ -6,6 +6,7 @@ import {unserializeTestCase} from "./src/Model/TestCaseSerializer";
 import {unserializeEntriesToDimensions} from "./src/Model/MetadataSerializer";
 import {FileMetadataRepository} from "./src/FileMetadataRepository";
 import {Command} from "commander";
+import RabbitMQConnection from "./src/MessageQueue/RabbitMQConnection";
 
 const config = EnvironmentConfig.create();
 
@@ -16,7 +17,8 @@ program.showHelpAfterError();
 program.parse();
 
 const repo = new FileMetadataRepository( program.opts().screenshotPath );
-const consumer = new RabbitMQConsumer( config.queueUrl, "Connection established, hit Ctrl-C to quit worker" );
+const queueConnection = new RabbitMQConnection( config.queueUrl );
+const consumer = new RabbitMQConsumer( queueConnection, "Connection established, hit Ctrl-C to quit worker" );
 
 consumer.consumeMetaDataQueue( async ( msgData: MetadataMessage ) => {
     if ( msgData.msgType === 'init' ) {

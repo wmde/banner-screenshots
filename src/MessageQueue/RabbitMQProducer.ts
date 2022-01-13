@@ -1,63 +1,38 @@
 import QueueProducer from "./QueueProducer";
-import ampqlib, {Channel, Connection} from "amqplib";
 import {METADATA_QUEUE, SCREENSHOT_QUEUE} from './queue_names';
 import {MetadataInitMessage, MetadataUpdateMessage} from "./Messages";
+import RabbitMQConnection from "./RabbitMQConnection";
 
 export default class RabbitMQProducer extends QueueProducer {
 
-	private readonly queueUrl: string;
-	private conn: Connection;
-	private channel: Channel;
+	private readonly connection: RabbitMQConnection;
 
-	constructor( queueUrl: string ) {
+	constructor( connection: RabbitMQConnection ) {
 		super();
-		this.queueUrl = queueUrl;
-	}
-
-	/**
-	 * @private
-	 * @returns {Promise<void>}
-	 */
-	async initialize() {
-		if (!this.conn) {
-			// TODO get URL from constructor
-			this.conn = await ampqlib.connect( this.queueUrl );
-		}
-		if (!this.channel) {
-			this.channel = await this.conn.createChannel();
-		}
+		this.connection = connection;
 	}
 
 	async sendTestCase( testCaseMessage ): Promise<void> {
-		await this.initialize();
-		await this.channel.assertQueue(SCREENSHOT_QUEUE);
-		this.channel.sendToQueue(SCREENSHOT_QUEUE, Buffer.from(
+		await this.connection.initialize();
+		await this.connection.assertQueue( SCREENSHOT_QUEUE );
+		this.connection.getChannel().sendToQueue( SCREENSHOT_QUEUE, Buffer.from(
 			JSON.stringify(testCaseMessage)
 		));
 	}
 
 	async sendInitializeMetadata(metadataInitMessage: MetadataInitMessage): Promise<void> {
-		await this.initialize();
-		await this.channel.assertQueue(METADATA_QUEUE);
-		this.channel.sendToQueue(METADATA_QUEUE, Buffer.from(
+		await this.connection.initialize();
+		await this.connection.assertQueue(METADATA_QUEUE);
+		this.connection.getChannel().sendToQueue(METADATA_QUEUE, Buffer.from(
 			JSON.stringify(metadataInitMessage)
 		));
 	}
 
 	async sendMetadataUpdate(metadataUpdateMessage: MetadataUpdateMessage): Promise<void> {
-		await this.initialize();
-		await this.channel.assertQueue(METADATA_QUEUE);
-		this.channel.sendToQueue(METADATA_QUEUE, Buffer.from(
+		await this.connection.initialize();
+		await this.connection.assertQueue(METADATA_QUEUE);
+		this.connection.getChannel().sendToQueue(METADATA_QUEUE, Buffer.from(
 			JSON.stringify(metadataUpdateMessage)
 		));
-	}
-
-	async disconnect() {
-		if (this.channel) {
-			await this.channel.close();
-		}
-		if (this.conn) {
-			await this.conn.close();
-		}
 	}
 }

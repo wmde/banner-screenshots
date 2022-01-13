@@ -8,6 +8,7 @@ import EnvironmentConfig from "./src/EnvironmentConfig";
 import { getTestFunction } from "./src/test_functions";
 import RabbitMQProducer from "./src/MessageQueue/RabbitMQProducer";
 import {TestCase, TestCaseFailedState, TestCaseFinishedState} from "./src/Model/TestCase";
+import RabbitMQConnection from "./src/MessageQueue/RabbitMQConnection";
 
 const config = EnvironmentConfig.create();
 
@@ -21,8 +22,9 @@ const browserFactory = new BrowserFactory( connectionOptions,
 	new CapabilityFactory( factoryOptions )
 );
 
-const consumer = new RabbitMQConsumer( config.queueUrl, "Connection established, hit Ctrl-C to quit worker" );
-const producer = new RabbitMQProducer( config.queueUrl );
+const queueConnection = new RabbitMQConnection( config.queueUrl );
+const consumer = new RabbitMQConsumer( queueConnection, "Connection established, hit Ctrl-C to quit worker" );
+const producer = new RabbitMQProducer( queueConnection );
 
 
 const sendMetadataUpdate = async ( testCase: TestCase, campaignName: string ): Promise<void> =>
@@ -55,6 +57,5 @@ consumer.consumeScreenshotQueue( async (msgData: TestCaseMessage) => {
 
 	testCase.updateState( new TestCaseFinishedState( 'Finished' ) );
 	await sendMetadataUpdate( testCase, msgData.trackingName );
-	// TODO check if there is any trouble when using consumer and producer at the same time ...
 });
 

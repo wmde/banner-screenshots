@@ -1,41 +1,30 @@
 import QueueConsumer from './QueueConsumer';
-import ampqlib, {Channel, Connection} from "amqplib";
 import {METADATA_QUEUE, SCREENSHOT_QUEUE} from './queue_names';
 import {isTestCaseMessage, MetadataMessageHandler} from "./Messages";
+import RabbitMQConnection from "./RabbitMQConnection";
 
 export default class RabbitMQConsumer extends QueueConsumer {
 
-	private readonly queueUrl: string;
-	private readonly readyMessage: string;
-	private conn: Connection;
-	private channel: Channel;
+	private readonly connection: RabbitMQConnection;
+	private readyMessage: string;
 
-	constructor( queueUrl: string, readyMessage = '' ) {
+	constructor( connection: RabbitMQConnection, readyMessage: string = '' ) {
 		super();
-		this.queueUrl = queueUrl;
+		this.connection = connection;
 		this.readyMessage = readyMessage;
 	}
 
-	async initialize() {
-		if (!this.conn) {
-			this.conn = await ampqlib.connect( this.queueUrl );
-		}
-		if (!this.channel) {
-			this.channel = await this.conn.createChannel();
-		}
-	}
-
 	async consumeScreenshotQueue( onScreenshotMessage ): Promise<void> {
-		await this.initialize();
-		await this.channel.assertQueue( SCREENSHOT_QUEUE );
-		const channel = this.channel;
+		await this.connection.initialize();
+		await this.connection.assertQueue( SCREENSHOT_QUEUE );
+		const channel = this.connection.getChannel();
 		// Since our processing function is async, we have to wait with fetching
 		// until we have acknowledged the message
 		await channel.prefetch(1);
 		if ( this.readyMessage ) {
 			console.log( this.readyMessage );
 		}
-		await this.channel.consume( SCREENSHOT_QUEUE, async function ( queuedScreenshotMessage ) {
+		await channel.consume( SCREENSHOT_QUEUE, async function ( queuedScreenshotMessage ) {
 			if ( queuedScreenshotMessage === null ) {
 				channel.ack(queuedScreenshotMessage);
 				return;
@@ -61,14 +50,14 @@ export default class RabbitMQConsumer extends QueueConsumer {
 
 
 	async consumeMetaDataQueue(onMetaDataMessage: MetadataMessageHandler): Promise<void> {
-		await this.initialize();
-		await this.channel.assertQueue( METADATA_QUEUE );
-		const channel = this.channel;
+		await this.connection.initialize();
+		await this.connection.assertQueue( SCREENSHOT_QUEUE );
+		const channel = this.connection.getChannel();
 		await channel.prefetch(1);
 		if ( this.readyMessage ) {
 			console.log( this.readyMessage );
 		}
-		await this.channel.consume( METADATA_QUEUE, async function ( queuedMetadataMessage ) {
+		await channel.consume( METADATA_QUEUE, async function ( queuedMetadataMessage ) {
 			if ( queuedMetadataMessage === null ) {
 				channel.ack(queuedMetadataMessage);
 				return;
