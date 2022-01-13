@@ -29,4 +29,13 @@ consumer.consumeMetaDataQueue( async ( msgData: MetadataMessage ) => {
         // TODO check verbosity flag
         console.log( `Initialized metadata file for ${metadata.campaign}` );
     }
+    if ( msgData.msgType === 'update' ) {
+        const testCase = unserializeTestCase( msgData.testCase );
+        const metadata = repo.loadMetadata( msgData.campaignName );
+        metadata.updateTestCase( testCase );
+        repo.saveMetadata( metadata );
+        // TODO send MetadataSummaryMessage when all test cases have finished<
+        // TODO check verbosity flag
+        console.log(`Updated metadata for testcase ${msgData.testCase.screenshotFilename}`);
+    }
 } );

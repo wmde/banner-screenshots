@@ -22,6 +22,7 @@ export type TestCaseMessageHandler = (TestCaseMessage) => Promise<void>;
 export interface MetadataUpdateMessage {
     msgType: 'update';
     testCase: SerializedTestCase;
+    campaignName: string;
 }
 
 export interface MetadataInitMessage {

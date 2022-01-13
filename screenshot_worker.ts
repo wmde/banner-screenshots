@@ -3,9 +3,11 @@ import {CapabilityFactory} from "./src/TBCapabilityFactory.js";
 import {createImageWriter} from "./src/writeImageData.js";
 import RabbitMQConsumer from "./src/MessageQueue/RabbitMQConsumer";
 import {TestCaseMessage} from "./src/MessageQueue/Messages";
-import {unserializeTestCase} from "./src/Model/TestCaseSerializer";
+import {serializeTestCase, unserializeTestCase} from "./src/Model/TestCaseSerializer";
 import EnvironmentConfig from "./src/EnvironmentConfig";
 import { getTestFunction } from "./src/test_functions";
+import RabbitMQProducer from "./src/MessageQueue/RabbitMQProducer";
+import {TestCase, TestCaseFailedState, TestCaseFinishedState} from "./src/Model/TestCase";
 
 const config = EnvironmentConfig.create();
 
@@ -20,10 +22,17 @@ const browserFactory = new BrowserFactory( connectionOptions,
 );
 
 const consumer = new RabbitMQConsumer( config.queueUrl, "Connection established, hit Ctrl-C to quit worker" );
+const producer = new RabbitMQProducer( config.queueUrl );
 
-// TODO create ScreenshotMessage type
+
+const sendMetadataUpdate = async ( testCase: TestCase, campaignName: string ): Promise<void> =>
+	producer.sendMetadataUpdate( {
+		msgType: "update",
+		testCase: serializeTestCase( testCase ),
+		campaignName
+	} );
+
 consumer.consumeScreenshotQueue( async (msgData: TestCaseMessage) => {
-	  console.log("processing message", msgData);
 	const writeImageData = await createImageWriter( msgData.outputDirectory );
 	const testCase = unserializeTestCase( msgData.testCase );
 	  // TODO check if test case is valid and skip if not
@@ -32,7 +41,8 @@ consumer.consumeScreenshotQueue( async (msgData: TestCaseMessage) => {
 	try {
 		testFunction = getTestFunction( msgData.testFunction );
 	} catch ( e ) {
-		// TODO  send "metadataUpdate" msg with failed state of test case, using e.message
+		testCase.updateState( new TestCaseFailedState( 'Test function failed with error', e ) );
+		await sendMetadataUpdate( testCase, msgData.trackingName );
 		console.log(e);
 		return;
 	}
@@ -42,7 +52,9 @@ consumer.consumeScreenshotQueue( async (msgData: TestCaseMessage) => {
 	} catch (e) {
 		console.log(e);
 	}
-	// TODO use producer to send "metadataUpdate" msg with state of test case
+
+	testCase.updateState( new TestCaseFinishedState( 'Finished' ) );
+	await sendMetadataUpdate( testCase, msgData.trackingName );
 	// TODO check if there is any trouble when using consumer and producer at the same time ...
 });
 
