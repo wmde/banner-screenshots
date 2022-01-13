@@ -27,6 +27,11 @@ export class FileMetadataRepository implements CampaignMetadataRepository {
         fs.writeFileSync( fileName, metadataStr, 'utf-8' );
     }
 
+    getCampaignNames(): string[] {
+        const all = fs.readdirSync( this.campaignPath, { withFileTypes: true } );
+        return all.filter( f => f.isDirectory() && fs.existsSync( this.getFilename( f.name ) ) ).map( f => f.name );
+    }
+
     private getFilename( campaignName: string ): string {
         return path.join( this.campaignPath, campaignName, 'metadata.json' );
     }
