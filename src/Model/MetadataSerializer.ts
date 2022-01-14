@@ -11,7 +11,7 @@ export interface SerializedCampaignMetadata {
     testCases: SerializedTestCase[]
 }
 
-function isSerializedCampaignMetadata( data: any ): data is SerializedCampaignMetadata {
+export function isSerializedCampaignMetadata( data: any ): data is SerializedCampaignMetadata {
     return typeof data === 'object' &&
         data.createdOn &&
         !isNaN( Date.parse( data.createdOn ) ) &&

@@ -4,6 +4,8 @@ import path from 'path';
 import {serializeCampaignMetadata, unserializeCampaignMetadata} from "./Model/MetadataSerializer";
 import CampaignMetadata from "./Model/CampaignMetadata";
 
+export const METADATA_FILE = 'metadata.json';
+
 export class FileMetadataRepository implements CampaignMetadataRepository {
     private readonly campaignPath: string;
 
@@ -33,6 +35,6 @@ export class FileMetadataRepository implements CampaignMetadataRepository {
     }
 
     private getFilename( campaignName: string ): string {
-        return path.join( this.campaignPath, campaignName, 'metadata.json' );
+        return path.join( this.campaignPath, campaignName, METADATA_FILE );
     }
 }
