@@ -14,6 +14,7 @@ import {Command} from "commander";
 import path from "path";
 import fs from "fs";
 import summarizeMetadata from "./src/MetadataSummarizer";
+import {workerData} from "worker_threads";
 
 const config = EnvironmentConfig.create();
 
@@ -46,10 +47,7 @@ consumer.consumeMetaDataQueue( async ( msgData: MetadataMessage ) => {
         metadata.updateTestCase( testCase );
         repo.saveMetadata( metadata );
         if ( !metadata.hasPendingTestCases() ) {
-            await producer.sendMetadataSummary( {
-                msgType: 'summary',
-                campaignName: msgData.campaignName
-            } );
+            await producer.sendMetadataSummary( { msgType: 'summary' } );
         }
         // TODO check verbosity flag
         console.log(`Updated metadata for testcase ${msgData.testCase.screenshotFilename}`);

@@ -103,16 +103,18 @@ im- and export it in `src/test_functions/index.js` and specify its name in
 ## Updating the screenshot metadata
 To update the metadata summary for the [Shutterbug UI](https://github.com/wmde/shutterbug), run the command
 
-    node ./metadata_summary.js
+    npx ts-node /metadata_summary.js
 
-Without any parameters, this will search the `banner-shots` directory for campaign directories and process their 
-`metadata.json` files. 
+This will trigger a queued action that will take all `metadata.json` files in `banner-shots` subdirectories
+and create a `metadata_summary.json` file. 
 
 To update the banner data on a remote server, use the `remote_metadata_summary.sh` script:
 
     ./remote_metadata_summary.sh username@your-server /remote/path/to/banner-shots
 
-This will download all the metadata via scp, generate the summary file and upload the summary file.
+This will download all the metadata via scp to a temporary directory. You then have to copy the metadata 
+files to `banner-shots` and copy the generated `metadata_summary.json` file to the temporary directory. 
+The script will then upload the new version fo the summary
 
 The user needs write access in the specified directory!
 

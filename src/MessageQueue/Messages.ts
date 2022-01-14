@@ -34,7 +34,6 @@ export interface MetadataInitMessage {
 
 export interface MetadataSummaryMessage {
     msgType: 'summary';
-    campaignName: string;
 }
 
 export type MetadataMessage = MetadataUpdateMessage |  MetadataInitMessage | MetadataSummaryMessage;
