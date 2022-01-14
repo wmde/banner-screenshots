@@ -14,7 +14,6 @@ import {Command} from "commander";
 import path from "path";
 import fs from "fs";
 import summarizeMetadata from "./src/MetadataSummarizer";
-import {workerData} from "worker_threads";
 
 const config = EnvironmentConfig.create();
 
@@ -31,40 +30,42 @@ const consumer = new RabbitMQConsumer( queueConnection, "Connection established,
 const producer = new RabbitMQProducer( queueConnection );
 
 consumer.consumeMetaDataQueue( async ( msgData: MetadataMessage ) => {
-    if ( msgData.msgType === 'init' ) {
-        const metadata = new CampaignMetadata(
-            msgData.testCases.map( unserializeTestCase ),
-            unserializeEntriesToDimensions( msgData.dimensions ),
-            msgData.campaignName
-        );
-        repo.saveMetadata( metadata );
-        // TODO check verbosity flag
-        console.log( `Initialized metadata file for ${metadata.campaign}` );
-    }
-    if ( msgData.msgType === 'update' ) {
-        const testCase = unserializeTestCase( msgData.testCase );
-        const metadata = repo.loadMetadata( msgData.campaignName );
-        metadata.updateTestCase( testCase );
-        repo.saveMetadata( metadata );
-        if ( !metadata.hasPendingTestCases() ) {
-            await producer.sendMetadataSummary( { msgType: 'summary' } );
-        }
-        // TODO check verbosity flag
-        console.log(`Updated metadata for testcase ${msgData.testCase.screenshotFilename}`);
-    }
-    if ( msgData.msgType === 'summary' ) {
-        const allMetadata = repo.getCampaignNames().map( campaignName => {
-            const fn = path.join( screenshotPath, campaignName, METADATA_FILE );
-            const serializedMetadata = JSON.parse( fs.readFileSync( fn, 'utf-8' ) );
-            if ( !isSerializedCampaignMetadata( serializedMetadata ) ) {
-                throw new Error( `ERROR: File "${fn}" contained invalid metadata` );
+    switch ( msgData.msgType ) {
+        case "init":
+            const initialMetadata = new CampaignMetadata(
+                msgData.testCases.map(unserializeTestCase),
+                unserializeEntriesToDimensions(msgData.dimensions),
+                msgData.campaignName
+            );
+            repo.saveMetadata(initialMetadata);
+            // TODO check verbosity flag
+            console.log(`Initialized metadata file for ${initialMetadata.campaign}`);
+            break;
+        case "update":
+            const testCase = unserializeTestCase(msgData.testCase);
+            const metadata = repo.loadMetadata(msgData.campaignName);
+            metadata.updateTestCase(testCase);
+            repo.saveMetadata(metadata);
+            if ( !metadata.hasPendingTestCases() ) {
+                await producer.sendMetadataSummary({msgType: 'summary'});
             }
-            return serializedMetadata;
-        } );
-        const summary = summarizeMetadata( allMetadata );
-        const summaryFileName = path.join( screenshotPath, 'metadata_summary.json' );
-        fs.writeFileSync( summaryFileName, JSON.stringify( summary, null, 4 ), 'utf-8' );
-        // TODO check verbosity flag
-        console.log(`Updated metadata summary`);
+            // TODO check verbosity flag
+            console.log(`Updated metadata for testcase ${msgData.testCase.screenshotFilename}`);
+            break;
+        case "summary":
+            const allMetadata = repo.getCampaignNames().map(campaignName => {
+                const fn = path.join(screenshotPath, campaignName, METADATA_FILE);
+                const serializedMetadata = JSON.parse(fs.readFileSync(fn, 'utf-8'));
+                if (!isSerializedCampaignMetadata(serializedMetadata)) {
+                    throw new Error(`ERROR: File "${fn}" contained invalid metadata`);
+                }
+                return serializedMetadata;
+            });
+            const summary = summarizeMetadata(allMetadata);
+            const summaryFileName = path.join(screenshotPath, 'metadata_summary.json');
+            fs.writeFileSync(summaryFileName, JSON.stringify(summary, null, 4), 'utf-8');
+            // TODO check verbosity flag
+            console.log(`Updated metadata summary`);
+            break;
     }
 } );
