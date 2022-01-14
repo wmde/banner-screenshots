@@ -19,11 +19,13 @@ const config = EnvironmentConfig.create();
 
 const program = new Command();
 program.option('-s --screenshotPath <path>', 'Path to directory containing campaign directories with metadata', 'banner-shots');
-// TODO add verbosity flag for logging
+program.option('-v --verbose', 'Show output');
 program.showHelpAfterError();
 program.parse();
 
-const screenshotPath = program.opts().screenshotPath;
+const options = program.opts();
+const screenshotPath = options.screenshotPath;
+const showMessage = options.verbose ? console.log : () => {};
 const repo = new FileMetadataRepository( screenshotPath );
 const queueConnection = new RabbitMQConnection( config.queueUrl );
 const consumer = new RabbitMQConsumer( queueConnection, "Connection established, hit Ctrl-C to quit worker" );
@@ -38,8 +40,7 @@ consumer.consumeMetaDataQueue( async ( msgData: MetadataMessage ) => {
                 msgData.campaignName
             );
             repo.saveMetadata(initialMetadata);
-            // TODO check verbosity flag
-            console.log(`Initialized metadata file for ${initialMetadata.campaign}`);
+            showMessage(`Initialized metadata file for ${initialMetadata.campaign}`);
             break;
         case "update":
             const testCase = unserializeTestCase(msgData.testCase);
@@ -49,8 +50,7 @@ consumer.consumeMetaDataQueue( async ( msgData: MetadataMessage ) => {
             if ( !metadata.hasPendingTestCases() ) {
                 await producer.sendMetadataSummary({msgType: 'summary'});
             }
-            // TODO check verbosity flag
-            console.log(`Updated metadata for testcase ${msgData.testCase.screenshotFilename}`);
+            showMessage(`Updated metadata for testcase ${msgData.testCase.screenshotFilename}`);
             break;
         case "summary":
             const allMetadata = repo.getCampaignNames().map(campaignName => {
@@ -64,8 +64,7 @@ consumer.consumeMetaDataQueue( async ( msgData: MetadataMessage ) => {
             const summary = summarizeMetadata(allMetadata);
             const summaryFileName = path.join(screenshotPath, 'metadata_summary.json');
             fs.writeFileSync(summaryFileName, JSON.stringify(summary, null, 4), 'utf-8');
-            // TODO check verbosity flag
-            console.log(`Updated metadata summary`);
+            showMessage(`Updated metadata summary`);
             break;
     }
 } );
