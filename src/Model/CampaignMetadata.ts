@@ -32,4 +32,13 @@ export default class CampaignMetadata {
         }
         this.testCases.set( name, testCase );
     }
+
+    hasPendingTestCases(): boolean {
+        for ( const testCase of this.testCases.values() ) {
+            if ( testCase.getLastStateName() === 'pending' ) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

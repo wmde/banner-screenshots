@@ -14,50 +14,44 @@ const PLATFORM_EXCLUDED_RESOLUTIONS = [
 export const INVALID_REASON_REQUIRED = 'The required dimensions are missing';
 export const INVALID_REASON_RESOLUTION = 'This resolution is not available on this platform';
 
-abstract class TestCaseState {
-	finished: boolean;
+interface TestCaseState {
+	description: string;
+	stateName: string;
+}
+
+export class TestCasePendingState implements TestCaseState {
+	stateName = "pending" as const;
 	description: string;
 
 	constructor() {
-		this.finished = false;
-	}
-}
-
-export class TestCasePendingState extends TestCaseState {
-	stateName = "pending" as const;
-
-	constructor() {
-		super();
 		this.description = "Test case is pending"
 	}
 }
 
-export class TestCaseFinishedState extends TestCaseState {
+export class TestCaseFinishedState implements TestCaseState {
 	stateName = "finished" as const;
+	description: string;
 
 	constructor( description: string ) {
-		super()
-		this.finished = true;
 		this.description = description
 	}
 }
 
-export class TestCaseIsRunningState extends TestCaseState {
+export class TestCaseIsRunningState implements TestCaseState {
 	stateName = "running" as const;
+	description: string;
 
 	constructor( description: string ) {
-		super();
-		this.finished = false;
 		this.description = description;
 	}
 }
 
-export class TestCaseFailedState extends TestCaseState {
+export class TestCaseFailedState implements TestCaseState {
 	stateName =  "failed" as const;
+	description: string;
 	error?: Error;
 
 	constructor( description: string, error?: Error ) {
-		super();
 		this.description = description;
 		this.error = error;
 	}
@@ -156,5 +150,9 @@ export class TestCase {
 
 	getLastStateDescription(): string {
 		return this.state.description;
+	}
+	
+	getLastStateName(): string {
+		return this.state.stateName;
 	}
 }

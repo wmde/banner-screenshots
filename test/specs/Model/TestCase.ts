@@ -1,6 +1,11 @@
 import { strict as assert } from 'assert';
 import { Dimension } from "../../../src/Model/Dimension";
-import { TestCase, INVALID_REASON_REQUIRED, INVALID_REASON_RESOLUTION } from "../../../src/Model/TestCase"
+import {
+	TestCase,
+	INVALID_REASON_REQUIRED,
+	INVALID_REASON_RESOLUTION,
+	TestCaseFinishedState
+} from "../../../src/Model/TestCase"
 
 describe('TestCase', () => {
 	const dimensions = [Dimension.PLATFORM, Dimension.RESOLUTION, Dimension.BANNER];
@@ -54,5 +59,34 @@ describe('TestCase', () => {
 			['firefox', '1024x768'],
 			'https://de.wikipedia.org'
 		))
-	} )
+	} );
+
+	it( 'returns description of last state', () => {
+		const testCase = TestCase.create(
+			dimensions,
+			[ 'chrome_win7', '1280x960', 'ctrl' ],
+			'https://de.wikipedia.org'
+		);
+		testCase.updateState( new TestCaseFinishedState( 'Successfully finished' ) );
+
+
+		assert.strictEqual( 'Successfully finished', testCase.getLastStateDescription() );
+	} );
+
+	it( 'returns name of last state', () => {
+		const newTestCase = TestCase.create(
+			dimensions,
+			[ 'chrome_win7', '1280x960', 'ctrl' ],
+			'https://de.wikipedia.org'
+		);
+		const finishedTestCase = TestCase.create(
+			dimensions,
+			[ 'chrome_win7', '1280x960', 'ctrl' ],
+			'https://de.wikipedia.org'
+		);
+		finishedTestCase.updateState( new TestCaseFinishedState( 'Successfully finished' ) );
+
+		assert.equal( newTestCase.getLastStateName(), 'pending' );
+		assert.equal( finishedTestCase.getLastStateName(), 'finished' );
+	} );
 });
