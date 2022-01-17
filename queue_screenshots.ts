@@ -5,7 +5,7 @@ import EnvironmentConfig from "./src/EnvironmentConfig";
 import RabbitMQConnection from "./src/MessageQueue/RabbitMQConnection";
 import RabbitMQProducer from "./src/MessageQueue/RabbitMQProducer";
 
-const config = EnvironmentConfig.create();
+const config = new EnvironmentConfig();
 const connection = new RabbitMQConnection( config.queueUrl );
 const queue = new RabbitMQProducer( connection );
 const screenshotGenerator = new ScreenshotGenerator( queue );

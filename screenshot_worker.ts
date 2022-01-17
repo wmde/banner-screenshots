@@ -11,7 +11,7 @@ import { TestCase, TestCaseFailedState } from "./src/Model/TestCase";
 import RabbitMQConnection from "./src/MessageQueue/RabbitMQConnection";
 import {Command} from "commander";
 
-const config = EnvironmentConfig.create();
+const config = new EnvironmentConfig();
 
 const connectionOptions = {
 	...DEFAULT_CONNECTION_PARAMS,
@@ -31,8 +31,8 @@ program.parse();
 
 const options = program.opts();
 const showMessage = options.verbose ? console.log : () => {};
-const queueConnection = new RabbitMQConnection( config.queueUrl );
-const consumer = new RabbitMQConsumer( queueConnection, "Connection established, hit Ctrl-C to quit worker" );
+const queueConnection = new RabbitMQConnection( config.queueUrl, "Connection established, hit Ctrl-C to quit worker" );
+const consumer = new RabbitMQConsumer( queueConnection );
 const producer = new RabbitMQProducer( queueConnection );
 
 
@@ -46,6 +46,7 @@ const sendMetadataUpdate = async ( testCase: TestCase, campaignName: string ): P
 consumer.consumeScreenshotQueue( async (msgData: TestCaseMessage) => {
 	const writeImageData = await createImageWriter( msgData.outputDirectory );
 	const testCase = unserializeTestCase( msgData.testCase );
+	showMessage( `Creating a browser instance for test ${testCase.getName()}` );
 	const browser = await browserFactory.getBrowser(testCase);
 	showMessage( `Taking screenshot for test ${testCase.getName()}` );
 	let testFunction;

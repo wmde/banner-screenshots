@@ -15,7 +15,7 @@ import path from "path";
 import fs from "fs";
 import summarizeMetadata from "./src/MetadataSummarizer";
 
-const config = EnvironmentConfig.create();
+const config = new EnvironmentConfig();
 
 const program = new Command();
 program.description( 'A queue worker that processes metadata messages' );
@@ -28,8 +28,8 @@ const options = program.opts();
 const screenshotPath = options.screenshotPath;
 const showMessage = options.verbose ? console.log : () => {};
 const repo = new FileMetadataRepository( screenshotPath );
-const queueConnection = new RabbitMQConnection( config.queueUrl );
-const consumer = new RabbitMQConsumer( queueConnection, "Connection established, hit Ctrl-C to quit worker" );
+const queueConnection = new RabbitMQConnection( config.queueUrl, "Connection established, hit Ctrl-C to quit worker" );
+const consumer = new RabbitMQConsumer( queueConnection );
 const producer = new RabbitMQProducer( queueConnection );
 
 consumer.consumeMetaDataQueue( async ( msgData: MetadataMessage ) => {

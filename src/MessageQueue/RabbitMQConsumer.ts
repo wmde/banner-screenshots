@@ -6,24 +6,15 @@ import RabbitMQConnection from "./RabbitMQConnection";
 export default class RabbitMQConsumer extends QueueConsumer {
 
 	private readonly connection: RabbitMQConnection;
-	private readyMessage: string;
 
-	constructor( connection: RabbitMQConnection, readyMessage: string = '' ) {
+	constructor( connection: RabbitMQConnection ) {
 		super();
 		this.connection = connection;
-		this.readyMessage = readyMessage;
 	}
 
 	async consumeScreenshotQueue( onScreenshotMessage ): Promise<void> {
 		await this.connection.initialize();
-		await this.connection.assertQueue( SCREENSHOT_QUEUE );
 		const channel = this.connection.getChannel();
-		// Since our processing function is async, we have to wait with fetching
-		// until we have acknowledged the message
-		await channel.prefetch(1);
-		if ( this.readyMessage ) {
-			console.log( this.readyMessage );
-		}
 		await channel.consume( SCREENSHOT_QUEUE, async function ( queuedScreenshotMessage ) {
 			if ( queuedScreenshotMessage === null ) {
 				channel.ack(queuedScreenshotMessage);
@@ -33,7 +24,7 @@ export default class RabbitMQConsumer extends QueueConsumer {
 			const msgData = JSON.parse(queuedScreenshotMessage.content.toString());
 			if ( !isTestCaseMessage( msgData ) ) {
 				console.log( 'consumeScreenshotQueue received invalid message data: ', msgData );
-				channel.reject( queuedScreenshotMessage, false );
+				channel.nack( queuedScreenshotMessage, false );
 				return;
 			}
 
@@ -41,7 +32,7 @@ export default class RabbitMQConsumer extends QueueConsumer {
 				await onScreenshotMessage( msgData );
 			} catch ( e ) {
 				console.log( 'There was an error creating the screenshot', e, msgData );
-				channel.reject( queuedScreenshotMessage, false );
+				channel.nack( queuedScreenshotMessage, false );
 				return;
 			}
 			channel.ack( queuedScreenshotMessage );
@@ -51,12 +42,7 @@ export default class RabbitMQConsumer extends QueueConsumer {
 
 	async consumeMetaDataQueue(onMetaDataMessage: MetadataMessageHandler): Promise<void> {
 		await this.connection.initialize();
-		await this.connection.assertQueue( SCREENSHOT_QUEUE );
 		const channel = this.connection.getChannel();
-		await channel.prefetch(1);
-		if ( this.readyMessage ) {
-			console.log( this.readyMessage );
-		}
 		await channel.consume( METADATA_QUEUE, async function ( queuedMetadataMessage ) {
 			if ( queuedMetadataMessage === null ) {
 				channel.ack(queuedMetadataMessage);
@@ -71,7 +57,7 @@ export default class RabbitMQConsumer extends QueueConsumer {
 				await onMetaDataMessage( msgData );
 			} catch ( e ) {
 				console.log( 'There was an error handling the metadata', e, msgData );
-				channel.reject( queuedMetadataMessage, false );
+				channel.nack( queuedMetadataMessage, false );
 				return;
 			}
 			channel.ack( queuedMetadataMessage );

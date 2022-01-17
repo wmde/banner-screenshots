@@ -1,4 +1,5 @@
 // A simple "message echo" worker to test the server
+
 import RabbitMQConsumer from "./src/MessageQueue/RabbitMQConsumer";
 import {TestCaseMessage} from "./src/MessageQueue/Messages";
 import EnvironmentConfig from "./src/EnvironmentConfig";
@@ -7,12 +8,12 @@ import RabbitMQProducer from "./src/MessageQueue/RabbitMQProducer";
 import {serializeTestCase, unserializeTestCase} from "./src/Model/TestCaseSerializer";
 import RabbitMQConnection from "./src/MessageQueue/RabbitMQConnection";
 
-const config = EnvironmentConfig.create();
+const config = new EnvironmentConfig();
 
 const TASK_DELAY = 500;
 
-const queueConnection = new RabbitMQConnection( config.queueUrl );
-const consumer = new RabbitMQConsumer( queueConnection, "Connection established, hit Ctrl-C to quit worker" );
+const queueConnection = new RabbitMQConnection( config.queueUrl, "Connection established, hit Ctrl-C to quit worker" );
+const consumer = new RabbitMQConsumer( queueConnection );
 const producer = new RabbitMQProducer( queueConnection );
 
 async function sendMetadataUpdate( testCase: TestCase, campaignName: string  ): Promise<void> {
