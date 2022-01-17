@@ -18,6 +18,7 @@ import summarizeMetadata from "./src/MetadataSummarizer";
 const config = EnvironmentConfig.create();
 
 const program = new Command();
+program.description( 'A queue worker that processes metadata messages' );
 program.option('-s --screenshotPath <path>', 'Path to directory containing campaign directories with metadata', 'banner-shots');
 program.option('-v --verbose', 'Show output');
 program.showHelpAfterError();

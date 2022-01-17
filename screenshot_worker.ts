@@ -7,8 +7,9 @@ import {serializeTestCase, unserializeTestCase} from "./src/Model/TestCaseSerial
 import EnvironmentConfig from "./src/EnvironmentConfig";
 import { getTestFunction } from "./src/test_functions";
 import RabbitMQProducer from "./src/MessageQueue/RabbitMQProducer";
-import {TestCase, TestCaseFailedState, TestCaseFinishedState} from "./src/Model/TestCase";
+import { TestCase, TestCaseFailedState } from "./src/Model/TestCase";
 import RabbitMQConnection from "./src/MessageQueue/RabbitMQConnection";
+import {Command} from "commander";
 
 const config = EnvironmentConfig.create();
 
@@ -22,6 +23,14 @@ const browserFactory = new BrowserFactory( connectionOptions,
 	new CapabilityFactory( factoryOptions )
 );
 
+const program = new Command();
+program.description( 'A queue worker that processes screenshot messages' );
+program.option('-v --verbose', 'Show output');
+program.showHelpAfterError();
+program.parse();
+
+const options = program.opts();
+const showMessage = options.verbose ? console.log : () => {};
 const queueConnection = new RabbitMQConnection( config.queueUrl );
 const consumer = new RabbitMQConsumer( queueConnection, "Connection established, hit Ctrl-C to quit worker" );
 const producer = new RabbitMQProducer( queueConnection );
@@ -37,25 +46,27 @@ const sendMetadataUpdate = async ( testCase: TestCase, campaignName: string ): P
 consumer.consumeScreenshotQueue( async (msgData: TestCaseMessage) => {
 	const writeImageData = await createImageWriter( msgData.outputDirectory );
 	const testCase = unserializeTestCase( msgData.testCase );
-	  // TODO check if test case is valid and skip if not
 	const browser = await browserFactory.getBrowser(testCase);
+	showMessage( `Taking screenshot for test ${testCase.getName()}` );
 	let testFunction;
 	try {
 		testFunction = getTestFunction( msgData.testFunction );
 	} catch ( e ) {
 		testCase.updateState( new TestCaseFailedState( 'Test function failed with error', e ) );
 		await sendMetadataUpdate( testCase, msgData.trackingName );
-		console.log(e);
+		showMessage( e.message );
 		return;
 	}
 
 	try {
-		await testFunction(browser, testCase, writeImageData);
+		// test function will update the state of testCase
+		await testFunction( browser, testCase, writeImageData );
 	} catch (e) {
-		console.log(e);
+		testCase.updateState( new TestCaseFailedState( e.message ) );
+		showMessage( e.message );
+		return;
 	}
 
-	testCase.updateState( new TestCaseFinishedState( 'Finished' ) );
 	await sendMetadataUpdate( testCase, msgData.trackingName );
 });
 
