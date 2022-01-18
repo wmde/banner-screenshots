@@ -1,4 +1,4 @@
-import { SerializedCampaignMetadata } from "./Model/MetadataSerializer";
+import { SerializedCampaignMetadata } from "./MetadataSerializer";
 
 interface MetadataSummary {
 	campaign: string,

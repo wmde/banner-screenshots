@@ -10,22 +10,16 @@ import {
     unserializeEntriesToDimensions
 } from "./src/Model/MetadataSerializer";
 import {FileMetadataRepository, METADATA_FILE} from "./src/FileMetadataRepository";
-import {Command} from "commander";
 import path from "path";
 import fs from "fs";
-import summarizeMetadata from "./src/MetadataSummarizer";
+import summarizeMetadata from "./src/Model/MetadataSummarizer";
+import {WorkerConfigFactory} from "./src/CommandLine/WorkerConfig";
 
 const config = new EnvironmentConfig();
+const cliConfig = new WorkerConfigFactory();
 
-const program = new Command();
-program.description( 'A queue worker that processes metadata messages' );
-program.option('-s --screenshotPath <path>', 'Path to directory containing campaign directories with metadata', 'banner-shots');
-program.option('-v --verbose', 'Show output');
-program.showHelpAfterError();
-program.parse();
-
-const options = program.opts();
-const screenshotPath = options.screenshotPath;
+const options = cliConfig.getConfig( 'A queue worker that processes metadata messages', process.cwd() );
+const screenshotPath = options.outputPath;
 const showMessage = options.verbose ? console.log : () => {};
 const repo = new FileMetadataRepository( screenshotPath );
 const queueConnection = new RabbitMQConnection( config.queueUrl, "Connection established, hit Ctrl-C to quit worker" );

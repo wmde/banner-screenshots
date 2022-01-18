@@ -1,7 +1,7 @@
 import { Command } from 'commander';
 import * as path from "path";
-import { testFunctionExists } from "./test_functions";
-import {ScreenshotsRequest} from "./ScreenshotGenerator";
+import { testFunctionExists } from "../test_functions";
+import {ScreenshotsRequest} from "../ScreenshotGenerator";
 
 export class CliRequestFactory {
 	cwd: string;

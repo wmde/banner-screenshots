@@ -1,4 +1,4 @@
-import {CliRequestFactory} from "./src/CliRequestFactory";
+import {CliRequestFactory} from "./src/CommandLine/CliRequestFactory";
 import {ScreenshotGenerator} from "./src/ScreenshotGenerator.js";
 import {TestCase} from "./src/Model/TestCase";
 import EnvironmentConfig from "./src/EnvironmentConfig";

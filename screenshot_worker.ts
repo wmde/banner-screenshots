@@ -9,10 +9,11 @@ import { getTestFunction } from "./src/test_functions";
 import RabbitMQProducer from "./src/MessageQueue/RabbitMQProducer";
 import { TestCase, TestCaseFailedState } from "./src/Model/TestCase";
 import RabbitMQConnection from "./src/MessageQueue/RabbitMQConnection";
-import {Command} from "commander";
 import path from "path";
+import {WorkerConfigFactory} from "./src/CommandLine/WorkerConfig";
 
 const config = new EnvironmentConfig();
+const cliConfig = new WorkerConfigFactory();
 
 const connectionOptions = {
 	...DEFAULT_CONNECTION_PARAMS,
@@ -24,16 +25,8 @@ const browserFactory = new BrowserFactory( connectionOptions,
 	new CapabilityFactory( factoryOptions )
 );
 
-const program = new Command();
-program.description( 'A queue worker that processes screenshot messages' );
-program.option('-s --screenshotPath <path>', 'Path to directory containing campaign directories with metadata', 'banner-shots')
-program.option('-v --verbose', 'Show output');
-program.showHelpAfterError();
-program.parse();
-
-const options = program.opts();
+const options = cliConfig.getConfig( 'A queue worker that processes screenshot messages', process.cwd() );
 const showMessage = options.verbose ? console.log : () => {};
-const outputDirectory = path.isAbsolute( options.screenshotPath ) ? options.screenshotPath : path.join( process.cwd(), options.screenshotPath );
 const queueConnection = new RabbitMQConnection( config.queueUrl, "Connection established, hit Ctrl-C to quit worker" );
 const consumer = new RabbitMQConsumer( queueConnection );
 const producer = new RabbitMQProducer( queueConnection );
@@ -47,7 +40,7 @@ const sendMetadataUpdate = async ( testCase: TestCase, campaignName: string ): P
 	} );
 
 consumer.consumeScreenshotQueue( async (msgData: TestCaseMessage) => {
-	const writeImageData = await createImageWriter( path.join( outputDirectory, msgData.trackingName ) );
+	const writeImageData = await createImageWriter( path.join( options.outputPath, msgData.trackingName ) );
 	const testCase = unserializeTestCase( msgData.testCase );
 	showMessage( `Creating a browser instance for test ${testCase.getName()}` );
 	const browser = await browserFactory.getBrowser(testCase);

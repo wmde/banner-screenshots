@@ -1,8 +1,8 @@
 import { strict as assert } from 'assert';
-import summarizeMetadata from "../../src/MetadataSummarizer";
-import { testcase1, testcase2 } from "../fixtures/campaign_metadata";
-import {serializeTestCase} from "../../src/Model/TestCaseSerializer";
-import {Dimension} from "../../src/Model/Dimension";
+import summarizeMetadata from "../../../src/Model/MetadataSummarizer";
+import { testcase1, testcase2 } from "../../fixtures/campaign_metadata";
+import {serializeTestCase} from "../../../src/Model/TestCaseSerializer";
+import {Dimension} from "../../../src/Model/Dimension";
 
 function createMetaData( fieldGenerator ): any {
 	const metaData = [];
