@@ -1,25 +1,21 @@
 import fs from "fs";
 import {ConfigurationParser} from "./ConfigurationParser";
-import path from "path";
 import { serializeTestCase } from "./Model/TestCaseSerializer";
 import {serializeDimensionsToEntries} from "./Model/MetadataSerializer";
 
 export class ScreenshotsRequest {
 	campaignName;
 	configPath;
-	screenshotPath;
 	testFunction;
 
 	/**
 	 *
 	 * @param {string} configPath Path to campaign configuration
-	 * @param {string} screenshotPath Path to screenshots
 	 * @param {string} campaignName campaign configuration section name, e.g. "desktop" or "mobile"
 	 * @param {string} testFunctionName Name of test function
 	 */
-	constructor(configPath, screenshotPath, campaignName, testFunctionName ) {
+	constructor(configPath, campaignName, testFunctionName ) {
 		this.configPath = configPath;
-		this.screenshotPath = screenshotPath;
 		this.campaignName = campaignName;
 		this.testFunction = testFunctionName;
 	}
@@ -46,7 +42,7 @@ export class ScreenshotGenerator {
 	 */
 
 	async generateQueuedScreenshots( request ) {
-		const { trackingName, outputDirectory, testCases, dimensions } = this.initialize( request );
+		const { trackingName, testCases, dimensions } = this.initialize( request );
 		const serializedTestCases = testCases.map( serializeTestCase );
 
 		await this.queue.sendInitializeMetadata( {
@@ -61,7 +57,6 @@ export class ScreenshotGenerator {
 					testCase: tc,
 					testFunction: request.testFunction,
 					trackingName,
-					outputDirectory
 				};
 				return this.queue.sendTestCase( msg );
 			  } ) );
@@ -78,14 +73,12 @@ export class ScreenshotGenerator {
 		const config = fs.readFileSync( request.configPath );
 		const parser = new ConfigurationParser( config.toString() );
 		const trackingName = parser.getCampaignTracking( request.campaignName );
-		const outputDirectory = path.join( request.screenshotPath, trackingName );
 		const testCaseGenerator = parser.generate( request.campaignName );
 		const testCases = testCaseGenerator.getTestCases();
 
 		return {
 			trackingName,
 			testCases,
-			outputDirectory,
 			dimensions: testCaseGenerator.dimensions
 		}
 	}

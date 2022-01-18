@@ -10,6 +10,7 @@ import RabbitMQProducer from "./src/MessageQueue/RabbitMQProducer";
 import { TestCase, TestCaseFailedState } from "./src/Model/TestCase";
 import RabbitMQConnection from "./src/MessageQueue/RabbitMQConnection";
 import {Command} from "commander";
+import path from "path";
 
 const config = new EnvironmentConfig();
 
@@ -25,12 +26,14 @@ const browserFactory = new BrowserFactory( connectionOptions,
 
 const program = new Command();
 program.description( 'A queue worker that processes screenshot messages' );
+program.option('-s --screenshotPath <path>', 'Path to directory containing campaign directories with metadata', 'banner-shots')
 program.option('-v --verbose', 'Show output');
 program.showHelpAfterError();
 program.parse();
 
 const options = program.opts();
 const showMessage = options.verbose ? console.log : () => {};
+const outputDirectory = path.isAbsolute( options.screenshotPath ) ? options.screenshotPath : path.join( process.cwd(), options.screenshotPath );
 const queueConnection = new RabbitMQConnection( config.queueUrl, "Connection established, hit Ctrl-C to quit worker" );
 const consumer = new RabbitMQConsumer( queueConnection );
 const producer = new RabbitMQProducer( queueConnection );
@@ -44,7 +47,7 @@ const sendMetadataUpdate = async ( testCase: TestCase, campaignName: string ): P
 	} );
 
 consumer.consumeScreenshotQueue( async (msgData: TestCaseMessage) => {
-	const writeImageData = await createImageWriter( msgData.outputDirectory );
+	const writeImageData = await createImageWriter( path.join( outputDirectory, msgData.trackingName ) );
 	const testCase = unserializeTestCase( msgData.testCase );
 	showMessage( `Creating a browser instance for test ${testCase.getName()}` );
 	const browser = await browserFactory.getBrowser(testCase);

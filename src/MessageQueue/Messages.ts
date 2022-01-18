@@ -3,7 +3,6 @@ import {DimensionEntries} from "../Model/MetadataSerializer";
 
 export interface TestCaseMessage {
     testCase: SerializedTestCase;
-    outputDirectory: string;
     testFunction: string;
     trackingName: string;
 }
@@ -11,7 +10,6 @@ export interface TestCaseMessage {
 export function isTestCaseMessage( data: any ): data is TestCaseMessage {
     return typeof data === 'object' &&
         !!data.testCase &&
-        !!data.outputDirectory &&
         !!data.testFunction &&
         !!data.trackingName &&
         isSerializedTestCase( data.testCase );
