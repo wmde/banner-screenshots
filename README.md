@@ -1,25 +1,27 @@
-# WMDE Banner screenshots
+# WMDE Banner Screenshots
 
 This is a tool for taking screenshots of WMDE fundraising banners on wikipedia.org in different browsers and resolutions.
 
-## Initial setup
+## Configuration & Setup
+The screenshot background worker needs credentials for the Testingbot service. Put these in the file named `.env`.
+You can copy and adapt the file `env-template`.
 
-You need a running [RabbitMQ](https://www.rabbitmq.com/) instance. On your local machine you can start it in a Docker container with the following command:
+To install the dependencies run
 
-    docker run -d -p 5672:5672 rabbitmq
+    npm install
 
-This will expose the default port of 5672 on your local machine.
+or
 
-You need to create the configuration file named `.env`. You can file an example of the contents in [`env-template`](env-template).
-You need to put the full URL to the RabbitMQ server and your testingbot credentials into the file. 
-You can get the credentials by logging in on testingbot.com.
+    docker run --rm -v $(pwd):/app -w /app node:16-alpine npm install
 
-You need to start the screenshot worker and metadata worker like this:
+## Starting the Environment
 
-    npx ts-node screenshot_worker.ts
-    npx ts-node metadata_worker.ts
+The screenshot tool needs background workers and a message queue (see architecture diagram below). To start these, run
 
-TODO create docker-compose file that replaces this section of the README
+    docker-compose up -d
+
+This will start the background workers and [RabbitMQ](https://www.rabbitmq.com/) and expose it on Port 5672 on the 
+local machine.
 
 ## Creating Screenshots
 
@@ -33,12 +35,25 @@ repository](https://github.com/wmde/fundraising-banners).
 `<CAMPAIGN_NAME>` must be one of the configuration keys of that
 configuration file, e.g. `desktop` or `mobile`.
 
-The screenshot tool will create a directory inside the `banner-shots` directory. The campaign directory contains the 
-screenshot images and file `metadata.json` with all the meta data about the test case.
+The background workers will create a directory inside the `banner-shots` directory. The campaign directory contains the 
+screenshot images and file `metadata.json` with all the metadata about the test case.
 
 Instead of using the `-c` parameter, you can also create a symbolic link
 from your local copy of `wmde/fundraising-banners` to the screenshot tool
 directory.
+
+### Running inside the docker context
+
+To enable Docker to access RabbitMQ you need to figure out the network name of the `docker-compose` installation. 
+Usually that's the name of the directory of the `docker-compose.yml` file with the suffix `_default`. You can show all 
+networks with the command
+
+    docker network ls
+
+Then you can run the script with the following command:
+
+    docker run --rm --network SCREENSHOT_NETWORK_NAME -v /path/to/banner/config:/app/campaign_info.toml -v $(pwd):/app \
+        -w /app node:16-alpine npx ts-node queue_screenshots.ts -u ampq://rabbitmq <CAMPAIGN_NAME>
 
 
 ### Configuration file format
@@ -100,24 +115,6 @@ Add a different test function to the `src/test_functions/` directory,
 im- and export it in `src/test_functions/index.js` and specify its name in
 `testFunctionName` in `index.js`.
 
-## Updating the screenshot metadata
-To update the metadata summary for the [Shutterbug UI](https://github.com/wmde/shutterbug), run the command
-
-    npx ts-node /metadata_summary.js
-
-This will trigger a queued action that will take all `metadata.json` files in `banner-shots` subdirectories
-and create a `metadata_summary.json` file. 
-
-To update the banner data on a remote server, use the `remote_metadata_summary.sh` script:
-
-    ./remote_metadata_summary.sh username@your-server /remote/path/to/banner-shots
-
-This will download all the metadata via scp to a temporary directory. You then have to copy the metadata 
-files to `banner-shots` and copy the generated `metadata_summary.json` file to the temporary directory. 
-The script will then upload the new version fo the summary
-
-The user needs write access in the specified directory!
-
 ## Running the unit tests
 
     npm run test
@@ -125,3 +122,7 @@ The user needs write access in the specified directory!
 Use the following command to run individual tests
 
     npx mocha test/specs/name_of_your_test.js 
+
+## Architecture
+
+![Architecture - Component Diagram](docs/architecture.svg)
