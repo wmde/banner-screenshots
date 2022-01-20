@@ -8,7 +8,7 @@ services:
     depends_on:
       - rabbitmq
     environment:
-      - QUEUE_URL
+      QUEUE_URL: amqp://rabbitmq
 
   # Run multiple instances of screenshot worker to parallelize screenshot jobs.
   # Should be less than 5 to be sure not to run into limits
@@ -20,9 +20,9 @@ services:
     depends_on:
       - rabbitmq
     environment:
-      - QUEUE_URL
-      - TB_KEY
-      - TB_SECRET
+      QUEUE_URL: amqp://rabbitmq
+      TB_KEY: ${TB_KEY}
+      TB_SECRET: ${TB_SECRET}
 
   screenshot_worker_2:
     build: .
@@ -32,9 +32,9 @@ services:
     depends_on:
       - rabbitmq
     environment:
-      - QUEUE_URL
-      - TB_KEY
-      - TB_SECRET
+      QUEUE_URL: amqp://rabbitmq
+      TB_KEY: ${TB_KEY}
+      TB_SECRET: ${TB_SECRET}
 
   screenshot_worker_3:
     build: .
@@ -44,9 +44,9 @@ services:
     depends_on:
       - rabbitmq
     environment:
-      - QUEUE_URL
-      - TB_KEY
-      - TB_SECRET
+      QUEUE_URL: amqp://rabbitmq
+      TB_KEY: ${TB_KEY}
+      TB_SECRET: ${TB_SECRET}
 
   screenshot_worker_4:
     build: .
@@ -56,9 +56,9 @@ services:
     depends_on:
       - rabbitmq
     environment:
-      - QUEUE_URL
-      - TB_KEY
-      - TB_SECRET
+      QUEUE_URL: amqp://rabbitmq
+      TB_KEY: ${TB_KEY}
+      TB_SECRET: ${TB_SECRET}
 
 
   rabbitmq:

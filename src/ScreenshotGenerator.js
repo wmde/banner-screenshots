@@ -3,24 +3,6 @@ import {ConfigurationParser} from "./ConfigurationParser";
 import { serializeTestCase } from "./Model/TestCaseSerializer";
 import {serializeDimensionsToEntries} from "./Model/MetadataSerializer";
 
-export class ScreenshotsRequest {
-	campaignName;
-	configPath;
-	testFunction;
-
-	/**
-	 *
-	 * @param {string} configPath Path to campaign configuration
-	 * @param {string} campaignName campaign configuration section name, e.g. "desktop" or "mobile"
-	 * @param {string} testFunctionName Name of test function
-	 */
-	constructor(configPath, campaignName, testFunctionName ) {
-		this.configPath = configPath;
-		this.campaignName = campaignName;
-		this.testFunction = testFunctionName;
-	}
-}
-
 /**
  * This class is a use case that takes a ScreenshotsRequest, generates
  * a test matrix from it and sends screenshot and metadata commands to the queues.

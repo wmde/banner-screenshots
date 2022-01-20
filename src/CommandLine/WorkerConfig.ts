@@ -7,7 +7,7 @@ interface WorkerConfig {
 }
 
 export class WorkerConfigFactory {
-    
+
     public getConfig( workerDescription: string, cwd: string ): WorkerConfig {
         const program = new Command();
         program.description( workerDescription );
@@ -18,7 +18,7 @@ export class WorkerConfigFactory {
 
         const options = program.opts();
         const verbose = options.verbose;
-        const outputPath = path.isAbsolute( options.screenshotPath ) ? options.screenshotPath : path.join( process.cwd(), options.screenshotPath );
+        const outputPath = path.isAbsolute( options.screenshotPath ) ? options.screenshotPath : path.join( cwd, options.screenshotPath );
         return { verbose, outputPath }
     }
 }
