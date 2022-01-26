@@ -132,7 +132,7 @@ describe('unserializeTestCaseState', () => {
         } );
     } );
 
-    it('fails when state name has unknown value not set', () => {
+    it('fails when state name has unknown value', () => {
         assert.throws(() => unserializeTestCaseState({stateName: 'of emergency'}))
     } );
 } );
