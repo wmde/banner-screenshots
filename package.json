@@ -28,7 +28,7 @@
     "partition-all": "^1.0.1",
     "promise-queue": "^2.2.5",
     "toml": "^3.0.0",
-    "webdriverio": "^7.16.13"
+    "webdriverio": "^7.16.14"
   },
   "bin": {
     "metadata_summary": "metadata_summary.js"
