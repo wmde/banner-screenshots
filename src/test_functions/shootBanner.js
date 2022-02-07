@@ -1,3 +1,6 @@
+import { Dimension } from "../Model/Dimension";
+import {TestCaseFinishedState, TestCaseIsRunningState} from "../Model/TestCase";
+
 /**
  *
  * @param browser
@@ -5,10 +8,13 @@
  * @param {function} writeImageData
  * @return {Promise<void>}
  */
-import {TestCaseFinishedState, TestCaseIsRunningState} from "../TestCase.js";
-
 export async function shootBanner( browser, testCase, writeImageData ) {
 	testCase.updateState( new TestCaseIsRunningState( "Testcase started" ) );
+
+	if (testCase.dimensions.has( Dimension.RESOLUTION )) {
+		const [width, height] = testCase.dimensions.get( Dimension.RESOLUTION ).split( "x", 2 );
+		await browser.setWindowSize(Number(width), Number(height));
+	}
 
 	await browser.url( testCase.getBannerUrl() )
 	testCase.updateState( new TestCaseIsRunningState( "URL requested" ) );
@@ -18,7 +24,7 @@ export async function shootBanner( browser, testCase, writeImageData ) {
 
 	await banner.waitForExist( {
 		timeout: 30000,
-		timeoutMsg: `Page did not contain class "banner-position--state-finished" for banner ${testCase.getScreenshotFilename()}`
+		timeoutMsg: `Page did not contain class "banner-position--state-finished" for banner ${testCase.getScreenshotFilename()}, probably a size issue`
 	} );
 	testCase.updateState( new TestCaseIsRunningState( "Banner display finish element found" ) );
 

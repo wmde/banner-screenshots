@@ -1,21 +1,17 @@
 import { strict as assert } from 'assert';
-import {TestCaseGenerator} from "../../src/TestCaseGenerator.js";
-import {BANNER, DEVICE, PLATFORM} from "../../src/Dimensions.js";
+import {TestCaseGenerator} from "../../../src/Model/TestCaseGenerator";
+import { Dimension } from "../../../src/Model/Dimension";
 
 const BANNER_URL = 'http://de.wikipedia.org/{{PLACEHOLDER}}';
 const PLACEHOLDER = '{{PLACEHOLDER}}';
-const PAGE_NAMES = [ ['ctrl', 'B19WMDE_21_191221_ctrl'], [ 'var', 'B19WMDE_21_191221_var' ] ];
+const PAGE_NAMES = new Map( [ ['ctrl', 'B19WMDE_21_191221_ctrl'], [ 'var', 'B19WMDE_21_191221_var' ] ] );
 
 describe('TestMatrix', () => {
 	it('Builds test cases', () => {
-		const generator = new TestCaseGenerator(
-			new Map( PAGE_NAMES ),
-			BANNER_URL,
-			PLACEHOLDER
-		);
+		const generator = new TestCaseGenerator( PAGE_NAMES, BANNER_URL, PLACEHOLDER );
 
-		generator.addDimension( BANNER, [ 'ctrl', 'var' ] )
-			.addDimension( DEVICE, [ 'iphone_xs_max', 'iphone_se' ])
+		generator.addDimension( Dimension.BANNER, [ 'ctrl', 'var' ] )
+			.addDimension( Dimension.DEVICE, [ 'iphone_xs_max', 'iphone_se' ])
 			.build();
 
 		const testCases = generator.getTestCases();
@@ -32,8 +28,8 @@ describe('TestMatrix', () => {
 	it('Throws an error on build when not passed required dimensions', () => {
 
 		assert.throws(() => {
-			const matrix = new TestCaseGenerator();
-			matrix.build();
+			const generator = new TestCaseGenerator( PAGE_NAMES, BANNER_URL, PLACEHOLDER );
+			generator.build();
 		}, Error);
 
 		assert.throws(() => {
@@ -42,29 +38,21 @@ describe('TestMatrix', () => {
 				BANNER_URL,
 				PLACEHOLDER
 			);
-			matrix.addDimension( PLATFORM, [ 'firefox_linux' ])
+			matrix.addDimension( Dimension.PLATFORM, [ 'firefox_linux' ])
 				.build();
-		}, Error);
-	} );
-
-	it('Throws an error on build when not passed required url information', () => {
-
-		assert.throws(() => {
-			const matrix = new TestCaseGenerator();
-			matrix.build();
 		}, Error);
 	} );
 
 	it('creates banner url for testCase', () => {
 
 		const generator = new TestCaseGenerator(
-			new Map( PAGE_NAMES ),
+			PAGE_NAMES,
 			BANNER_URL,
 			PLACEHOLDER
 		);
 
-		generator.addDimension( BANNER, [ 'ctrl' ] )
-			.addDimension( DEVICE, [ 'iphone_xs_max' ])
+		generator.addDimension( Dimension.BANNER, [ 'ctrl' ] )
+			.addDimension( Dimension.DEVICE, [ 'iphone_xs_max' ])
 			.build();
 
 		const testCases = generator.getTestCases();

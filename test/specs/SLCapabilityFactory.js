@@ -1,7 +1,7 @@
 import { strict as assert } from 'assert';
 import { CapabilityFactory } from "../../src/SLCapabilityFactory.js";
-import { TestCase } from "../../src/TestCase.js";
-import {BANNER, DEVICE, PLATFORM, RESOLUTION} from "../../src/Dimensions.js";
+import { TestCase } from "../../src/Model/TestCase.ts";
+import {BANNER, DEVICE, PLATFORM, RESOLUTION} from "../../src/Model/Dimension.ts";
 
 
 
@@ -34,13 +34,13 @@ describe('getSLCapabilities', () => {
 		);
 
 		const factory = new CapabilityFactory( {} );
-		assert.deepEqual( factory.getCapabilities( testCase ), { 
-			deviceName: 'iPhone XS Max Simulator', 
+		assert.deepEqual( factory.getCapabilities( testCase ), {
+			deviceName: 'iPhone XS Max Simulator',
 			deviceOrientation: "portrait",
-			platformName: 'iOS', 
-			browserName: 'Safari', 
-			appiumVersion: '1.16.0', 
-			platformVersion: '13.2' 
+			platformName: 'iOS',
+			browserName: 'Safari',
+			appiumVersion: '1.16.0',
+			platformVersion: '13.2'
 		} );
 
 	} )

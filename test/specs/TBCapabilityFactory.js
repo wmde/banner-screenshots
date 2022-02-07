@@ -1,7 +1,7 @@
 import { strict as assert } from 'assert';
 import { CapabilityFactory } from "../../src/TBCapabilityFactory.js";
-import { TestCase } from "../../src/TestCase.js";
-import {BANNER, DEVICE, PLATFORM, RESOLUTION} from "../../src/Dimensions.js";
+import { TestCase } from "../../src/Model/TestCase.ts";
+import {BANNER, DEVICE, PLATFORM, RESOLUTION} from "../../src/Model/Dimension.ts";
 
 
 

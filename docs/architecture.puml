@@ -1,0 +1,33 @@
+@startuml
+!include <C4/C4_Container.puml>
+
+title "Banner Screenshots"
+
+Person(p1, "Dev", "A member of the FUN-Tech team, who wants to generate screenshots")
+Person(p2, "Fundraiser", "A member of the campaigns team, who wants to check banners")
+
+System_Boundary(c1, "Banner Screenshots") {
+  Container(submitter, "Task submitter", "TypeScript", "Generate text matrix from config, send messages to queue")
+  System_Boundary(c2, "Docker") {
+    Container(screenshot_worker, "Screenshot Worker", "TypeScript", "Run tests that generate screenshots for a campaign, writes image files")
+    Container(metadata_worker, "Metadata Worker", "TypeScript", "Creates and updates metadata and metadata summaries for campaigns")
+    ContainerQueue(queue, "Message Queue", "RabbitMQ" )
+  }
+}
+
+System_Ext(selenium, "Selenium Service", "webdriver.io compatible service")
+System_Ext(fr_banners, "Fundraising Banners", "Campaign and test setup configuration")
+System_Ext(shutterbug, "Shutterbug", "Renders campaign list from metadata summary and screenshots view from metadata and image files")
+
+Rel(p1, submitter, "Uses", "ts-node CLI")
+Rel(p2, shutterbug, "Uses", "Browser, HTTP")
+
+Rel(submitter, queue, "Screenshot and metadata init message", "AMPQ")
+Rel(queue, screenshot_worker, "Screenshot message", "AMPQ")
+Rel(screenshot_worker, queue, "Metadata update message", "AMPQ")
+BiRel(queue, metadata_worker, "Metadata message", "AMPQ")
+
+Rel(fr_banners, submitter, "provides", "TOML, filesystem")
+Rel(screenshot_worker, selenium, "browser test", "Webdriver Protocol")
+Rel(c1, shutterbug, "Metadata and images in folder structure", "Filesystem")
+@enduml

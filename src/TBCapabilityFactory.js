@@ -1,4 +1,4 @@
-import {DEVICE, PLATFORM, ORIENTATION, RESOLUTION} from "./Dimensions.js";
+import { Dimension } from "./Model/Dimension";
 
 const DEVICE_NAMES = new Map( [
 	//s6 is responding very slowly or not at all
@@ -56,25 +56,25 @@ export class CapabilityFactory {
 		// TODO use deep clone library instead
 		let capabilityResult = Object.assign( {}, this.defaultCapabilities ) ;
 
-		if ( dimensions.has( DEVICE ) ) {
-			const device = dimensions.get( DEVICE );
-			if ( !DEVICE_NAMES.has( device ) ) {
-				throw new Error( `Unsupported device: ${device}` )
+		if ( dimensions.has( Dimension.DEVICE ) ) {
+			const deviceName = dimensions.get( Dimension.DEVICE );
+			if ( !DEVICE_NAMES.has( deviceName ) ) {
+				throw new Error( `Unsupported device: ${deviceName}` )
 			}
-			capabilityResult = { ...DEVICE_NAMES.get( device ) };
-			capabilityResult.orientation = dimensions.has( ORIENTATION ) ? dimensions.get( ORIENTATION ).toUpperCase() : 'PORTRAIT';
+			capabilityResult = { ...DEVICE_NAMES.get( deviceName ) };
+			capabilityResult.orientation = dimensions.has( Dimension.ORIENTATION ) ? dimensions.get( Dimension.ORIENTATION ).toUpperCase() : 'PORTRAIT';
 			return capabilityResult;
 		}
 		else {
-			const platform = dimensions.get( PLATFORM );
+			const platform = dimensions.get( Dimension.PLATFORM );
 			if ( !PLATFORM_NAMES.has( platform ) ) {
 				throw new Error( `Unsupported platform: ${platform}` )
 			}
 			capabilityResult = Object.assign( {}, capabilityResult, PLATFORM_NAMES.get( platform ) );
 		}
 
-		if ( dimensions.has( RESOLUTION ) ) {
-			capabilityResult['tb:options']['screen-resolution'] = dimensions.get( RESOLUTION );
+		if ( dimensions.has( Dimension.RESOLUTION ) ) {
+			capabilityResult['tb:options']['screen-resolution'] = dimensions.get( Dimension.RESOLUTION );
 		}
 
 		return capabilityResult;

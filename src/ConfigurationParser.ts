@@ -1,8 +1,8 @@
-import {BANNER as BANNER_DIMENSION} from "./Dimensions.js";
+import { Dimension } from "./Model/Dimension";
 
-import toml from 'toml';
-import {TestCaseGenerator} from "./TestCaseGenerator.js";
-import objectToMap from "./ObjectToMap.js";
+import { parse as parseTOML} from 'toml';
+import {TestCaseGenerator} from "./Model/TestCaseGenerator";
+import objectToMap from "./ObjectToMap";
 
 // Campaign keys
 const PREVIEW_URL = 'preview_url';
@@ -17,21 +17,24 @@ const PAGE_NAME = 'pagename';
 const PLACEHOLDER = '{{PLACEHOLDER}}';
 
 
+/**
+ * Create a test case builder (TestCaseGenerator) from a campaign TOML file
+ *
+ * @todo The pattern of converting the raw JavaScript object that comes
+ * from parsing TOML to a Map containing `any` values should be replaced
+ * with a proper deserialization/initialization library.
+ */
 export class ConfigurationParser {
 
-	/**
-	 * @param {string} data
-	 */
-	constructor( data ) {
-		const tomlData = toml.parse( data );
+	data: Map<string,any>;
+
+	constructor( data: string ) {
+		const tomlData = parseTOML( data );
 		this.data = objectToMap( tomlData );
 	}
 
 
-	/**
-	 * @param {Map<string,any>} campaign
-	 */
-	validate( campaign ) {
+	validate( campaign: Map<string,any> ) {
 		if( !campaign.has( PREVIEW_URL ) ) {
 			throw new Error( `${PREVIEW_URL} configuration item is required` );
 		}
@@ -46,11 +49,7 @@ export class ConfigurationParser {
 	}
 
 
-	/**
-	 * @param {string} campaignName
-	 * @return {TestCaseGenerator}
-	 */
-	generate( campaignName ) {
+	generate( campaignName: string ): TestCaseGenerator {
 		if ( !this.data.has( campaignName ) ) {
 			throw new Error( `Campaign "${campaignName}" not found in configuration!` );
 		}
@@ -62,18 +61,13 @@ export class ConfigurationParser {
 	}
 
 
-	/**
-	 * @private
-	 * @param {Map<string,any>} campaign
-	 * @return {TestCaseGenerator}
-	 */
-	createMatrix( campaign ) {
+	private createMatrix( campaign: Map<string, any> ): TestCaseGenerator {
 
 		const testMatrix = campaign.get( TEST_MATRIX );
 		const banners = campaign.get( BANNERS );
 		const previewUrl = campaign.get( PREVIEW_URL );
 
-		testMatrix.set( BANNER_DIMENSION, Array.from( banners.keys() ) );
+		testMatrix.set( Dimension.BANNER, Array.from( banners.keys() ) );
 
 		const matrix = new TestCaseGenerator(
 			this.getBannerPlaceholders( banners ),
@@ -84,18 +78,13 @@ export class ConfigurationParser {
 		testMatrix.forEach( ( values, key ) => {
 			matrix.addDimension( key, values );
 		} );
-		
+
 		matrix.build();
 
 		return matrix;
 	}
 
-	/**
-	 * @private
-	 * @param banners
-	 * @return {Map<string, string>}
-	 */
-	getBannerPlaceholders( banners ) {
+	private getBannerPlaceholders( banners: Map<string, Map<string, string>> ): Map<string, string> {
 		let bannerMap = new Map();
 		banners.forEach( (value, key) => {
 			bannerMap.set( key, value.get( PAGE_NAME ) );
@@ -103,12 +92,7 @@ export class ConfigurationParser {
 		return bannerMap;
 	}
 
-	/**
-	 *
-	 * @param {string} campaignName
-	 * @return {string}
-	 */
-	getCampaignTracking( campaignName ) {
+	getCampaignTracking( campaignName: string ): string {
 		return this.data.get( campaignName ).get( CAMPAIGN_TRACKING )
 	}
 

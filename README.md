@@ -1,30 +1,59 @@
-# WMDE Banner screenshots
+# WMDE Banner Screenshots
 
 This is a tool for taking screenshots of WMDE fundraising banners on wikipedia.org in different browsers and resolutions.
 
+## Configuration & Setup
+The screenshot background worker needs credentials for the Testingbot service. Put these in the file named `.env`.
+You can copy and adapt the file `env-template`.
+
+To install the dependencies run
+
+    npm install
+
+or
+
+    docker run --rm -v $(pwd):/app -w /app node:16-alpine npm install
+
+## Starting the Environment
+
+The screenshot tool needs background workers and a message queue (see architecture diagram below). To start these, run
+
+    docker-compose up -d
+
+This will start the background workers and [RabbitMQ](https://www.rabbitmq.com/) and expose it on Port 5672 on the 
+local machine.
+
 ## Creating Screenshots
 
-To run the tool, you need to set your testingbot credentials. You can get them by logging in on testingbot.com:
+Run the screenshot tool with the following command
 
-    export TB_KEY=<testingbot team account key>
-    export TB_SECRET=<testingbot team account secret>
-
-Then you can run the screenshot tool:
-
-    node index.js -c ../fundraising-banners/campaign_info.toml <CAMPAIGN_NAME>
+    npx ts-node queue_screenshots.ts -c ../fundraising-banners/campaign_info.toml <CAMPAIGN_NAME>
 
 The `-c` parameter is for locating the campaign configuration from the
 [`wmde/fundraising-banners`
 repository](https://github.com/wmde/fundraising-banners).
-`<CAMPAIGN_NAME>` must be one one the configuration keys of that
+`<CAMPAIGN_NAME>` must be one of the configuration keys of that
 configuration file, e.g. `desktop` or `mobile`.
 
-The screenshot tool will create a directory inside the `banner-shots` directory. The campaign directory contains the 
-screenshot images and file `metadata.json` with all the meta data about the test case.
+The background workers will create a directory inside the `banner-shots` directory. The campaign directory contains the 
+screenshot images and file `metadata.json` with all the metadata about the test case.
 
 Instead of using the `-c` parameter, you can also create a symbolic link
 from your local copy of `wmde/fundraising-banners` to the screenshot tool
 directory.
+
+### Running inside the docker context
+
+To enable Docker to access RabbitMQ you need to figure out the network name of the `docker-compose` installation. 
+Usually that's the name of the directory of the `docker-compose.yml` file with the suffix `_default`. You can show all 
+networks with the command
+
+    docker network ls
+
+Then you can run the script with the following command:
+
+    docker run --rm --network SCREENSHOT_NETWORK_NAME -v /path/to/banner/config:/app/campaign_info.toml -v $(pwd):/app \
+        -w /app node:16-alpine npx ts-node queue_screenshots.ts -u ampq://rabbitmq <CAMPAIGN_NAME>
 
 
 ### Configuration file format
@@ -86,22 +115,6 @@ Add a different test function to the `src/test_functions/` directory,
 im- and export it in `src/test_functions/index.js` and specify its name in
 `testFunctionName` in `index.js`.
 
-## Updating the screenshot metadata
-To update the metadata summary for the [Shutterbug UI](https://github.com/wmde/shutterbug), run the command
-
-    node ./metadata_summary.js
-
-Without any parameters, this will search the `banner-shots` directory for campaign directories and process their 
-`metadata.json` files. 
-
-To update the banner data on a remote server, use the `remote_metadata_summary.sh` script:
-
-    ./remote_metadata_summary.sh username@your-server /remote/path/to/banner-shots
-
-This will download all the metadata via scp, generate the summary file and upload the summary file.
-
-The user needs write access in the specified directory!
-
 ## Running the unit tests
 
     npm run test
@@ -109,3 +122,7 @@ The user needs write access in the specified directory!
 Use the following command to run individual tests
 
     npx mocha test/specs/name_of_your_test.js 
+
+## Architecture
+
+![Architecture - Component Diagram](docs/architecture.svg)

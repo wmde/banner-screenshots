@@ -1,0 +1,3 @@
+# Testingbot API credentials. Log in to your account at testingbot.com to see them
+TB_KEY=<testingbot team account key>
+TB_SECRET=<testingbot team account secret>

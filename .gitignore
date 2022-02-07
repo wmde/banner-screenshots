@@ -6,3 +6,6 @@ banner-shots
 
 # Ignore campaign_info.toml, to be able to symlink it locally
 campaign_info.toml
+
+# might contain screenshot provider credentials
+.env
