@@ -22,7 +22,7 @@
     "chromedriver": "^98.0.1",
     "ts-mocha": "^8.0.0",
     "ts-node": "^10.5.0",
-    "wdio-chromedriver-service": "^7.2.6"
+    "wdio-chromedriver-service": "^7.2.8"
   },
   "dependencies": {
     "@types/amqplib": "^0.8.2",
