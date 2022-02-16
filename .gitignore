@@ -9,3 +9,8 @@ campaign_info.toml
 
 # might contain screenshot provider credentials
 .env
+
+# Docker-compose override files for differengt paths to screenshot
+# directory and banner configuration.
+docker-compose.dev.yml
+docker-compose.prod.yml
