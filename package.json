@@ -20,7 +20,7 @@
     "@wdio/spec-reporter": "7.16.14",
     "@wdio/testingbot-service": "^7.16.15",
     "chromedriver": "^98.0.1",
-    "ts-mocha": "^8.0.0",
+    "ts-mocha": "^9.0.2",
     "ts-node": "^10.5.0",
     "wdio-chromedriver-service": "^7.2.8"
   },
