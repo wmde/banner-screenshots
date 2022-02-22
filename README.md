@@ -8,45 +8,61 @@ To improve performance, the system consists of parallelizable worker scripts for
 The screenshot background worker needs credentials for the Testingbot service. Put these in the file named `.env`.
 You can copy and adapt the file `env-template`.
 
-Have a look at the `docker-compose.yml` file to see the paths
-mounted into the containers:
+Make a copy of the `docker-compose.example-dev.file` named `docker-compose.dev.yml`. Edit the paths in the file to pount at the right files and directories:
 
-- The one mounted to `banner-shots` will contain the screenshots and metadata.
-- The one mounted to `campaign_info.toml` must exist and contain a banner
+- The directory mounted to `/app/banner-shots` will contain the screenshots and metadata.
+- The file mounted to `/app/campaign_info.toml` must exist and contain a banner
 	configuration file (see below).
 
-Do not change the paths in `docker-compose.yml` file directly! If you
-can't provide the required paths in your local setup, create an [override
-docker-compose
-file](https://docs.docker.com/compose/extends/#multiple-compose-files) and
-use the `-f` parameter to specify additional file for all `docker-compose`
-commands. Example:
+All calls to the `docker-compose` command must use the `-f` parameter with
+the two configuration files, creating an [override docker-compose
+configuration](https://docs.docker.com/compose/extends/#multiple-compose-files).
+Example:
 
-	docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+	docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
 
 ## Starting the Environment
 
 The screenshot tool needs background workers and a message queue (see architecture diagram below). To start these, run
 
-    docker-compose up -d
+	docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
 
 This will start the background workers and [RabbitMQ](https://www.rabbitmq.com/) and expose it on Port 5672 on the 
 local machine.
 
 ## Creating Screenshots
 
+### Downloading the campaign file for a branch
+
+The URL for the campaign configuration file from the
+[`wmde/fundraising-banners`
+repository](https://github.com/wmde/fundraising-banners) is
+`https://raw.githubusercontent.com/wmde/fundraising-banners/<BRANCH_NAME>/campaign_info.toml`.
+Replace the placeholder `<BRANCH_NAME>` with the name of the branch you
+want to use. To download the file you can use `wget` or `curl`. Examples:
+	
+	wget https://raw.githubusercontent.com/wmde/fundraising-banners/main/campaign_info.toml
+
+	curl -o campaign_info.toml -L https://raw.githubusercontent.com/wmde/fundraising-banners/main/campaign_info.toml
+
+### Running the command
+
+You will run the screenshot tool inside one of the screenshot worker containers with
+`docker-compose exec`.
+
 Run the screenshot tool with the following command
 
-    docker-compose exec screenshot_worker_1 npx ts-node queue_screenshots.ts <CAMPAIGN_NAME>
+	docker-compose -f docker-compose.yml -f docker-compose.dev.yml exec screenshot_worker_1 npx ts-node queue_screenshots.ts <CAMPAIGN_NAME>
 
-The `queue_screenshot` tool will look for the file `campaign_info.toml`,
+The `queue_screenshot.ts` tool will look for the file `campaign_info.toml`,
 create a test matrix and queue the tests. 
 
 `<CAMPAIGN_NAME>` must be one of the configuration keys of that
 configuration file, e.g. `desktop` or `mobile`.
 
-The background workers will create a directory inside the `banner-shots` directory. The campaign directory contains the 
-screenshot images and file `metadata.json` with all the metadata about the test case.
+The background workers will create a directory inside the `banner-shots`
+directory. The campaign directory contains the screenshot images and file
+`metadata.json` with all the metadata about the test case.
 
 
 ### Configuration file format
