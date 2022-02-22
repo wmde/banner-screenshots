@@ -48,13 +48,13 @@ want to use. To download the file you can use `wget` or `curl`. Examples:
 ### Running the command
 
 You will run the screenshot tool inside one of the screenshot worker containers with
-`docker-compose exec`.
+`docker-compose exec`. With the override configuration and the RabbitMQ
+URL being different than the default, this would be a very long command
+line. To shorten the call, use the `queue_screenshot.sh` command:
 
-Run the screenshot tool with the following command
+	./queue_screenshot.sh <CAMPAIGN_NAME>
 
-	docker-compose -f docker-compose.yml -f docker-compose.dev.yml exec screenshot_worker_1 npx ts-node queue_screenshots.ts <CAMPAIGN_NAME>
-
-The `queue_screenshot.ts` tool will look for the file `campaign_info.toml`,
+The `queue_screenshot.sh` tool will look for the file `campaign_info.toml`,
 create a test matrix and queue the tests. 
 
 `<CAMPAIGN_NAME>` must be one of the configuration keys of that
@@ -150,7 +150,7 @@ You have to set the environment variables `QUEUE_URL` (e.g. `amqp://localhost`),
 	npx ts-node screenshot_worker.ts
 
 Instead of the full-fledged screenshot worker you can also run
-`simple_worker.js` which just echoes the data it receives.
+`simple_worker.js` which echoes the data it receives.
 
 
 ### Running the screenshot tool
