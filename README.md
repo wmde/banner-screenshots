@@ -8,42 +8,46 @@ To improve performance, the system consists of parallelizable worker scripts for
 The screenshot background worker needs credentials for the Testingbot service. Put these in the file named `.env`.
 You can copy and adapt the file `env-template`.
 
-Make a copy of the `docker-compose.example-dev.file` named `docker-compose.dev.yml`. Edit the paths in the file to pount at the right files and directories:
+Run the command
+
+	make generate-dev-config
+
+to create the file `docker-compose.dev.yml`. You can have a look inside it
+or edit the paths in the file to point at the right files and directories:
 
 - The directory mounted to `/app/banner-shots` will contain the screenshots and metadata.
 - The file mounted to `/app/campaign_info.toml` must exist and contain a banner
 	configuration file (see below).
 
-All calls to the `docker-compose` command must use the `-f` parameter with
-the two configuration files, creating an [override docker-compose
-configuration](https://docs.docker.com/compose/extends/#multiple-compose-files).
-Example:
 
-	docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
-
-## Starting the Environment
+## Starting and Stopping the Environment
 
 The screenshot tool needs background workers and a message queue (see architecture diagram below). To start these, run
 
-	docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+	make start-workers
 
 This will start the background workers and [RabbitMQ](https://www.rabbitmq.com/) and expose it on Port 5672 on the 
 local machine.
+
+You can stop with
+
+	make stop-workers
+
+The Makefile abstracts the ["override"
+mechanism](https://docs.docker.com/compose/extends/#multiple-compose-files)
+of docker-compose which we use to bind-mount different versions of the
+configuration file and output directory in development and production.
 
 ## Creating Screenshots
 
 ### Downloading the campaign file for a branch
 
-The URL for the campaign configuration file from the
-[`wmde/fundraising-banners`
-repository](https://github.com/wmde/fundraising-banners) is
-`https://raw.githubusercontent.com/wmde/fundraising-banners/<BRANCH_NAME>/campaign_info.toml`.
-Replace the placeholder `<BRANCH_NAME>` with the name of the branch you
-want to use. To download the file you can use `wget` or `curl`. Examples:
-	
-	wget https://raw.githubusercontent.com/wmde/fundraising-banners/main/campaign_info.toml
+Run the command
 
-	curl -o campaign_info.toml -L https://raw.githubusercontent.com/wmde/fundraising-banners/main/campaign_info.toml
+	make BRANCH_NAME=<branchname> fetch-campaign-info
+
+Replacing the placeholder `<branchname>` with the branch name you want to
+fetch from. It defaults to `main`.
 
 ### Running the command
 
@@ -130,44 +134,7 @@ im- and export it in `src/test_functions/index.js` and specify its name in
 
 ## Local development
 
-To avoid the build cycle of the Docker images, you can also develop
-locally.
-
-### Installing the dependencies
-
-	npm install
-
-### Run a rabbitmq instance
-
-	docker run -d --name amqp.test -p 5672:5672 rabbitmq
-
-
-### Running the workers
-
-You have to set the environment variables `QUEUE_URL` (e.g. `amqp://localhost`), `TB_SECRET` and `TB_KEY` (authentication data for testingbot) before running the scripts.
-
-	npx ts-node metadata_worker.ts
-	npx ts-node screenshot_worker.ts
-
-Instead of the full-fledged screenshot worker you can also run
-`simple_worker.js` which echoes the data it receives.
-
-
-### Running the screenshot tool
-
-	npx ts-node queue_screenshots.ts -c path/to/campaign_info.toml <CAMPAIGN_NAME>
-
-Instead of using the `-c` parameter, you can also create a symbolic link
-from your local copy of `wmde/fundraising-banners` to the screenshot tool
-directory.
-
-### Running the unit tests
-
-    npm run test
-
-Use the following command to run individual tests
-
-    npx mocha test/specs/name_of_your_test.js 
+See [DEVELOPMENT](DEVELOPMENT.md)
 
 ## Architecture
 
