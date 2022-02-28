@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "ts-mocha test/specs/**/*.ts && ts-mocha test/specs/*.ts"
+    "test": "ts-mocha test/specs/**/*.ts && ts-mocha test/specs/*.ts",
+	"metadata-worker": "ts-node metadata_worker.ts",
+	"screenshot-worker": "ts-node screenshot_worker.ts",
+	"simple-worker": "ts-node simple_worker.ts"
+
   },
   "keywords": [],
   "author": "",

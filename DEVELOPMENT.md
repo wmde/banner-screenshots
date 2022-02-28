@@ -18,11 +18,11 @@ you will get port conflicts on port 5672
 
 You have to set the environment variables `QUEUE_URL` (e.g. `amqp://localhost`), `TB_SECRET` and `TB_KEY` (authentication data for testingbot) before running the scripts.
 
-	npx ts-node metadata_worker.ts
-	npx ts-node screenshot_worker.ts
+	npm run metadata-worker
+	npm run screenshot-worker
 
 Instead of the full-fledged screenshot worker you can also run
-`simple_worker.js` which echoes the data it receives.
+`npm run simple-worker` which echoes the data it receives.
 
 
 ## Running the screenshot tool
