@@ -2,61 +2,78 @@
 
 This is a tool for taking screenshots of WMDE fundraising banners on wikipedia.org in different browsers and resolutions.
 
-## Configuration & Setup
+To improve performance, the system consists of parallelizable worker scripts for taking screenshots and processing metadata, connected by a message queue.
+
+## Configuration
 The screenshot background worker needs credentials for the Testingbot service. Put these in the file named `.env`.
 You can copy and adapt the file `env-template`.
 
-To install the dependencies run
+Run the command
 
-    npm install
+	make generate-dev-config
 
-or
+to create the file `docker-compose.dev.yml`. You can have a look inside it
+or edit the paths in the file to point at the right files and directories:
 
-    docker run --rm -v $(pwd):/app -w /app node:16-alpine npm install
+- The directory mounted to `/app/banner-shots` will contain the screenshots and metadata.
+- The file mounted to `/app/campaign_info.toml` must exist and contain a banner
+	configuration file (see below).
 
-## Starting the Environment
+
+## Starting and Stopping the Environment
 
 The screenshot tool needs background workers and a message queue (see architecture diagram below). To start these, run
 
-    docker-compose up -d
+	make start-workers
 
 This will start the background workers and [RabbitMQ](https://www.rabbitmq.com/) and expose it on Port 5672 on the 
 local machine.
 
+You can stop with
+
+	make stop-workers
+
+The Makefile abstracts the ["override"
+mechanism](https://docs.docker.com/compose/extends/#multiple-compose-files)
+of docker-compose which we use to bind-mount different versions of the
+configuration file and output directory in development and production.
+
 ## Creating Screenshots
 
-Run the screenshot tool with the following command
+### Downloading the campaign file for a branch
 
-    npx ts-node queue_screenshots.ts -c ../fundraising-banners/campaign_info.toml <CAMPAIGN_NAME>
+Run the command
 
-The `-c` parameter is for locating the campaign configuration from the
-[`wmde/fundraising-banners`
-repository](https://github.com/wmde/fundraising-banners).
+	make BRANCH_NAME=<branchname> fetch-campaign-info
+
+Replacing the placeholder `<branchname>` with the branch name you want to
+fetch from. It defaults to `main`.
+
+### Running the command
+
+You will run the screenshot tool inside one of the screenshot worker containers with
+`docker-compose exec`. With the override configuration and the RabbitMQ
+URL being different than the default, this would be a very long command
+line. To shorten the call, use the `queue_screenshot.sh` command:
+
+	./queue_screenshot.sh <CAMPAIGN_NAME>
+
+The `queue_screenshot.sh` tool will look for the file `campaign_info.toml`,
+create a test matrix and queue the tests. 
+
 `<CAMPAIGN_NAME>` must be one of the configuration keys of that
 configuration file, e.g. `desktop` or `mobile`.
 
-The background workers will create a directory inside the `banner-shots` directory. The campaign directory contains the 
-screenshot images and file `metadata.json` with all the metadata about the test case.
-
-Instead of using the `-c` parameter, you can also create a symbolic link
-from your local copy of `wmde/fundraising-banners` to the screenshot tool
-directory.
-
-### Running inside the docker context
-
-To enable Docker to access RabbitMQ you need to figure out the network name of the `docker-compose` installation. 
-Usually that's the name of the directory of the `docker-compose.yml` file with the suffix `_default`. You can show all 
-networks with the command
-
-    docker network ls
-
-Then you can run the script with the following command:
-
-    docker run --rm --network SCREENSHOT_NETWORK_NAME -v /path/to/banner/config:/app/campaign_info.toml -v $(pwd):/app \
-        -w /app node:16-alpine npx ts-node queue_screenshots.ts -u ampq://rabbitmq <CAMPAIGN_NAME>
+The background workers will create a directory inside the `banner-shots`
+directory. The campaign directory contains the screenshot images and file
+`metadata.json` with all the metadata about the test case.
 
 
 ### Configuration file format
+
+This is the same file used in the [`wmde/fundraising-banners`
+repository](https://github.com/wmde/fundraising-banners) for configuring
+campaigns. It also contains test matrix configurations.
 
 The TOML file has the following (abbreviated) format
 
@@ -82,11 +99,11 @@ resolution = ["1280x960", "1024x768"]
 `[campaign]` is the key you pass to the screenshot tool. The TOML file can
 contain several campaigns, each one for a specific *channel* (a
 combination of device type and language). `[campaign]` in the example
-above is just a placeholder, the campaign name can consist of all
+above is a placeholder, the campaign name can consist of all
 alphanumeric characters, e.g. `desktop` or `ipad_en`.
 
-Each campaign will also have at least one banner, configured with the
-`[campaign.banners.BANNER_NAME]`. Usually, `BANNER_NAME` is `ctrl` or `var`.
+Each campaign will also have at least one banner, configured in the 
+`[campaign.banners.BANNER_NAME]` section. Usually, `BANNER_NAME` is `ctrl` or `var`.
 Each banner has a unique `pagename` which designates its page name in
 CentralNotice. To preview a banner (and to render the screenshot), you
 replace the `{{PLACEHOLDER}}` with the banner name in the `preview_url` of
@@ -115,13 +132,9 @@ Add a different test function to the `src/test_functions/` directory,
 im- and export it in `src/test_functions/index.js` and specify its name in
 `testFunctionName` in `index.js`.
 
-## Running the unit tests
+## Local development
 
-    npm run test
-
-Use the following command to run individual tests
-
-    npx mocha test/specs/name_of_your_test.js 
+See [DEVELOPMENT](DEVELOPMENT.md)
 
 ## Architecture
 

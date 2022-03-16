@@ -1,2 +1,4 @@
 .env
 banner-shots
+campaign_info.toml
+campaign_info.example.toml

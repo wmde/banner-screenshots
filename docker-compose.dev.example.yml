@@ -3,6 +3,9 @@ services:
   metadata_worker:
     build: .
     entrypoint: ["npx", "ts-node", "metadata_worker.ts", "--verbose"]
+    volumes:
+      - ./banner-shots:/app/banner-shots
+      - ./campaign_info.example.toml:/app/campaign_info.toml
     depends_on:
       - rabbitmq
     environment:
@@ -13,6 +16,9 @@ services:
   screenshot_worker_1:
     build: .
     entrypoint: [ "npx", "ts-node", "screenshot_worker.ts", "--verbose" ]
+    volumes:
+      - ./banner-shots:/app/banner-shots
+      - ./campaign_info.example.toml:/app/campaign_info.toml
     depends_on:
       - rabbitmq
     environment:
@@ -23,6 +29,9 @@ services:
   screenshot_worker_2:
     build: .
     entrypoint: [ "npx", "ts-node", "screenshot_worker.ts", "--verbose" ]
+    volumes:
+      - ./banner-shots:/app/banner-shots
+      - ./campaign_info.example.toml:/app/campaign_info.toml
     depends_on:
       - rabbitmq
     environment:
@@ -33,6 +42,9 @@ services:
   screenshot_worker_3:
     build: .
     entrypoint: [ "npx", "ts-node", "screenshot_worker.ts", "--verbose" ]
+    volumes:
+      - ./banner-shots:/app/banner-shots
+      - ./campaign_info.example.toml:/app/campaign_info.toml
     depends_on:
       - rabbitmq
     environment:
@@ -43,6 +55,9 @@ services:
   screenshot_worker_4:
     build: .
     entrypoint: [ "npx", "ts-node", "screenshot_worker.ts", "--verbose" ]
+    volumes:
+      - ./banner-shots:/app/banner-shots
+      - ./campaign_info.example.toml:/app/campaign_info.toml
     depends_on:
       - rabbitmq
     environment:
@@ -52,4 +67,5 @@ services:
 
 
   rabbitmq:
-    image: "rabbitmq"
+    ports:
+      - "5672:5672"
