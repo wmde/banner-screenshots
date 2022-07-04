@@ -25,7 +25,7 @@
     "@wdio/testingbot-service": "^7.20.5",
     "chromedriver": "^103.0.0",
     "ts-mocha": "^10.0.0",
-    "ts-node": "^10.8.1",
+    "ts-node": "^10.8.2",
     "wdio-chromedriver-service": "^7.3.2"
   },
   "dependencies": {
