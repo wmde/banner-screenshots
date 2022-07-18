@@ -17,7 +17,7 @@
     "node": ">=15.0"
   },
   "devDependencies": {
-    "@types/node": "^18.0.3",
+    "@types/node": "^18.0.6",
     "@wdio/cli": "^7.20.7",
     "@wdio/local-runner": "~7.20.5",
     "@wdio/mocha-framework": "^7.20.7",
