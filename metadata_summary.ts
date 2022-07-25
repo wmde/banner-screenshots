@@ -1,11 +1,19 @@
 #!/usr/bin/env ts-node-script
 
+import { Command } from 'commander';
+
 import RabbitMQConnection from "./src/MessageQueue/RabbitMQConnection";
 import RabbitMQProducer from "./src/MessageQueue/RabbitMQProducer";
-import EnvironmentConfig from "./src/EnvironmentConfig";
+		
+const program = new Command();
+program
+	.option('-u --queueUrl <file>', 'RabbitMQ URL', 'amqp://localhost' )
+	program.showHelpAfterError();
+program.parse();
 
-const config = EnvironmentConfig.create();
-const queueConnection = new RabbitMQConnection( config.queueUrl );
+const queueUrl = program.opts().queueUrl;
+
+const queueConnection = new RabbitMQConnection( queueUrl );
 const producer = new RabbitMQProducer( queueConnection );
 
 ( async () => {
