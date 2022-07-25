@@ -40,16 +40,20 @@ configuration file and output directory in development and production.
 
 ## Creating Screenshots
 
-### Downloading the campaign file for a branch
+### 
+The following steps are valid for both, the local dev environment
+and in the production environment.
+
+### 1 Downloading the campaign file for a branch
 
 Run the command
 
-	make BRANCH_NAME=<branchname> fetch-campaign-info
+    make BRANCH_NAME=<branchname> fetch-campaign-info
 
 Replacing the placeholder `<branchname>` with the branch name you want to
 fetch from. It defaults to `main`.
 
-### Running the command
+### 2 Running the command
 
 You will run the screenshot tool inside one of the screenshot worker containers with
 `docker-compose exec`. With the override configuration and the RabbitMQ
@@ -68,8 +72,29 @@ The background workers will create a directory inside the `banner-shots`
 directory. The campaign directory contains the screenshot images and file
 `metadata.json` with all the metadata about the test case.
 
+### ▶️️ Running the steps on the shutterbug production server
+In order to let https://shutterbug.wikimedia.de/ serve new banner screenshots,
+you have to run the previous steps on the web3 server.
+1) On the webserver, run `$cd /local/sites/shutterbug.wikimedia.de/banner-screenshots`
+   
+   This is the directory the `banner-screenshots` repository code is checked into.
+2) Make sure that the git `main` branch is checked out and at a current state.
+3) Download the campaign file from [Step 1](#1-downloading-the-campaign-file-for-a-branch)
+4) Run `$make start-workers` to start the environment.
 
-### Configuration file format
+    *(Do not use `$docker-compose up -d` instead.)*
+
+   *(Make sure the Makefile says mentions docker-compose.prod.yml, not the dev version.)*
+
+5) Run the screenshot generator command from [Step 2](#2-running-the-command) 
+6) The screenshots can be found in `shutterbug.wikimedia.de/htdocs/screenshots` on the server.
+7) The metadata summary file should update automatically.
+
+- if want to reconfigure or restart environment containers:
+  - `$make stop-workers`
+  - `$docker-compose down -v` will also remove the rabbitMQ logs, use it with care.
+
+### ℹ️ About the Configuration file format
 
 This is the same file used in the [`wmde/fundraising-banners`
 repository](https://github.com/wmde/fundraising-banners) for configuring
