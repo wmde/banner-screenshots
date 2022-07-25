@@ -4,7 +4,7 @@ start-workers:
 	docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
 
 stop-workers:
-	docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+	docker-compose -f docker-compose.yml -f docker-compose.dev.yml down
 
 generate-dev-config:
 	if [ ! -f docker-compose.dev.yml ]; then cp docker-compose.dev.example.yml docker-compose.dev.yml; fi
