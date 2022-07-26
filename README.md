@@ -138,7 +138,7 @@ Run the command
 
 	make force-summary
 
-to trugger the summary command for the metadata worker. This will refresh
+to trigger the summary command for the metadata worker. This will refresh
 the overview page for Shutterbug, based on the existing metadata files. If
 a metadata file is invalid, the metadata worker will show a log message
 and ignore the file.
