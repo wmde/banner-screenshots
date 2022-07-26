@@ -132,6 +132,17 @@ Add a different test function to the `src/test_functions/` directory,
 im- and export it in `src/test_functions/index.js` and specify its name in
 `testFunctionName` in `index.js`.
 
+## Refreshing the metadata summary
+
+Run the command 
+
+	make force-summary
+
+to trigger the summary command for the metadata worker. This will refresh
+the overview page for Shutterbug, based on the existing metadata files. If
+a metadata file is invalid, the metadata worker will show a log message
+and ignore the file.
+
 ## Local development
 
 See [DEVELOPMENT](DEVELOPMENT.md)

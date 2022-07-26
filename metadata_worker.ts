@@ -48,14 +48,16 @@ consumer.consumeMetaDataQueue( async ( msgData: MetadataMessage ) => {
             showMessage(`Updated metadata for testcase ${msgData.testCase.screenshotFilename}`);
             break;
         case "summary":
-            const allMetadata = repo.getCampaignNames().map(campaignName => {
+            const allMetadata = repo.getCampaignNames().reduce((collectedMetaData, campaignName) => {
                 const fn = path.join(screenshotPath, campaignName, METADATA_FILE);
                 const serializedMetadata = JSON.parse(fs.readFileSync(fn, 'utf-8'));
-                if (!isSerializedCampaignMetadata(serializedMetadata)) {
-                    throw new Error(`ERROR: File "${fn}" contained invalid metadata`);
-                }
-                return serializedMetadata;
-            });
+                if ( isSerializedCampaignMetadata(serializedMetadata) ) {
+					collectedMetaData.push(serializedMetadata);
+                } else {
+                    console.log( `ERROR: File "${fn}" contained invalid metadata` );
+				}
+                return collectedMetaData;
+            }, []);
             const summary = summarizeMetadata(allMetadata);
             const summaryFileName = path.join(screenshotPath, 'metadata_summary.json');
             fs.writeFileSync(summaryFileName, JSON.stringify(summary, null, 4), 'utf-8');
