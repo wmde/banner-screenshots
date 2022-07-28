@@ -155,4 +155,12 @@ export class TestCase {
 	getLastStateName(): string {
 		return this.state.stateName;
 	}
+
+	containsDimensions( dimensions: Dimension[] ): boolean {
+		if ( this.dimensions.size > dimensions.length ) {
+			return false;
+		}
+		const unknownDimensions = dimensions.filter( (dimension: Dimension) => !this.dimensions.has( dimension ) );
+		return unknownDimensions.length === 0;
+	}
 }

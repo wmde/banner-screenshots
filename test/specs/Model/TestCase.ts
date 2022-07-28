@@ -89,4 +89,19 @@ describe('TestCase', () => {
 		assert.equal( newTestCase.getLastStateName(), 'pending' );
 		assert.equal( finishedTestCase.getLastStateName(), 'finished' );
 	} );
+
+	it( 'can validate dimensions', () => {
+		const testCase = TestCase.create(
+			dimensions,
+			[ 'chrome_win7', '1280x960', 'ctrl' ],
+			'https://de.wikipedia.org'
+		);
+
+		const fewerDimensions = [Dimension.PLATFORM, Dimension.RESOLUTION];
+		const differentDimensions = [Dimension.PLATFORM, Dimension.RESOLUTION, Dimension.ORIENTATION];
+
+		assert.ok( testCase.containsDimensions( dimensions ) );
+		assert.ok( !testCase.containsDimensions( fewerDimensions ) );
+		assert.ok( !testCase.containsDimensions( differentDimensions ) );
+	} )
 });

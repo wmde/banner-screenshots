@@ -3,6 +3,7 @@ import { strict as assert } from 'assert';
 import CampaignMetadata from "../../../src/Model/CampaignMetadata";
 import {dimensions, createdOn, testcase1, testcase2, dimensionKeys} from "../../fixtures/campaign_metadata";
 import {TestCase, TestCaseFinishedState} from "../../../src/Model/TestCase";
+import { Dimension } from '../../../src/Model/Dimension';
 
 describe( 'CampaignMetadata', () => {
 
@@ -14,6 +15,11 @@ describe( 'CampaignMetadata', () => {
         assert.equal( meta.getTestCase( testcase1.getName() ), testcase1, 'Test cases should be stored by reference' );
         assert.deepEqual( meta.createdOn, createdOn );
         assert.equal( meta.campaign, 'test_campaign' );
+    } );
+
+	it('can not be created with test case and dimension mismatch', () => {
+		const onlySomeDimensions = new Map( [ [ Dimension.DEVICE, [ 'Blackberry' ] ] ] );
+        assert.throws(() => new CampaignMetadata( [testcase1, testcase2], onlySomeDimensions, 'test_campaign', createdOn ) );
     } );
 
     it( 'fails getting a test case when the name does not match', () => {
