@@ -23,7 +23,7 @@ describe( 'serializeCampaignMetadata', () => {
         const serialized =  serializeCampaignMetadata( Fixtures.campaignMetadata );
         const expectedDimensions = [
             [ 'device', ['iPhone_99'] ],
-            [ 'banner', ['CTRL'] ],
+            [ 'banner', ['CTRL', 'VAR'] ],
         ];
 
         assert.deepEqual( serialized.dimensions, expectedDimensions );

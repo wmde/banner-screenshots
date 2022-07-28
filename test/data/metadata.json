@@ -11,20 +11,17 @@
     [
       "banner",
       [
-        "CTRL"
+        "CTRL",
+        "VAR"
       ]
     ]
   ],
   "testCases": [
     {
-      "dimensionKeys": [
-        "device",
-        "banner"
-      ],
-      "dimensionValues": [
-        "iPhone_99",
-        "CTRL"
-      ],
+      "dimensions": {
+        "device": "iPhone_99",
+        "banner": "CTRL"
+      },
       "bannerUrl": "https://example.com/banner",
       "state": {
         "stateName": "pending",
@@ -34,14 +31,10 @@
       "valid": true
     },
     {
-      "dimensionKeys": [
-        "device",
-        "banner"
-      ],
-      "dimensionValues": [
-        "iPhone_99",
-        "VAR"
-      ],
+      "dimensions": {
+        "device": "iPhone_99",
+        "banner": "VAR"
+      },
       "bannerUrl": "https://example.com/banner",
       "state": {
         "stateName": "pending",
