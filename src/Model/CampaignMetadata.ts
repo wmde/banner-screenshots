@@ -18,7 +18,7 @@ export default class CampaignMetadata {
         return Array.from( this.testCases.values() );
     }
 
-    getTestCase( name ): TestCase {
+    getTestCase( name: string ): TestCase {
         if ( !this.testCases.has( name ) ) {
             throw new Error( `Test case "${name}" not found` );
         }

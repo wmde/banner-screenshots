@@ -9,7 +9,7 @@ const FIXTURE = path.join( __dirname, '../data/metadata.json' );
 
 describe('FileMetadataRepository', function () {
     describe( '#saveMetadata', () => {
-        let testDir;
+        let testDir : string;
 
         beforeEach(() => {
             testDir = fs.mkdtempSync(path.join(tmpdir(), 'test-'));
