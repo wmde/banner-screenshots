@@ -10,7 +10,7 @@ fetch-campaign-info:
 	curl -o campaign_info.toml -L https://raw.githubusercontent.com/wmde/fundraising-banners/${BRANCH_NAME}/campaign_info.toml
 
 force-summary:
-	docker-compose -f docker-compose.yml -f ${DOCKER_COMPOSE_OVERRIDE} exec metadata_worker npx ts-node queue_screenshots.ts -u amqp://rabbitmq
+	docker-compose -f docker-compose.yml -f ${DOCKER_COMPOSE_OVERRIDE} exec metadata_worker npx ts-node metadata_summary.ts -u amqp://rabbitmq
 
 # Start/Stop container environment. This will run the scripts inside the built container, NOT the scripts in the local environment 
 start-workers:
