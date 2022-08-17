@@ -53,11 +53,22 @@ describe( 'unserializeCampaignMetadata', () => {
     };
 
 
-    it('unserializes date', () => {
+    it('unserializes date in ISO format', () => {
         const newMeta =  unserializeCampaignMetadata( serializedObject );
 
         assert.deepEqual( newMeta.createdOn, Fixtures.createdOn );
     } );
+
+    it('unserializes numeric date', () => {
+		const serializedObjectWithNumericDate = {
+			...serializedObject,
+			createdOn: 1640304000000
+		}
+        const newMeta =  unserializeCampaignMetadata( serializedObjectWithNumericDate );
+
+        assert.deepEqual( newMeta.createdOn, Fixtures.createdOn );
+    } );
+
 
     it('rejects invalid date', () => {
         assert.throws( () => {
