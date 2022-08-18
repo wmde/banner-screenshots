@@ -10,6 +10,7 @@ import RabbitMQProducer from "./src/MessageQueue/RabbitMQProducer";
 import { TestCase, TestCaseFailedState } from "./src/Model/TestCase";
 import RabbitMQConnection from "./src/MessageQueue/RabbitMQConnection";
 import path from "path";
+import process from "process";
 import {WorkerConfigFactory} from "./src/CommandLine/WorkerConfig";
 
 const config = new EnvironmentConfig();
@@ -38,6 +39,8 @@ const sendMetadataUpdate = async ( testCase: TestCase, campaignName: string ): P
 		testCase: serializeTestCase( testCase ),
 		campaignName
 	} );
+
+process.umask(0o002);
 
 consumer.consumeScreenshotQueue( async (msgData: TestCaseMessage) => {
 	const writeImageData = await createImageWriter( path.join( options.outputPath, msgData.trackingName ) );
