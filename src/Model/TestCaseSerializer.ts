@@ -5,7 +5,7 @@ import {
     TestCaseIsRunningState,
     TestCasePendingState,
 } from "./TestCase";
-import { isValidDimension} from "./Dimension";
+import { isValidDimension, Dimension } from "./Dimension";
 
 interface SerializedTestCaseState {
     stateName: string;
@@ -14,7 +14,7 @@ interface SerializedTestCaseState {
 }
 
 export interface SerializedTestCase {
-    dimensions: Record<string, string>,
+    dimensions: [string, string][],
     bannerUrl: string,
     state?: SerializedTestCaseState,
     screenshotFilename?: string,
@@ -58,13 +58,9 @@ export function unserializeTestCaseState( stateObj: SerializedTestCaseState ): S
 }
 
 export function serializeTestCase( testCase: TestCase ): SerializedTestCase {
-    const dimensions = {};
     const state = Reflect.get(testCase, 'state')
-	for ( let [dimensionName, dimensionValue] of testCase.getDimensions().entries() ) {
-		dimensions[dimensionName] = dimensionValue;
-	}
     return {
-        dimensions,
+        dimensions: Array.from( testCase.getDimensions().entries() ),
         bannerUrl: testCase.getBannerUrl(),
         state: serializeTestCaseState( state ),
         screenshotFilename: testCase.getScreenshotFilename(),
@@ -86,18 +82,18 @@ export function unserializeTestCase( testCaseObj: SerializedTestCase ): TestCase
         throw new Error( 'Invalid test case data' );
     }
 	
-	const dimensionKeys = Object.keys( testCaseObj.dimensions ).map( ( dimensionKey: string ) => {
+	const dimensions = new Map<Dimension, string>();
+
+	testCaseObj.dimensions.forEach( ( [ dimensionKey, dimensionValue] ) => {
 		if ( !isValidDimension( dimensionKey ) ) {
             throw new Error( `${dimensionKey} is not a valid dimension name.` )
         }
-		return dimensionKey;
+		dimensions.set( dimensionKey, dimensionValue );
 	} );
 
-	const dimensionValues = Object.values( testCaseObj.dimensions );
-
     const testCase = TestCase.create(
-        dimensionKeys,
-        dimensionValues,
+        Array.from( dimensions.keys() ),
+		Array.from( dimensions.values() ),
         testCaseObj.bannerUrl
     );
     if ( testCaseObj.state ) {

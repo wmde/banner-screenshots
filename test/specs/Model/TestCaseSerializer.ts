@@ -148,11 +148,11 @@ describe('serializeTestCase', () => {
         assert.deepEqual(
             serializeTestCase( testCase ),
             {
-				dimensions: {
-					platform: "firefox",
-					banner: "ctrl",
-					resolution: '1200x960',
-				},
+				dimensions: [
+					[ 'platform', "firefox" ],
+					[ 'banner', "ctrl" ],
+					[ 'resolution', '1200x960'],
+				],
                 bannerUrl: 'https://example.com/',
                 state: { stateName: 'pending', description: 'Test case is pending' },
                 screenshotFilename: 'firefox__ctrl__1200x960.png',
@@ -171,11 +171,11 @@ describe('unserializeTestCase', () => {
 
         assert.deepEqual(
             unserializeTestCase( {
-                dimensions: {
-					platform: 'firefox',
-					banner: 'ctrl',
-					resolution: '1200x960'
-				},
+                dimensions: [
+					[ 'platform', "firefox" ],
+					[ 'banner', "ctrl" ],
+					[ 'resolution', '1200x960'],
+				],
                 bannerUrl: 'https://example.com/',
                 state: { stateName: 'pending', description: 'Test case is pending' },
                 screenshotFilename: 'firefox__ctrl__1200x960.png',
@@ -194,11 +194,12 @@ describe('unserializeTestCase', () => {
         expectedTestCase.updateState(new TestCaseFailedState( "The circuit's dead there's something wrong" ));
 
         const testCase = unserializeTestCase( {
-                dimensions: {
-					platform: 'firefox',
-					banner: 'ctrl',
-					resolution: '1200x960'
-				},                bannerUrl: 'https://example.com/',
+                dimensions: [
+					[ 'platform', "firefox" ],
+					[ 'banner', "ctrl" ],
+					[ 'resolution', '1200x960'],
+				],
+				bannerUrl: 'https://example.com/',
                 state: { stateName: 'failed', description: "The circuit's dead there's something wrong" },
                 screenshotFilename: 'Not_A_Valid_File_Name.png',
                 valid: true
@@ -215,8 +216,8 @@ describe('unserializeTestCase', () => {
             [ true, 'Boolean' ],
             [ {}, 'Empty object' ],
             [ { bannerUrl: 'https://example.com/', }, 'missing dimensios' ],
-            [ { dimensions: { operating_system: "Windows" }, bannerUrl: 'https://example.com/', }, 'unsupported dimension' ],
-            [ { dimensions: { platform: 'firefox'} }, 'missing banner url' ],
+            [ { dimensions: [ ['operating_system', "Windows" ] ], bannerUrl: 'https://example.com/', }, 'unsupported dimension' ],
+            [ { dimensions: [ ['platform', 'firefox' ] ] }, 'missing banner url' ],
         ];
 
         faultyData.forEach( ([misshapenObj, description]) => {
@@ -227,7 +228,7 @@ describe('unserializeTestCase', () => {
 
     it( 'creates pending state when state is missing', () => {
         const testCase = unserializeTestCase( {
-            dimensions: { platform: 'firefox' },
+            dimensions: [ ['platform', 'firefox' ] ],
             bannerUrl: 'https://example.com/',
         } );
 
