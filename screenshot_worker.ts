@@ -52,7 +52,7 @@ consumer.consumeScreenshotQueue( async (msgData: TestCaseMessage) => {
 	try {
 		testFunction = getTestFunction( msgData.testFunction );
 	} catch ( e ) {
-		testCase.updateState( new TestCaseFailedState( 'Test function failed with error', e ) );
+		testCase.updateState( new TestCaseFailedState( e.message ) );
 		await sendMetadataUpdate( testCase, msgData.trackingName );
 		showMessage( e.message );
 		return;
@@ -63,6 +63,7 @@ consumer.consumeScreenshotQueue( async (msgData: TestCaseMessage) => {
 		await testFunction( browser, testCase, writeImageData );
 	} catch (e) {
 		testCase.updateState( new TestCaseFailedState( e.message ) );
+		await sendMetadataUpdate( testCase, msgData.trackingName );
 		showMessage( e.message );
 		return;
 	}
