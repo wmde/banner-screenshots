@@ -14,7 +14,7 @@ const PLATFORM_EXCLUDED_RESOLUTIONS = [
 export const INVALID_REASON_REQUIRED = 'The required dimensions are missing';
 export const INVALID_REASON_RESOLUTION = 'This resolution is not available on this platform';
 
-interface TestCaseState {
+export interface TestCaseState {
 	description: string;
 	stateName: string;
 }
