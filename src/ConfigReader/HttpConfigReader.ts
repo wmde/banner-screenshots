@@ -23,6 +23,7 @@ export class HttpConfigReader implements ConfigReader {
 		return new Promise( ( resolve, reject ) => {
 			// Determine which module to use. They have the same API
 			const httpModule = /^https:/.test(url) ? https : http;
+			console.log(`Fetching ${url}`);
 			const req = httpModule.get( url, (res) => {
 				const { statusCode } = res;
 

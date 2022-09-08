@@ -50,9 +50,7 @@ export class ConfigurationParser {
 
 
 	generate( campaignName: string ): TestCaseGenerator {
-		if ( !this.data.has( campaignName ) ) {
-			throw new Error( `Campaign "${campaignName}" not found in configuration!` );
-		}
+		this.checkForCampaignName( campaignName );
 		const campaign = this.data.get( campaignName );
 
 		this.validate( campaign );
@@ -60,6 +58,11 @@ export class ConfigurationParser {
 		return this.createMatrix( campaign );
 	}
 
+	private checkForCampaignName( campaignName: string ): void {
+		if ( !this.data.has( campaignName ) ) {
+			throw new Error( `Campaign "${campaignName}" not found in configuration!` );
+		}
+	}
 
 	private createMatrix( campaign: Map<string, any> ): TestCaseGenerator {
 
@@ -93,6 +96,7 @@ export class ConfigurationParser {
 	}
 
 	getCampaignTracking( campaignName: string ): string {
+		this.checkForCampaignName( campaignName );
 		return this.data.get( campaignName ).get( CAMPAIGN_TRACKING )
 	}
 

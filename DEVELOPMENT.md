@@ -41,4 +41,12 @@ Use the following command to run individual tests
 
     npx mocha test/specs/name_of_your_test.js 
 
+## Downloading the campaign file for a branch
+
+Run the command
+
+	make BRANCH_NAME=<branchname> fetch-campaign-info
+
+Replacing the placeholder `<branchname>` with the branch name you want to
+fetch from. It defaults to `main`.
 
