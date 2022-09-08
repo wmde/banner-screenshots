@@ -1,18 +1,18 @@
-import {ScreenshotsRequestFactory} from "./src/CommandLine/ScreenshotRequest";
+import {QueueScreenshotsFromFileCommand} from "./src/CommandLine/QueueScreenshotsFromFileCommand";
 import {ScreenshotGenerator} from "./src/ScreenshotGenerator.js";
 import {TestCase} from "./src/Model/TestCase";
 import RabbitMQConnection from "./src/MessageQueue/RabbitMQConnection";
 import RabbitMQProducer from "./src/MessageQueue/RabbitMQProducer";
 
-const requestFactory = new ScreenshotsRequestFactory( process.cwd() );
-const requestParameters = requestFactory.getRequestParameters();
+const command = new QueueScreenshotsFromFileCommand( process.cwd() );
+const requestParameters = command.getRequestParameters();
 const connection = new RabbitMQConnection( requestParameters.queueUrl );
 const queue = new RabbitMQProducer( connection );
 const screenshotGenerator = new ScreenshotGenerator( queue );
 
 screenshotGenerator.generateQueuedScreenshots( requestParameters ).then(
-	async ( testcases: TestCase[] ) => {
-		console.log(`sent ${testcases.length} test cases to queue`);
+	async ( testCases: TestCase[] ) => {
+		console.log(`sent ${testCases.length} test cases to queue`);
 		await connection.disconnect();
 		process.exit(0);
 	})
