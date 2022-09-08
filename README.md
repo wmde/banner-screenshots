@@ -143,6 +143,36 @@ the overview page for Shutterbug, based on the existing metadata files. If
 a metadata file is invalid, the metadata worker will show a log message
 and ignore the file.
 
+## Commands for Troubleshooting
+
+### Check if the containers are running
+
+	docker-compose ps
+
+The container state should be "Up".
+
+### Check if the banner-shots directory is mounted into the container
+
+	docker-compose exec screenshot_worker_1 ash -c 'ls -al'
+
+The directory listing should show the `banner-shots` directory with an
+owner of `node`.
+
+### Check if the workers are doing something
+
+You can get a unified stream of log output (with timestamps) by running
+
+	docker-compose logs -tf
+
+By default, the workers should start with the `--verbose` flag
+(see `entrypoint` in the `docker-compose` file).
+
+
+### Show queue and message count
+
+	docker-compose exec rabbitmq bash -c 'rabbitmqctl list_queues'
+
+
 ## Local development
 
 See [DEVELOPMENT](DEVELOPMENT.md)
