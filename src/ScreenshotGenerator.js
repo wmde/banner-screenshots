@@ -24,7 +24,7 @@ export class ScreenshotGenerator {
 	 */
 
 	async generateQueuedScreenshots( request ) {
-		const { trackingName, testCases, dimensions } = this.initialize( request );
+		const { trackingName, testCases, dimensions } = await this.initialize( request );
 		const serializedTestCases = testCases.map( serializeTestCase );
 
 		await this.queue.sendInitializeMetadata( {
@@ -51,9 +51,9 @@ export class ScreenshotGenerator {
 	 * @param {ScreenshotsRequest} request
 	 * @returns {{testCases: TestCase[], outputDirectory: string, trackingName: string, dimensions: Dimensions}}
 	 */
-	initialize( request ) {
-		const config = fs.readFileSync( request.configPath );
-		const parser = new ConfigurationParser( config.toString() );
+	async initialize( request ) {
+		const config = await request.configReader.getConfig();
+		const parser = new ConfigurationParser( config );
 		const trackingName = parser.getCampaignTracking( request.campaignName );
 		const testCaseGenerator = parser.generate( request.campaignName );
 		const testCases = testCaseGenerator.getTestCases();

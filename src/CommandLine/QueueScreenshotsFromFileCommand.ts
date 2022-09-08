@@ -1,22 +1,10 @@
 import { Command } from 'commander';
 import * as path from "path";
 import { testFunctionExists } from "../test_functions";
+import { ScreenshotsRequest } from './ScreenshotsRequest';
+import { FileConfigReader } from '../ConfigReader/FileConfigReader';
 
-export class ScreenshotsRequest {
-	readonly campaignName: string;
-	readonly configPath: string;
-	readonly testFunction: string;
-	readonly queueUrl: string;
-
-	constructor( configPath: string, campaignName: string, testFunctionName: string, queueUrl: string ) {
-		this.configPath = configPath;
-		this.campaignName = campaignName;
-		this.testFunction = testFunctionName;
-		this.queueUrl = queueUrl;
-	}
-}
-
-export class ScreenshotsRequestFactory {
+export class QueueScreenshotsFromFileCommand {
 	cwd: string;
 
 	constructor( cwd: string ) {
@@ -30,7 +18,7 @@ export class ScreenshotsRequestFactory {
 			.option('-c --configName <file>', 'Path to the campaign config file (toml)', 'campaign_info.toml' )
 			.option('-t --testFunctionName <name>', 'Name of the test function', 'shootBanner' )
 			.option('-u --queueUrl <file>', 'RabbitMQ URL', 'amqp://localhost' )
-			.argument( '<CAMPAIGN_NAME>')
+			.argument( '<CAMPAIGN_NAME>', 'channel name, e.g. "desktop", "mobile", etc.' )
 			.action( (campaign) => {
 				campaignName = campaign
 			})
@@ -46,6 +34,6 @@ export class ScreenshotsRequestFactory {
 			process.exit( 2 );
 		}
 
-		return new ScreenshotsRequest( configPath, campaignName, testFunctionName, program.opts().queueUrl );
+		return new ScreenshotsRequest( new FileConfigReader( configPath ), campaignName, testFunctionName, program.opts().queueUrl );
 	}
 }

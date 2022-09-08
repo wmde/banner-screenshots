@@ -1,17 +1,20 @@
 import * as http from 'http'
 import * as https from 'https'
 import urlJoin from 'url-join';
+import { ConfigReader } from './ConfigReaderInterface';
 
-export class HttpConfigReader {
+export class HttpConfigReader implements ConfigReader {
 	baseUrl: string;
+	remoteBranchName: string;
 
-	constructor( baseUrl: string ) {
+	constructor( baseUrl: string, remoteBranchName: string ) {
 		this.baseUrl = baseUrl;
+		this.remoteBranchName = remoteBranchName;
 	}
 
-	getConfig( remoteBranchName: string ): Promise<string> {
+	getConfig(): Promise<string> {
 
-		const url = urlJoin( this.baseUrl, remoteBranchName, 'campaign_info.toml' );
+		const url = urlJoin( this.baseUrl, this.remoteBranchName, 'campaign_info.toml' );
 		return this.doRequest( url );
 		
 	}
