@@ -1,5 +1,5 @@
 import { strict as assert } from 'assert';
-import {determineCampaignFromBranchName } from '../../src/determineCampaignFromBranchName';
+import {determineCampaignFromBranchName } from '../../src/CommandLine/determineCampaignFromBranchName';
 
 describe("determineCampaignFromBranchName", () => {
 	it("returns desktop for WMDE prefix without other modifiers", () => {
