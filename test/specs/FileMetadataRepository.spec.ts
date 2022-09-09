@@ -9,7 +9,7 @@ const FIXTURE = path.join( __dirname, '../data/metadata.json' );
 
 describe('FileMetadataRepository', function () {
     describe( '#saveMetadata', () => {
-        let testDir;
+        let testDir : string;
 
         beforeEach(() => {
             testDir = fs.mkdtempSync(path.join(tmpdir(), 'test-'));
@@ -23,9 +23,9 @@ describe('FileMetadataRepository', function () {
 
             const outputFilePath = path.join(testDir, 'test_campaign/metadata.json');
             assert.ok(fs.existsSync(outputFilePath));
-            const expectedContent = fs.readFileSync(FIXTURE);
-            const actualContent = fs.readFileSync(outputFilePath);
-            assert.ok(expectedContent.equals(actualContent));
+            const expectedContent = fs.readFileSync(FIXTURE, 'utf-8');
+            const actualContent = fs.readFileSync(outputFilePath, 'utf-8');
+			assert.deepEqual(expectedContent, actualContent);
         } );
     } );
 

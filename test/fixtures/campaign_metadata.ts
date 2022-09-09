@@ -4,7 +4,7 @@ import CampaignMetadata from "../../src/Model/CampaignMetadata";
 
 export const dimensions = new Map( [
     [ Dimension.DEVICE, ['iPhone_99'] ],
-    [ Dimension.BANNER, ['CTRL'] ]
+    [ Dimension.BANNER, ['CTRL', 'VAR'] ]
 ] );
 export const dimensionKeys = Array.from( dimensions.keys() );
 export const createdOn = new Date( '2021-12-24' );

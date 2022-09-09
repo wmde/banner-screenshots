@@ -5,8 +5,9 @@ import {isTestCaseMessage} from "../../../src/MessageQueue/Messages";
 describe('isTestCaseMessage', () => {
 
     const validSerializedTestCase = {
-        dimensionKeys: [Dimension.PLATFORM],
-        dimensionValues: ['firefox'],
+        dimensions: {
+			[Dimension.PLATFORM]: 'firefox'
+		},
         bannerUrl: 'https://example.com/banner'
     }
 
@@ -22,7 +23,7 @@ describe('isTestCaseMessage', () => {
         ] as const;
 
         faultyData.forEach( ([data, description]) => {
-            assert.equal( isTestCaseMessage( data ), false )
+            assert.equal( isTestCaseMessage( data ), false, description )
         } );
     } );
 

@@ -12,6 +12,7 @@ import {
 import {FileMetadataRepository, METADATA_FILE} from "./src/FileMetadataRepository";
 import path from "path";
 import fs from "fs";
+import process from "process";
 import summarizeMetadata from "./src/Model/MetadataSummarizer";
 import {WorkerConfigFactory} from "./src/CommandLine/WorkerConfig";
 
@@ -25,6 +26,8 @@ const repo = new FileMetadataRepository( screenshotPath );
 const queueConnection = new RabbitMQConnection( config.queueUrl, "Connection established, hit Ctrl-C to quit worker" );
 const consumer = new RabbitMQConsumer( queueConnection );
 const producer = new RabbitMQProducer( queueConnection );
+
+process.umask(0o002);
 
 consumer.consumeMetaDataQueue( async ( msgData: MetadataMessage ) => {
     switch ( msgData.msgType ) {

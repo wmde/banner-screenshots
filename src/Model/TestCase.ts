@@ -14,7 +14,7 @@ const PLATFORM_EXCLUDED_RESOLUTIONS = [
 export const INVALID_REASON_REQUIRED = 'The required dimensions are missing';
 export const INVALID_REASON_RESOLUTION = 'This resolution is not available on this platform';
 
-interface TestCaseState {
+export interface TestCaseState {
 	description: string;
 	stateName: string;
 }
@@ -154,5 +154,13 @@ export class TestCase {
 	
 	getLastStateName(): string {
 		return this.state.stateName;
+	}
+
+	containsDimensions( dimensions: Dimension[] ): boolean {
+		if ( this.dimensions.size > dimensions.length ) {
+			return false;
+		}
+		const unknownDimensions = dimensions.filter( (dimension: Dimension) => !this.dimensions.has( dimension ) );
+		return unknownDimensions.length === 0;
 	}
 }

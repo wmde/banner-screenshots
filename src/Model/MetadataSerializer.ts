@@ -14,10 +14,16 @@ export interface SerializedCampaignMetadata {
 export function isSerializedCampaignMetadata( data: any ): data is SerializedCampaignMetadata {
     return typeof data === 'object' &&
         data.createdOn &&
-        !isNaN( Date.parse( data.createdOn ) ) &&
+        isValidCreationDate( data.createdOn ) &&
         data.dimensions &&
         data.dimensions.reduce( (acc: boolean, [dimensionKey]) => acc && isDimensionValue( dimensionKey ), true ) &&
         data.testCases
+}
+
+function isValidCreationDate( dateCandidate ): boolean {
+	// Some legacy metadata files use numbers instead of ISO string
+	return typeof dateCandidate === "number" ||
+		!isNaN( Date.parse( dateCandidate ) )
 }
 
 function isDimensionValue( dimensionCandidate: any ): dimensionCandidate is keyof typeof Dimension {

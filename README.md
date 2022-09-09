@@ -40,34 +40,26 @@ configuration file and output directory in development and production.
 
 ## Creating Screenshots
 
-### Downloading the campaign file for a branch
-
 Run the command
 
-	make BRANCH_NAME=<branchname> fetch-campaign-info
+```shell
+./queue_screenshot.sh <BRANCH_NAME>
+```
 
-Replacing the placeholder `<branchname>` with the branch name you want to
-fetch from. It defaults to `main`.
+With `<BRANCH_NAME>` being a tag or branch name on the [Banner GitHub
+repository](https://github.com/wmde/fundraising-banners), e.g.
+`C22_WMDE_Test_04` or `C22_WMDE_Mobile_EN_Test_01`. The script will try to
+figure out the channel (desktop, mobile, pad_en, etc.) from the branch
+name.
 
-### Running the command
+The shell script is a wrapper for a long `docker-compose exec` command.
 
-You will run the screenshot tool inside one of the screenshot worker containers with
-`docker-compose exec`. With the override configuration and the RabbitMQ
-URL being different than the default, this would be a very long command
-line. To shorten the call, use the `queue_screenshot.sh` command:
-
-	./queue_screenshot.sh <CAMPAIGN_NAME>
-
-The `queue_screenshot.sh` tool will look for the file `campaign_info.toml`,
-create a test matrix and queue the tests. 
-
-`<CAMPAIGN_NAME>` must be one of the configuration keys of that
-configuration file, e.g. `desktop` or `mobile`.
-
-The background workers will create a directory inside the `banner-shots`
-directory. The campaign directory contains the screenshot images and file
-`metadata.json` with all the metadata about the test case.
-
+The background workers will create a campaign directory inside the
+`banner-shots` directory. Depending on the docker-compose file used (prod,
+dev) the configuration will mount different host paths into the containers
+as the `banner-shots` directory. The campaign directory contains the
+screenshot images and file `metadata.json` with all the metadata about the
+test case.
 
 ### Configuration file format
 
@@ -142,6 +134,36 @@ to trigger the summary command for the metadata worker. This will refresh
 the overview page for Shutterbug, based on the existing metadata files. If
 a metadata file is invalid, the metadata worker will show a log message
 and ignore the file.
+
+## Commands for Troubleshooting
+
+### Check if the containers are running
+
+	docker-compose ps
+
+The container state should be "Up".
+
+### Check if the banner-shots directory is mounted into the container
+
+	docker-compose exec screenshot_worker_1 ash -c 'ls -al'
+
+The directory listing should show the `banner-shots` directory with an
+owner of `node`.
+
+### Check if the workers are doing something
+
+You can get a unified stream of log output (with timestamps) by running
+
+	docker-compose logs -tf
+
+By default, the workers should start with the `--verbose` flag
+(see `entrypoint` in the `docker-compose` file).
+
+
+### Show queue and message count
+
+	docker-compose exec rabbitmq bash -c 'rabbitmqctl list_queues'
+
 
 ## Local development
 

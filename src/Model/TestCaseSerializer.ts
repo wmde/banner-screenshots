@@ -5,7 +5,7 @@ import {
     TestCaseIsRunningState,
     TestCasePendingState,
 } from "./TestCase";
-import {Dimension, isValidDimension} from "./Dimension";
+import { isValidDimension, Dimension } from "./Dimension";
 
 interface SerializedTestCaseState {
     stateName: string;
@@ -14,8 +14,7 @@ interface SerializedTestCaseState {
 }
 
 export interface SerializedTestCase {
-    dimensionKeys: string[],
-    dimensionValues: string[],
+    dimensions: [string, string][],
     bannerUrl: string,
     state?: SerializedTestCaseState,
     screenshotFilename?: string,
@@ -59,11 +58,9 @@ export function unserializeTestCaseState( stateObj: SerializedTestCaseState ): S
 }
 
 export function serializeTestCase( testCase: TestCase ): SerializedTestCase {
-    const dimensions = testCase.getDimensions();
     const state = Reflect.get(testCase, 'state')
     return {
-        dimensionKeys: Array.from( dimensions.keys() ),
-        dimensionValues: Array.from( dimensions.values() ),
+        dimensions: Array.from( testCase.getDimensions().entries() ),
         bannerUrl: testCase.getBannerUrl(),
         state: serializeTestCaseState( state ),
         screenshotFilename: testCase.getScreenshotFilename(),
@@ -72,7 +69,7 @@ export function serializeTestCase( testCase: TestCase ): SerializedTestCase {
 }
 
 export function isSerializedTestCase( data: any ): data is SerializedTestCase {
-    return (typeof data) === 'object' && ['dimensionKeys', 'dimensionValues', 'bannerUrl'].reduce(
+    return (typeof data) === 'object' && ['dimensions', 'bannerUrl'].reduce(
         (isValid: boolean, propName: string ): boolean => {
             return isValid && ( data.hasOwnProperty(propName) && !!data[propName] );
         },
@@ -84,18 +81,19 @@ export function unserializeTestCase( testCaseObj: SerializedTestCase ): TestCase
     if (!isSerializedTestCase( testCaseObj ) ) {
         throw new Error( 'Invalid test case data' );
     }
+	
+	const dimensions = new Map<Dimension, string>();
 
-    const dimensions = testCaseObj.dimensionKeys.reduce( (seenDimensions: Dimension[], currentDimension: string ) => {
-        if (!isValidDimension(currentDimension)) {
-            throw new Error( `${currentDimension} is not a valid dimension name.` )
+	testCaseObj.dimensions.forEach( ( [ dimensionKey, dimensionValue] ) => {
+		if ( !isValidDimension( dimensionKey ) ) {
+            throw new Error( `${dimensionKey} is not a valid dimension name.` )
         }
-        seenDimensions.push( currentDimension );
-        return seenDimensions;
-    }, [] );
+		dimensions.set( dimensionKey, dimensionValue );
+	} );
 
     const testCase = TestCase.create(
-        dimensions,
-        testCaseObj.dimensionValues,
+        Array.from( dimensions.keys() ),
+		Array.from( dimensions.values() ),
         testCaseObj.bannerUrl
     );
     if ( testCaseObj.state ) {

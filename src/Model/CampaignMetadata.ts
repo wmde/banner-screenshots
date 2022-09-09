@@ -8,6 +8,11 @@ export default class CampaignMetadata {
     createdOn: Date;
 
     constructor(testCases: TestCase[], dimensions: Dimensions, campaign: string, createdOn?: Date) {
+		const dimensionIdentifiers = [ ...dimensions.keys() ];
+		const testCaseMismatchesDimensions = (tc: TestCase) => !tc.containsDimensions( dimensionIdentifiers );
+		if ( testCases.find( testCaseMismatchesDimensions ) ) {
+			throw new Error("Test case data does not match dimensions");
+		}
         this.testCases = new Map( testCases.map( (testCase: TestCase) => [testCase.getName(), testCase] ) );
         this.dimensions = dimensions;
         this.campaign = campaign;
@@ -18,7 +23,7 @@ export default class CampaignMetadata {
         return Array.from( this.testCases.values() );
     }
 
-    getTestCase( name ): TestCase {
+    getTestCase( name: string ): TestCase {
         if ( !this.testCases.has( name ) ) {
             throw new Error( `Test case "${name}" not found` );
         }
