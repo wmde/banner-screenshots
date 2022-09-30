@@ -67,7 +67,15 @@ consumer.consumeScreenshotQueue( async (msgData: TestCaseMessage) => {
 	const onTestCaseStateChange = getTestCaseStateChangeFunction( msgData.trackingName )
 
 	showMessage( `Creating a browser instance for test ${testCase.getName()}` );
-	const browser = await browserFactory.getBrowser(testCase);
+	let browser;
+	try {
+		browser = await browserFactory.getBrowser(testCase);
+	} catch ( e ) {
+		onTestCaseStateChange( testCase, new TestCaseFailedState( 'Failed creating remote browser instance: ' + e.message ) );
+		showMessage( `Could not create browser instance for test ${testCase.getName()}` );
+		showMessage( e );
+		return;
+	}
 
 	showMessage( `Taking screenshot for test ${testCase.getName()}` );
 	let testFunction;
