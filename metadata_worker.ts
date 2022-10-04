@@ -39,6 +39,8 @@ consumer.consumeMetaDataQueue( async ( msgData: MetadataMessage ) => {
             );
             repo.saveMetadata(initialMetadata);
             showMessage(`Initialized metadata file for ${initialMetadata.campaign}`);
+			// Trigger metadata summary update, so the new test shows up immediately
+			await producer.sendMetadataSummary({msgType: 'summary'});
             break;
         case "update":
             const testCase = unserializeTestCase(msgData.testCase);
