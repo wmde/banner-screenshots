@@ -2,69 +2,106 @@
 
 This is a tool for taking screenshots of WMDE fundraising banners on wikipedia.org in different browsers and resolutions.
 
-To improve performance, the system consists of parallelizable worker scripts for taking screenshots and processing metadata, connected by a message queue.
+The system consists of four parts:
 
-## Configuration
-The screenshot background worker needs credentials for the Testingbot service. Put these in the file named `.env`.
-You can copy and adapt the file `env-template`.
+1. A message queue ([RabbitMQ][1])
+2. A worker daemon, `screenshot_worker.ts`, that processes screenshot messages from the queue and takes screenshots
+3. A worker daemon `metadata_worker.ts`, that creates and updates metadata for every batch of screenshots.
+4. A CLI tool that creates a test matrix (a batch of screenshots) from the
+   campaign configuration and pushes them into the queue.
+
+Please note that the instructions in this README are for *local 
+development* only! To create screenshots, use docker-compose environment
+and the instructions in [PRODUCTION.md](PRODUCTION.md).
+
+## Installing the dependencies
+
+	npm install
+
+## Starting the message queue
+
+	make start-rabbitmq
+
+This will start [RabbitMQ][1] inside a docker container (using the
+[official RabbitMQ docker image](https://hub.docker.com/_/rabbitmq)),
+listening on port 5672.
+
+If you get an error that port 5672 is blocked, make sure that no other
+docker containers (e.g. the `docker-compose.yml` file in this repo) are
+using the port. Use the command `docker ps` to see which containers use
+which port.
+
+
+## Preparing the configuration file
+
+Create the file `.env` and put in the following content:
+
+	QUEUE_URL="amqp://localhost"
+	TB_SECRET="<secret>"
+	TB_KEY="<key>"
+
+Replace the placeholders `<secret>` and `<key>` with the real API data from your account at [Testingbot](https://testingbot.com).
+
+## Running the workers
+
+	npm run metadata-worker
+	npm run screenshot-worker
+
+### Debugging the screenshot messages
+
+Instead of the full-fledged screenshot worker you can also run
+
+	npm run simple-worker
+
+The "simple_worker" echoes the data it receives and does not take any screenshots.
+
+## Running the screenshot tool
+
+### Creating screenshots for a GitHub branch
+
+The following command will pull the specified campaign branch/tag from the
+Banner Repository, figure out which channel (desktop, mobile, ipad, etc) the campaign belongs to and queue screenshot requests for this channel:
+
+	npx ts-node queue_screenshots.ts <CAMPAIGN_NAME>
+
+### Creating screenshots for a local campaign file
+
+	npx ts-node queue_screenshots_from_file.ts -c path/to/campaign_info.toml <CHANNEL_NAME>
+
+#### Downloading the campaign file for a branch
 
 Run the command
 
-	make generate-dev-config
+	make BRANCH_NAME=<CAMPAIGN_NAME> fetch-campaign-info
 
-to create the file `docker-compose.dev.yml`. You can have a look inside it
-or edit the paths in the file to point at the right files and directories:
-
-- The directory mounted to `/app/banner-shots` will contain the screenshots and metadata.
-- The file mounted to `/app/campaign_info.toml` must exist and contain a banner
-	configuration file (see below).
+Replace the placeholder `<CAMPAIGN_NAME>` with the branch name you want to
+fetch from. It defaults to `main`.
 
 
-## Starting and Stopping the Environment
+#### Using your local copy of the banner repository
 
-The screenshot tool needs background workers and a message queue (see architecture diagram below). To start these, run
+The `queue_screenshots_from_file.ts` script will look first in the main
+directory of this repository for a `campaign_info.toml`. You can use this
+behavior by creating a symbolic link from the `campaign_info.toml` of your
+local copy of the [`wmde/fundraising-banners/` repository][2] to the main
+directory of the screenshot repository. You can then omit the `-c
+path/to/campaign_info.toml` part of the command:
 
-	make start-workers
+	npx ts-node queue_screenshots_from_file.ts <CHANNEL_NAME>
 
-This will start the background workers and [RabbitMQ](https://www.rabbitmq.com/) and expose it on Port 5672 on the 
-local machine.
+## Running the unit tests
 
-You can stop with
+    npm run test
 
-	make stop-workers
+Use the following command to run individual tests
 
-The Makefile abstracts the ["override"
-mechanism](https://docs.docker.com/compose/extends/#multiple-compose-files)
-of docker-compose which we use to bind-mount different versions of the
-configuration file and output directory in development and production.
+    npx mocha test/specs/name_of_your_test.js 
 
-## Creating Screenshots
 
-Run the command
-
-```shell
-./queue_screenshot.sh <BRANCH_NAME>
-```
-
-With `<BRANCH_NAME>` being a tag or branch name on the [Banner GitHub
-repository](https://github.com/wmde/fundraising-banners), e.g.
-`C22_WMDE_Test_04` or `C22_WMDE_Mobile_EN_Test_01`. The script will try to
-figure out the channel (desktop, mobile, pad_en, etc.) from the branch
-name.
-
-The shell script is a wrapper for a long `docker-compose exec` command.
-
-The background workers will create a campaign directory inside the
-`banner-shots` directory. Depending on the docker-compose file used (prod,
-dev) the configuration will mount different host paths into the containers
-as the `banner-shots` directory. The campaign directory contains the
-screenshot images and file `metadata.json` with all the metadata about the
-test case.
-
-### Configuration file format
+## Configuration file format
 
 This is the same file used in the [`wmde/fundraising-banners`
-repository](https://github.com/wmde/fundraising-banners) for configuring
+repository][2] for configuring
 campaigns. It also contains test matrix configurations.
 
 The TOML file has the following (abbreviated) format
@@ -117,58 +154,28 @@ Example:
 "1024x768"]` and 2 banners, `ctrl` and `var`, will create 12 (3*2*4)
 screenshots.
 
-
 ## Different test functions for different banners
 
 Add a different test function to the `src/test_functions/` directory,
-im- and export it in `src/test_functions/index.js` and specify its name in
-`testFunctionName` in `index.js`.
+im- and export it in `src/test_functions/index.js` and specify its name 
+with the `-t` flag of `queue_screenshots.ts` or
+`queue_screenshots_from_file.ts`.
 
-## Refreshing the metadata summary
+## Flushing the message queue
 
-Run the command 
+To throw away all messages currently in the queue, run the following
+commands:
 
-	make force-summary
+	docker stop amqp.test
+	make start-rabbitmq
 
-to trigger the summary command for the metadata worker. This will refresh
-the overview page for Shutterbug, based on the existing metadata files. If
-a metadata file is invalid, the metadata worker will show a log message
-and ignore the file.
-
-## Commands for Troubleshooting
-
-### Check if the containers are running
-
-	docker-compose ps
-
-The container state should be "Up".
-
-### Check if the banner-shots directory is mounted into the container
-
-	docker-compose exec screenshot_worker_1 ash -c 'ls -al'
-
-The directory listing should show the `banner-shots` directory with an
-owner of `node`.
-
-### Check if the workers are doing something
-
-You can get a unified stream of log output (with timestamps) by running
-
-	docker-compose logs -tf
-
-By default, the workers should start with the `--verbose` flag
-(see `entrypoint` in the `docker-compose` file).
-
-
-### Show queue and message count
-
-	docker-compose exec rabbitmq bash -c 'rabbitmqctl list_queues'
-
-
-## Local development
-
-See [DEVELOPMENT](DEVELOPMENT.md)
+The RabbitMQ Docker container uses container-internal storage for its
+messages and when you stop the container, it will delete all its data.
 
 ## Architecture
 
 ![Architecture - Component Diagram](docs/architecture.svg)
+
+1: https://www.rabbitmq.com/
+2: https://github.com/wmde/fundraising-banners
+
