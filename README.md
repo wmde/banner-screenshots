@@ -176,6 +176,6 @@ messages and when you stop the container, it will delete all its data.
 
 ![Architecture - Component Diagram](docs/architecture.svg)
 
-1: https://www.rabbitmq.com/
-2: https://github.com/wmde/fundraising-banners
+[1]: https://www.rabbitmq.com/
+[2]: https://github.com/wmde/fundraising-banners
 
