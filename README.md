@@ -166,7 +166,7 @@ with the `-t` flag of `queue_screenshots.ts` or
 To throw away all messages currently in the queue, run the following
 commands:
 
-	docker stop amqp.test
+	docker stop banner-screenshots-rabbitmq
 	make start-rabbitmq
 
 The RabbitMQ Docker container uses container-internal storage for its
