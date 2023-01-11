@@ -23,7 +23,7 @@ generate-dev-config:
 
 # Start a rabbitmq instance that workers outside the environemnt can connect to
 start-rabbitmq:
-	docker run -d --name amqp.test -p 5672:5672 rabbitmq
+	docker run -d --rm --name banner-screenshots-rabbitmq -p 5672:5672 rabbitmq
 
 fetch-campaign-info:
 	curl -o campaign_info.toml -L https://raw.githubusercontent.com/wmde/fundraising-banners/${BRANCH_NAME}/campaign_info.toml

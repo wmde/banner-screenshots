@@ -1,6 +1,6 @@
 import * as http from 'http'
 import * as https from 'https'
-import urlJoin from 'url-join';
+import { urlJoin } from 'url-join-ts';
 import { ConfigReader } from './ConfigReaderInterface';
 
 export class HttpConfigReader implements ConfigReader {
