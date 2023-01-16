@@ -28,7 +28,7 @@
     "wdio-chromedriver-service": "^8.0.1"
   },
   "dependencies": {
-    "@types/amqplib": "^0.8.2",
+    "@types/amqplib": "^0.10.1",
     "amqp-connection-manager": "^4.1.7",
     "amqplib": "^0.10.3",
     "commander": "^9.5.0",
