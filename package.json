@@ -37,7 +37,7 @@
     "toml": "^3.0.0",
     "typescript": "^5.1.6",
     "url-join-ts": "^1.0.5",
-    "webdriverio": "^8.14.6"
+    "webdriverio": "^8.15.4"
   },
   "bin": {
     "metadata_summary": "metadata_summary.js"
