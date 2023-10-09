@@ -21,7 +21,7 @@
     "@wdio/local-runner": "~8.16.19",
     "@wdio/mocha-framework": "^8.16.22",
     "@wdio/spec-reporter": "8.16.17",
-    "@wdio/testingbot-service": "^8.16.18",
+    "@wdio/testingbot-service": "^8.16.22",
     "chromedriver": "^117.0.2",
     "ts-mocha": "^10.0.0",
     "ts-node": "^10.9.1",
