@@ -23,7 +23,7 @@ repository](https://github.com/wmde/fundraising-banners), e.g.
 figure out the channel (desktop, mobile, pad_en, etc.) from the branch
 name.
 
-The shell script is a wrapper for a long `docker-compose exec` command.
+The shell script is a wrapper for a long `docker compose exec` command.
 
 The background workers will create a campaign directory inside the
 `banner-shots` directory. Depending on the docker-compose file used (prod,
@@ -38,7 +38,7 @@ The following command will start the workers, [RabbitMQ](https://www.rabbitmq.co
 
 	make start-workers
 
-**Do not use the command `docker-compose up -d`!**
+**Do not use the command `docker compose up -d`!**
 
 The production environment uses the ["override"
 mechanism](https://docs.docker.com/compose/extends/#multiple-compose-files)
@@ -57,13 +57,13 @@ You can stop the environment with
 
 ### Check if the containers are running
 
-	docker-compose ps
+	docker compose ps
 
 The container state of all containers should be "Up".
 
 ### Check if the banner-shots directory is mounted into the container
 
-	docker-compose exec screenshot_worker_1 ash -c 'ls -al'
+	docker compose exec screenshot_worker_1 ash -c 'ls -al'
 
 The directory listing should show the `banner-shots` directory with an
 owner of `node`.
@@ -72,7 +72,7 @@ owner of `node`.
 
 You can get a unified stream of log output (with timestamps) by running
 
-	docker-compose logs -tf
+	docker compose logs -tf
 
 By default, the workers should start with the `--verbose` flag
 (see `entrypoint` in the `docker-compose` file).
@@ -80,7 +80,7 @@ By default, the workers should start with the `--verbose` flag
 
 ### Show queue and message count
 
-	docker-compose exec rabbitmq bash -c 'rabbitmqctl list_queues'
+	docker compose exec rabbitmq bash -c 'rabbitmqctl list_queues'
 
 ### Refreshing the metadata summary
 
