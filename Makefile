@@ -16,6 +16,13 @@ start-workers:
 stop-workers:
 	docker compose -f docker-compose.yml -f ${DOCKER_COMPOSE_OVERRIDE} down
 
+# stop container environment and remove all volumes and images. This is used by our ansible deployment script
+shutdown-workers:
+	docker compose -f docker-compose.yml -f ${DOCKER_COMPOSE_OVERRIDE} down -v --remove-orphans --rmi local
+
+build-workers:
+	docker compose -f docker-compose.yml -f ${DOCKER_COMPOSE_OVERRIDE} build
+
 # ====================== Dev Environment tasks
 
 generate-dev-config:
