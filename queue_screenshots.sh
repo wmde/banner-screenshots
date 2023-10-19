@@ -20,4 +20,4 @@ fi
 
 set -x
 
-docker-compose -f docker-compose.yml -f $DOCKERFILE_OVERRIDE exec screenshot_worker_1 npx ts-node queue_screenshots.ts -u amqp://rabbitmq $@
+docker compose -f docker-compose.yml -f $DOCKERFILE_OVERRIDE exec screenshot_worker_1 npx ts-node queue_screenshots.ts -u amqp://rabbitmq $@

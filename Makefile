@@ -7,14 +7,21 @@ DOCKER_COMPOSE_OVERRIDE:=docker-compose.prod.yml
 endif
 
 force-summary:
-	docker-compose -f docker-compose.yml -f ${DOCKER_COMPOSE_OVERRIDE} exec metadata_worker npx ts-node metadata_summary.ts -u amqp://rabbitmq
+	docker compose -f docker-compose.yml -f ${DOCKER_COMPOSE_OVERRIDE} exec metadata_worker npx ts-node metadata_summary.ts -u amqp://rabbitmq
 
 # Start/Stop container environment. This will run the scripts inside the built container, NOT the scripts in the local environment
 start-workers:
-	docker-compose -f docker-compose.yml -f ${DOCKER_COMPOSE_OVERRIDE} up -d
+	docker compose -f docker-compose.yml -f ${DOCKER_COMPOSE_OVERRIDE} up -d
 
 stop-workers:
-	docker-compose -f docker-compose.yml -f ${DOCKER_COMPOSE_OVERRIDE} down
+	docker compose -f docker-compose.yml -f ${DOCKER_COMPOSE_OVERRIDE} down
+
+# stop container environment and remove all volumes and images. This is used by our ansible deployment script
+shutdown-workers:
+	docker compose -f docker-compose.yml -f ${DOCKER_COMPOSE_OVERRIDE} down -v --remove-orphans --rmi local
+
+build-workers:
+	docker compose -f docker-compose.yml -f ${DOCKER_COMPOSE_OVERRIDE} build
 
 # ====================== Dev Environment tasks
 
