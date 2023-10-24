@@ -3,7 +3,7 @@ import {TestCaseFinishedState, TestCaseIsRunningState} from "../Model/TestCase";
 
 /**
  *
- * @param browser
+ * @param browser - WebdriverIO browser instance
  * @param {TestCase} testCase
  * @param {function} writeImageData - A callback that writes image data
  * @param {function} onStateChange - A callback that updates the test case state (and maybe logs)
@@ -18,18 +18,40 @@ export async function shootBanner( browser, testCase, writeImageData, onStateCha
 	}
 
 	await browser.url( testCase.getBannerUrl() )
-	onStateChange(testCase, new TestCaseIsRunningState( "URL requested" ) );
+	onStateChange(testCase, new TestCaseIsRunningState( `URL requested - ${testCase.getBannerUrl()}` ) );
 
-	const banner = await browser.$('.banner-position--state-finished');
-	onStateChange(testCase, new TestCaseIsRunningState( "Banner display finish element requested" ) );
+	const banner = await browser.$('.wmde-banner');
+	onStateChange(testCase, new TestCaseIsRunningState( "Banner root element requested" ) );
 
-	// TODO find a less time-intensive and error-prone way to check for banners
-	//      that don't display due to banner size issues
 	await banner.waitForExist( {
-		timeout: 30000,
-		timeoutMsg: `Page did not contain class "banner-position--state-finished" for banner ${testCase.getScreenshotFilename()}, probably a size issue`
+		// wait for max 5 seoncds for the page to load and CentralNotice to load the banner code
+		timeout: 5000,
+		timeoutMsg: `Page did not contain class "wmde-banner" for banner ${testCase.getScreenshotFilename()}`
 	} );
-	onStateChange(testCase, new TestCaseIsRunningState( "Banner display finish element found" ) );
+	onStateChange(testCase, new TestCaseIsRunningState( "Banner root element found" ) );
+
+	let bannerStateClass = '';
+	await banner.waitUntil( async () => {
+		const classes = await banner.getAttribute( "class" );
+		const expectedStateMatch = classes.match( /wmde-banner--(not-shown|visible)/ );
+		if ( expectedStateMatch === null ) {
+			return false;
+		}
+		bannerStateClass = expectedStateMatch[1];
+		return true;
+	}, {
+		// 15 seconds should be more than sufficient to wait both for the initial delay and the animation
+		timeout: 15000,
+		timeoutMsg: `Banner did not reach state "visible" or "not-shown" for banner ${testCase.getScreenshotFilename()}`
+	} );
+
+	if ( bannerStateClass === 'not-shown' ) {
+		onStateChange(testCase, new TestCaseFinishedState( "Banner has size issues" ) );
+		return;
+	}
+
+	onStateChange(testCase, new TestCaseIsRunningState( "Banner is visible" ) );
+
 
 	// TODO Wait until all in-banner animations (progress bar/highlight) have finished
 	const shot = await browser.takeScreenshot();
