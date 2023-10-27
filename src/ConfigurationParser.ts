@@ -14,7 +14,7 @@ const CAMPAIGN_TRACKING = 'campaign_tracking';
 const PAGE_NAME = 'pagename';
 
 // Placeholder in PREVIEW_URL
-const PLACEHOLDER = '{{PLACEHOLDER}}';
+const PLACEHOLDER = '{{banner}}';
 
 
 /**
