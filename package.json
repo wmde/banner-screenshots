@@ -22,7 +22,7 @@
     "@wdio/mocha-framework": "^8.18.2",
     "@wdio/spec-reporter": "8.16.17",
     "@wdio/testingbot-service": "^8.28.6",
-    "chromedriver": "^119.0.1",
+    "chromedriver": "^120.0.1",
     "ts-mocha": "^10.0.0",
     "ts-node": "^10.9.1",
     "wdio-chromedriver-service": "^8.1.1"
