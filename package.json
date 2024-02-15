@@ -16,28 +16,28 @@
     "node": ">=15.0"
   },
   "devDependencies": {
-    "@types/node": "^20.11.10",
-    "@wdio/cli": "^8.29.7",
-    "@wdio/local-runner": "~8.28.8",
-    "@wdio/mocha-framework": "^8.29.3",
-    "@wdio/spec-reporter": "8.29.7",
-    "@wdio/testingbot-service": "^8.29.7",
-    "chromedriver": "^120.0.1",
+    "@types/node": "^20.11.17",
+    "@wdio/cli": "^8.31.1",
+    "@wdio/local-runner": "~8.31.1",
+    "@wdio/mocha-framework": "^8.31.1",
+    "@wdio/spec-reporter": "8.31.1",
+    "@wdio/testingbot-service": "^8.31.1",
+    "chromedriver": "^121.0.0",
     "ts-mocha": "^10.0.0",
-    "ts-node": "^10.9.1",
+    "ts-node": "^10.9.2",
     "wdio-chromedriver-service": "^8.1.1"
   },
   "dependencies": {
-    "@types/amqplib": "^0.10.3",
+    "@types/amqplib": "^0.10.4",
     "amqp-connection-manager": "^4.1.14",
     "amqplib": "^0.10.3",
     "commander": "^12.0.0",
-    "dotenv": "^16.3.2",
+    "dotenv": "^16.4.3",
     "partition-all": "^1.0.1",
     "toml": "^3.0.0",
-    "typescript": "^5.2.2",
+    "typescript": "^5.3.3",
     "url-join-ts": "^1.0.5",
-    "webdriverio": "^8.29.1"
+    "webdriverio": "^8.31.1"
   },
   "bin": {
     "metadata_summary": "metadata_summary.js"
