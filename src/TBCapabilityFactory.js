@@ -22,18 +22,18 @@ const DEVICE_NAMES = new Map( [
 ]);
 
 const PLATFORM_NAMES = new Map( [
-	[ 'ie11', 			{ platformName: 'WIN7', browserName: 'internet explorer', browserVersion: 11 } ],
-	[ 'edge', 			{ platformName: 'WIN10', browserName: 'microsoftedge', browserVersion: 91 } ],
-	[ 'firefox_win10', 	{ platformName: 'WIN10', browserName: 'firefox', browserVersion: 89 } ],
-	[ 'chrome_win10', 	{ platformName: 'WIN10', browserName: 'chrome', browserVersion: 91 } ],
+	[ 'ie11', 			{ platformName: 'WIN7', browserName: 'internet explorer', browserVersion: 11, 'wdio:enforceWebDriverClassic': true } ],
+	[ 'edge', 			{ platformName: 'WIN10', browserName: 'microsoftedge', browserVersion: 91, 'wdio:enforceWebDriverClassic': true } ],
+	[ 'firefox_win10', 	{ platformName: 'WIN10', browserName: 'firefox', browserVersion: 89, 'wdio:enforceWebDriverClassic': true } ],
+	[ 'chrome_win10', 	{ platformName: 'WIN10', browserName: 'chrome', browserVersion: 91, 'wdio:enforceWebDriverClassic': true } ],
 
-	[ 'firefox_linux', { platformName: 'LINUX', browserName: 'firefox', browserVersion: 89 } ],
-	[ 'chrome_linux', { platformName: 'LINUX', browserName: 'chrome', browserVersion: 91 } ],
+	[ 'firefox_linux', { platformName: 'LINUX', browserName: 'firefox', browserVersion: 89, 'wdio:enforceWebDriverClassic': true } ],
+	[ 'chrome_linux', { platformName: 'LINUX', browserName: 'chrome', browserVersion: 91, 'wdio:enforceWebDriverClassic': true } ],
 
 	/* macos 10.15 */
-	[ 'chrome_macos', { platformName: 'CATALINA', browserName: 'chrome', browserVersion: 91 } ],
-	[ 'firefox_macos', { platformName: 'CATALINA', browserName: 'firefox', browserVersion: 89 } ],
-	[ 'safari', { platformName: 'CATALINA', browserName: 'safari', browserVersion: 13 } ],
+	[ 'chrome_macos', { platformName: 'CATALINA', browserName: 'chrome', browserVersion: 91, 'wdio:enforceWebDriverClassic': true } ],
+	[ 'firefox_macos', { platformName: 'CATALINA', browserName: 'firefox', browserVersion: 89, 'wdio:enforceWebDriverClassic': true } ],
+	[ 'safari', { platformName: 'CATALINA', browserName: 'safari', browserVersion: 13, 'wdio:enforceWebDriverClassic': true } ],
 ]);
 
 export class CapabilityFactory {
