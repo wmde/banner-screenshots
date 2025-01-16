@@ -9,14 +9,17 @@ export const DEFAULT_CONNECTION_PARAMS = {
 		}]
 	],
 	// Set to "info" or trace to see everything the library is doing
-	logLevel: "warn",
+	//logLevel: "info",
 	connectionRetryCount: 1,
 	// TestingBot can take up to 2 minutes to spin up a phone simulator
 	connectionRetryTimeout: 360000
 }
 
 export const factoryOptions = {
-	'tb:options': { screenrecorder: false }
+	'tb:options': {
+		screenrecorder: false,
+
+	}
 }
 
 export class BrowserFactory {
