@@ -9,7 +9,7 @@ pagename = "B20_WMDE_Test_05_ctrl"
 pagename = "B20_WMDE_Test_05_var"
 
 [desktop.test_matrix]
-platform = [ "edge", "ie11",
+platform = [ "edge",
             "firefox_win10", "chrome_win10",
             "safari",
             "firefox_macos", "chrome_macos",
@@ -47,17 +47,16 @@ pagename = "B20_WMDE_Test_Mobile"
 
 [mobile.test_matrix]
 device = [
-    #"samsung_s6",
-    'samsung_s10',
-    'nexus_6',
-    "iphone_xs_max",
-    "iphone_5s",
-    "iphone_se",
+    "samsung_s6",
+    'pixel_3',
+    'pixel_6a',
+    'pixel_8',
     "iphone_8",
-    "iphone_12_mini",
-    "iphone_7_plus",
-    "iphone_11_pro_max",
-    "ipad_pro_9_7_inch"
+    "iphone_13_mini",
+    "iphone_15",
+    "iphone_16",
+    "ipad_pro_9_7_inch",
+    "ipad"
 ]
 orientation = ["portrait", "landscape"]
 
@@ -72,6 +71,6 @@ pagename = "B20_WMDE_Test_Mobile"
 
 [mobile_test.test_matrix]
 device = [
-    "samsung_s10",
+    "samsung_s6",
 ]
 orientation = ["landscape", "portrait"]

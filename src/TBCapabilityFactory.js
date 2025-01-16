@@ -2,38 +2,36 @@ import { Dimension } from "./Model/Dimension";
 
 const DEVICE_NAMES = new Map( [
 	//s6 is responding very slowly or not at all
-	[ 'samsung_s6', {browserName : 'browser',platform : 'Android', browserVersion : '6.0',platformName : 'Android', deviceName : 'Galaxy S6'} ],
-	[ 'samsung_s10', { browserName : 'Chrome',platform : 'Android', browserVersion : '10.0',platformName : 'Android', deviceName : 'Galaxy S10'} ],
+	[ 'samsung_s6', {browserName : 'browser', platform : 'Android', browserVersion : '6.0',platformName : 'Android', deviceName : 'Galaxy S6', 'wdio:enforceWebDriverClassic': true } ],
+	[ 'pixel_3', { browserName : 'Chrome', platform : 'Android', browserVersion : '10.0', platformName : 'Android', deviceName : 'Pixel 3', 'wdio:enforceWebDriverClassic': true } ],
 	//firefox does not seem to be supported by testingbot at the moment
-	// [ 'samsung_s20', { browserName : 'Firefox',platform : 'Android', browserVersion : '10.0',platformName : 'Android', deviceName : 'Galaxy S20'} ],
-	[ 'nexus_6', { browserName : 'browser',platform : 'Android', browserVersion : '6.0',platformName : 'Android', deviceName : 'Nexus 6'} ],
+	//[ 'samsung_galaxy_s21', { browserName : 'firefox', platform : 'Android', browserVersion : '11.4', platformName : 'Android', deviceName : 'Galaxy S21', 'wdio:enforceWebDriverClassic': true } ],
 
-	[ 'iphone_xs_max', { browserName : 'safari', platform : 'iOS', browserVersion : '12.1', platformName : 'iOS', deviceName : 'iPhone XS Max' } ],
-	[ 'iphone_5s', { browserName : 'safari', platform : 'iOS', browserVersion : '12.1', platformName : 'iOS', deviceName : 'iPhone 5s' } ],
-	[ 'iphone_se', { browserName : 'safari', platform : 'iOS', browserVersion : '11.4', platformName : 'iOS', deviceName : 'iPhone SE' } ],
-	[ 'iphone_8', { browserName : 'safari', platform : 'iOS', browserVersion : '14.0', platformName : 'iOS', deviceName : 'iPhone 8' } ],
-	[ 'iphone_12_mini', { browserName : 'safari', platform : 'iOS', browserVersion : '14.2', platformName : 'iOS', deviceName : 'iPhone 12 mini' } ],
-	[ 'iphone_7_plus', { browserName : 'safari', platform : 'iOS', browserVersion : '11.4', platformName : 'iOS', deviceName : 'iPhone 7 Plus' } ],
-	[ 'iphone_11_pro_max', { browserName : 'safari', platform : 'iOS', browserVersion : '13.4', platformName : 'iOS', deviceName : 'iPhone 11 Pro Max' } ],
-	[ 'ipad_pro_9_7_inch', { browserName : 'safari', platform : 'iOS', browserVersion : '14.2', platformName : 'iOS', deviceName : 'iPad Pro (9.7-inch)' } ],
-	[ 'ipad', { browserName : 'safari', platform : 'BIGSUR', browserVersion : '14.2', platformName : 'iOS', deviceName : 'iPad (8th generation)' } ],
-	[ 'ipad_mini', { browserName : 'safari', platform : 'MONTEREY', browserVersion : '15.0', platformName : 'iOS', deviceName : 'iPad mini (6th generation)' } ],
-	[ 'ipad_pro_12_inch', { browserName : 'safari', platform : 'MONTEREY', browserVersion : '15.0', platformName : 'iOS', deviceName : 'iPad Pro (12.9-inch) (5th generation)' } ],
+	[ 'pixel_8', { browserName : 'chrome', platform : 'Android', browserVersion : '14.0',platformName : 'Android', deviceName : 'Pixel 8', 'wdio:enforceWebDriverClassic': true } ],
+	[ 'pixel_6a', { browserName : 'chrome', platform : 'Android', browserVersion : '13.0',platformName : 'Android', deviceName : 'Pixel 6a', 'wdio:enforceWebDriverClassic': true } ],
+
+	[ 'iphone_8', { browserName : 'safari', platform : 'iOS', browserVersion : '15.4', platformName : 'iOS', deviceName : 'iPhone 8', 'wdio:enforceWebDriverClassic': true } ],
+	[ 'iphone_13_mini', { browserName : 'safari', platform : 'iOS', browserVersion : '15.4', platformName : 'iOS', deviceName : 'iPhone 13 mini', 'wdio:enforceWebDriverClassic': true } ],
+	[ 'iphone_15', { browserName : 'safari', platform : 'iOS', browserVersion : '17.5', platformName : 'iOS', deviceName : 'iPhone 15', 'wdio:enforceWebDriverClassic': true } ],
+	[ 'iphone_16', { browserName : 'safari', platform : 'iOS', browserVersion : '18.0', platformName : 'iOS', deviceName : 'iPhone 16', 'wdio:enforceWebDriverClassic': true } ],
+
+	// ipad ------------------
+	[ 'ipad_mini', { browserName : 'safari', browserVersion : '15.4', platformName : 'iOS', deviceName : 'iPad mini (6th generation)' , 'wdio:enforceWebDriverClassic': true } ],
+	[ 'ipad_pro', { browserName : 'safari', browserVersion : '16.2', platformName : 'iOS', deviceName : 'iPad Pro (11-inch) (4th generation)' , 'wdio:enforceWebDriverClassic': true } ],
 ]);
 
 const PLATFORM_NAMES = new Map( [
-	[ 'ie11', 			{ platformName: 'WIN7', browserName: 'internet explorer', browserVersion: 11 } ],
-	[ 'edge', 			{ platformName: 'WIN10', browserName: 'microsoftedge', browserVersion: 91 } ],
-	[ 'firefox_win10', 	{ platformName: 'WIN10', browserName: 'firefox', browserVersion: 89 } ],
-	[ 'chrome_win10', 	{ platformName: 'WIN10', browserName: 'chrome', browserVersion: 91 } ],
+	[ 'edge', 			{ platformName: 'WIN11', browserName: 'microsoftedge', browserVersion: 130, 'wdio:enforceWebDriverClassic': true } ],
+	[ 'firefox_win10', 	{ platformName: 'WIN11', browserName: 'firefox', browserVersion: 133, 'wdio:enforceWebDriverClassic': true } ],
+	[ 'chrome_win10', 	{ platformName: 'WIN10', browserName: 'chrome', browserVersion: 130, 'wdio:enforceWebDriverClassic': true } ],
 
-	[ 'firefox_linux', { platformName: 'LINUX', browserName: 'firefox', browserVersion: 89 } ],
-	[ 'chrome_linux', { platformName: 'LINUX', browserName: 'chrome', browserVersion: 91 } ],
+	[ 'firefox_linux', { platformName: 'LINUX', browserName: 'firefox', browserVersion: 133, 'wdio:enforceWebDriverClassic': true } ],
+	[ 'chrome_linux', { platformName: 'LINUX', browserName: 'chrome', browserVersion: 131, 'wdio:enforceWebDriverClassic': true } ],
 
 	/* macos 10.15 */
-	[ 'chrome_macos', { platformName: 'CATALINA', browserName: 'chrome', browserVersion: 91 } ],
-	[ 'firefox_macos', { platformName: 'CATALINA', browserName: 'firefox', browserVersion: 89 } ],
-	[ 'safari', { platformName: 'CATALINA', browserName: 'safari', browserVersion: 13 } ],
+	[ 'chrome_macos', { platformName: 'CATALINA', browserName: 'chrome', browserVersion: 128, 'wdio:enforceWebDriverClassic': true } ],
+	[ 'firefox_macos', { platformName: 'CATALINA', browserName: 'firefox', browserVersion: 132, 'wdio:enforceWebDriverClassic': true } ],
+	[ 'safari', { platformName: 'CATALINA', browserName: 'safari', browserVersion: 13, 'wdio:enforceWebDriverClassic': true } ],
 ]);
 
 export class CapabilityFactory {
