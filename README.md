@@ -161,7 +161,9 @@ im- and export it in `src/test_functions/index.js` and specify its name
 with the `-t` flag of `queue_screenshots.ts` or
 `queue_screenshots_from_file.ts`.
 
-## Flushing the message queue
+## Troubleshooting
+
+### Flushing the message queue
 
 To throw away all messages currently in the queue, run the following
 commands:
@@ -171,6 +173,14 @@ commands:
 
 The RabbitMQ Docker container uses container-internal storage for its
 messages and when you stop the container, it will delete all its data.
+
+### Taking a single screenshot with TestingBot
+
+To test taking a single screenshot with directly adjustable settings and URL, use
+
+   `npx ts-node minimalscreenshotter.ts`
+
+Change the script according to your needs before running the command.
 
 ## Architecture
 

@@ -8,8 +8,8 @@ export const DEFAULT_CONNECTION_PARAMS = {
 			tbTunnel: false
 		}]
 	],
-	// Set to "info" or trace to see everything the library is doing
-	//logLevel: "info",
+	// Set to "info" or trace to see everything the library is doing (debugging)
+	logLevel: "warn",
 	connectionRetryCount: 1,
 	// TestingBot can take up to 2 minutes to spin up a phone simulator
 	connectionRetryTimeout: 360000

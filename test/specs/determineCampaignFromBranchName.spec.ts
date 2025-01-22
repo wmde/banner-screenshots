@@ -63,18 +63,18 @@ describe("determineCampaignFromBranchName", () => {
 	it("returns wikipediade for WPDE prefix without other modifiers", () => {
 		assert.equal(
 			determineCampaignFromBranchName('C21_WPDE_Test_01'),
-			'wikipediade'
+			'wpde_desktop'
 		);
 	} );
 
 	it("returns wikipediade_mobile for WPDE prefix without other modifiers", () => {
 		assert.equal(
 			determineCampaignFromBranchName('C21_WPDE_Test_Mobile_01'),
-			'wikipediade_mobile'
+			'wpde_mobile'
 		);
 		assert.equal(
 			determineCampaignFromBranchName('C21_WPDE_Test_Mob01'),
-			'wikipediade_mobile'
+			'wpde_mobile'
 		);
 	} );
 

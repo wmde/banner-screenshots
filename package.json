@@ -22,9 +22,9 @@
     "@wdio/mocha-framework": "^9.5.0",
     "@wdio/spec-reporter": "9.5.0",
     "@wdio/testingbot-service": "^9.5.7",
+    "@wdio/types": "^9.5.0",
     "ts-mocha": "^10.0.0",
-    "ts-node": "^10.9.2",
-    "@wdio/types": "^9.5.0"
+    "ts-node": "^10.9.2"
   },
   "dependencies": {
     "@types/amqplib": "^0.10.5",
