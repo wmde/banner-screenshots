@@ -22,7 +22,7 @@
     "@wdio/mocha-framework": "^9.6.4",
     "@wdio/spec-reporter": "9.8.0",
     "@wdio/testingbot-service": "^9.7.2",
-    "@wdio/types": "^9.6.3",
+    "@wdio/types": "^9.9.0",
     "ts-mocha": "^10.0.0",
     "ts-node": "^10.9.2"
   },
