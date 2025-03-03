@@ -34,7 +34,7 @@
     "dotenv": "^16.4.5",
     "partition-all": "^1.0.1",
     "toml": "^3.0.0",
-    "typescript": "^5.7.3",
+    "typescript": "^5.8.2",
     "url-join-ts": "^1.0.5",
     "webdriverio": "^9.10.0"
   },
