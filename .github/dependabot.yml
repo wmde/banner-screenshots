@@ -6,8 +6,11 @@ updates:
   - package-ecosystem: "npm" # See documentation for possible values
     directory: "/" # Location of package manifests
     schedule:
-      interval: "weekly"
+      interval: "monthly"
     groups:
+      minor-version-updates:
+        update-types:
+          - minor
       patch-updates:
         update-types:
           - patch
