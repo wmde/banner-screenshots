@@ -3,10 +3,10 @@ preview_url = 'https://de.wikipedia.org/wiki/Wikipedia:Hauptseite?banner={{PLACE
 campaign_tracking='00-ba-200416'
 
 [desktop.banners.ctrl]
-pagename = "B20_WMDE_Test_05_ctrl"
+pagename = "WMDE_FR_2025_Test_05_ctrl"
 
 [desktop.banners.var]
-pagename = "B20_WMDE_Test_05_var"
+pagename = "WMDE_FR_2025_Test_05_var"
 
 [desktop.test_matrix]
 platform = [ "edge",
@@ -30,7 +30,7 @@ preview_url = 'https://de.wikipedia.org/wiki/Wikipedia:Hauptseite?banner={{PLACE
 campaign_tracking='00-test-200416'
 
 [test.banners.ctrl]
-pagename = "B20_WMDE_Test_05_ctrl"
+pagename = "WMDE_FR_2025_Test_05_ctrl"
 
 
 [test.test_matrix]
@@ -43,7 +43,7 @@ preview_url = 'https://de.m.wikipedia.org/wiki/Wikipedia:Hauptseite?banner={{PLA
 campaign_tracking='00-mobile-200416'
 
 [mobile.banners.ctrl]
-pagename = "B20_WMDE_Test_Mobile"
+pagename = "WMDE_FR_2025_Test_Mobile"
 
 [mobile.test_matrix]
 device = [
@@ -67,7 +67,7 @@ preview_url = 'https://de.m.wikipedia.org/wiki/Wikipedia:Hauptseite?banner={{PLA
 campaign_tracking='00-mobile-test-200416'
 
 [mobile_test.banners.ctrl]
-pagename = "B20_WMDE_Test_Mobile"
+pagename = "WMDE_FR_2025_Test_Mobile"
 
 [mobile_test.test_matrix]
 device = [
