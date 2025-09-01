@@ -29,7 +29,7 @@
   "dependencies": {
     "@types/amqplib": "^0.10.7",
     "amqp-connection-manager": "^4.1.14",
-    "amqplib": "^0.10.8",
+    "amqplib": "^0.10.9",
     "commander": "^14.0.0",
     "dotenv": "^17.2.1",
     "partition-all": "^1.0.1",
