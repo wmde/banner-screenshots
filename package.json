@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@types/amqplib": "^0.10.7",
-    "amqp-connection-manager": "^4.1.14",
+    "amqp-connection-manager": "^5.0.0",
     "amqplib": "^0.10.9",
     "commander": "^14.0.0",
     "dotenv": "^17.2.1",
