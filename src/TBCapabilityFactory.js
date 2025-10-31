@@ -9,14 +9,14 @@ const DEVICE_NAMES = new Map( [
 	// currently no response from testingbot for firefox devices
 	//[ 'android_firefox', { browserName : 'firefox', browserVersion : '12.0', platformName : 'Android', 'appium:deviceName' : '*' } ],
 
-	[ 'iphone_old', { browserName : 'safari', browserVersion : '15.4', platformName : 'iOS', 'appium:deviceName' : 'iPhone 8' } ],
-	[ 'iphone_small', { browserName : 'safari', browserVersion : '15.4', platformName : 'iOS', 'appium:deviceName' : 'iPhone 13 mini' } ],
-	[ 'iphone_new', { browserName : 'safari', browserVersion : '18.0', platformName : 'iOS', 'appium:deviceName' : '*' } ],
+	[ 'iphone_old', { browserName : 'safari', browserVersion : '16.0', platformName : 'iOS', 'appium:deviceName' : 'iPhone 14' } ],
+	[ 'iphone_small', { browserName : 'safari', browserVersion : '26.0', platformName : 'iOS', 'appium:deviceName' : 'iPhone 17' } ],
+	[ 'iphone_new', { browserName : 'safari', browserVersion : '26.0', platformName : 'iOS', 'appium:deviceName' : '*' } ],
 
 	/* ipad */
 	[ 'ipad_mini', { browserName : 'safari', browserVersion : '17.2', platformName : 'iOS', 'appium:deviceName' : 'iPad mini (6th generation)' } ],
-	[ 'ipad_medium', { browserName : 'safari', browserVersion : '17.2', platformName : 'iOS', 'appium:deviceName' : 'iPad (10th generation)' } ],
-	[ 'ipad_big', { browserName : 'safari', browserVersion : '18.0', platformName : 'iOS', 'appium:deviceName' : 'iPad Pro (13-inch) (M4)' } ],
+	[ 'ipad_medium', { browserName : 'safari', browserVersion : '17.5', platformName : 'iOS', 'appium:deviceName' : 'iPad Pro (11-inch) (M4)' } ],
+	[ 'ipad_big', { browserName : 'safari', browserVersion : '26.0', platformName : 'iOS', 'appium:deviceName' : 'iPad Pro (13-inch) (M4)' } ],
 ]);
 
 /**
@@ -28,16 +28,16 @@ const DEVICE_NAMES = new Map( [
  * @type {Map<string, {'wdio:enforceWebDriverClassic': boolean, browserVersion: number, browserName: string, platformName: string}>}
  */
 const PLATFORM_NAMES = new Map( [
-	[ 'edge', 			{ platformName: 'WIN11', browserName: 'microsoftedge', browserVersion: 130, 'wdio:enforceWebDriverClassic': true } ],
-	[ 'firefox_windows', 	{ platformName: 'WIN11', browserName: 'firefox', browserVersion: 133, 'wdio:enforceWebDriverClassic': true } ],
-	[ 'chrome_windows', 	{ platformName: 'WIN10', browserName: 'chrome', browserVersion: 130, 'wdio:enforceWebDriverClassic': true } ],
+	[ 'edge', 			{ platformName: 'WIN11', browserName: 'microsoftedge', browserVersion: 140, 'wdio:enforceWebDriverClassic': true } ],
+	[ 'firefox_windows', 	{ platformName: 'WIN11', browserName: 'firefox', browserVersion: 141, 'wdio:enforceWebDriverClassic': true } ],
+	[ 'chrome_windows', 	{ platformName: 'WIN10', browserName: 'chrome', browserVersion: 140, 'wdio:enforceWebDriverClassic': true } ],
 
-	[ 'firefox_linux', { platformName: 'LINUX', browserName: 'firefox', browserVersion: 133, 'wdio:enforceWebDriverClassic': true } ],
+	[ 'firefox_linux', { platformName: 'LINUX', browserName: 'firefox', browserVersion: 143, 'wdio:enforceWebDriverClassic': true } ],
 	[ 'chrome_linux', { platformName: 'LINUX', browserName: 'chrome', browserVersion: 131, 'wdio:enforceWebDriverClassic': true } ],
 
 	/* macos 10.15 */
 	[ 'chrome_macos', { platformName: 'CATALINA', browserName: 'chrome', browserVersion: 128, 'wdio:enforceWebDriverClassic': true } ],
-	[ 'firefox_macos', { platformName: 'CATALINA', browserName: 'firefox', browserVersion: 132, 'wdio:enforceWebDriverClassic': true } ],
+	[ 'firefox_macos', { platformName: 'SONOMA', browserName: 'firefox', browserVersion: 143, 'wdio:enforceWebDriverClassic': true } ],
 	[ 'safari', { platformName: 'CATALINA', browserName: 'safari', browserVersion: 13, 'wdio:enforceWebDriverClassic': true } ],
 ]);
 
