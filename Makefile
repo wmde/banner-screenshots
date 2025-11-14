@@ -17,6 +17,7 @@ stop-workers:
 	docker compose -f docker-compose.yml -f ${DOCKER_COMPOSE_OVERRIDE} down
 
 # stop container environment and remove all volumes and images. This is used by our ansible deployment script
+# This can also be used for emptying the rabbitmq queue in production.
 shutdown-workers:
 	docker compose -f docker-compose.yml -f ${DOCKER_COMPOSE_OVERRIDE} down -v --remove-orphans --rmi local
 
@@ -28,7 +29,7 @@ build-workers:
 generate-dev-config:
 	if [ ! -f docker-compose.dev.yml ]; then cp docker-compose.dev.example.yml docker-compose.dev.yml; fi
 
-# Start a rabbitmq instance that workers outside the environemnt can connect to
+# Start a rabbitmq instance that workers outside the environment can connect to
 start-rabbitmq:
 	docker run -d --rm --name banner-screenshots-rabbitmq -p 5672:5672 rabbitmq
 

@@ -8,7 +8,7 @@ services:
       QUEUE_URL: amqp://rabbitmq
 
   # Run multiple instances of screenshot worker to parallelize screenshot jobs.
-  # Should be less than 5 to be sure not to run into limits
+  # Should be less than 4 to be sure not to run into limits
   screenshot_worker_1:
     build: .
     entrypoint: [ "npx", "ts-node", "screenshot_worker.ts", "--verbose" ]
@@ -38,17 +38,6 @@ services:
       QUEUE_URL: amqp://rabbitmq
       TB_KEY: ${TB_KEY}
       TB_SECRET: ${TB_SECRET}
-
-  screenshot_worker_4:
-    build: .
-    entrypoint: [ "npx", "ts-node", "screenshot_worker.ts", "--verbose" ]
-    depends_on:
-      - rabbitmq
-    environment:
-      QUEUE_URL: amqp://rabbitmq
-      TB_KEY: ${TB_KEY}
-      TB_SECRET: ${TB_SECRET}
-
 
   rabbitmq:
     image: "rabbitmq"
