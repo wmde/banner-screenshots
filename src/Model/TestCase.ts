@@ -73,7 +73,12 @@ export class TestCase {
 		}
 		testCase.dimensions = new Map( dimensionValues.map( ( v, i ) => [ dimensionKeys[ i ], v ] ) );
 		testCase.bannerUrl = bannerUrl;
-		testCase.name = dimensionValues.join('__');
+		const dimensionValuesForName = dimensionValues.slice();
+		if ( dimensionKeys.includes( Dimension.DARKMODE ) ) {
+			const darkModeIndex = dimensionKeys.indexOf( Dimension.DARKMODE );
+			dimensionValuesForName[ darkModeIndex ] = dimensionValuesForName[ darkModeIndex ].replace( 'on', 'dark' ).replace( 'off', 'light' );
+		}
+		testCase.name = dimensionValuesForName.join('__');
 		testCase.state = new TestCasePendingState();
 
 		testCase.validate();

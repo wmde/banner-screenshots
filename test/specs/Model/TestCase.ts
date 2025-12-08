@@ -1,11 +1,11 @@
 import { strict as assert } from 'assert';
-import { Dimension } from "../../../src/Model/Dimension";
+import { Dimension } from '../../../src/Model/Dimension';
 import {
-	TestCase,
 	INVALID_REASON_REQUIRED,
 	INVALID_REASON_RESOLUTION,
+	TestCase,
 	TestCaseFinishedState
-} from "../../../src/Model/TestCase"
+} from '../../../src/Model/TestCase'
 
 describe('TestCase', () => {
 	const dimensions = [Dimension.PLATFORM, Dimension.RESOLUTION, Dimension.BANNER];
@@ -51,6 +51,24 @@ describe('TestCase', () => {
 		);
 
 		assert.strictEqual( 'chrome_win7__1280x960__ctrl.png', testCase.getScreenshotFilename() );
+	});
+
+	it('creates screenshot name for dark mode', () => {
+
+		const testCaseDark = TestCase.create(
+			[ ...dimensions, Dimension.DARKMODE ],
+			[ 'chrome_win7', '1280x960', 'ctrl', 'on' ],
+			'https://de.wikipedia.org'
+		);
+
+		const testCaseLight = TestCase.create(
+			[ ...dimensions, Dimension.DARKMODE ],
+			[ 'chrome_win7', '1280x960', 'ctrl', 'off' ],
+			'https://de.wikipedia.org'
+		);
+
+		assert.strictEqual( 'chrome_win7__1280x960__ctrl__dark.png', testCaseDark.getScreenshotFilename() );
+		assert.strictEqual( 'chrome_win7__1280x960__ctrl__light.png', testCaseLight.getScreenshotFilename() );
 	});
 
 	it('cannot be created when dimension keys and values have different number of elements', () => {

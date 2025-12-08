@@ -1,5 +1,6 @@
 [desktop]
 preview_url = 'https://de.wikipedia.org/wiki/Wikipedia:Hauptseite?banner={{PLACEHOLDER}}'
+preview_url_darkmode = 'https://de.wikipedia.org/wiki/Wikipedia:Hauptseite?banner={{PLACEHOLDER}}&devMode&vectornightmode=1'
 campaign_tracking='00-ba-200416'
 
 [desktop.banners.ctrl]
