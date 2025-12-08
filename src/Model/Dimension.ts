@@ -4,6 +4,7 @@ export enum Dimension {
     PLATFORM = 'platform',
     ORIENTATION = 'orientation',
     RESOLUTION = 'resolution',
+	DARKMODE = 'darkmode',
 }
 
 export type Dimensions = Map<Dimension, string[]>;

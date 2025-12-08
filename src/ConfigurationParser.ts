@@ -3,9 +3,11 @@ import { Dimension } from "./Model/Dimension";
 import { parse as parseTOML} from 'toml';
 import {TestCaseGenerator} from "./Model/TestCaseGenerator";
 import objectToMap from "./ObjectToMap";
+import { PreviewUrl } from './Model/PreviewUrl';
 
 // Campaign keys
 const PREVIEW_URL = 'preview_url';
+const PREVIEW_URL_DARKMODE = 'preview_url_darkmode';
 const BANNERS = 'banners';
 const TEST_MATRIX = 'test_matrix';
 const CAMPAIGN_TRACKING = 'campaign_tracking';
@@ -69,12 +71,26 @@ export class ConfigurationParser {
 		const testMatrix = campaign.get( TEST_MATRIX );
 		const banners = campaign.get( BANNERS );
 		const previewUrl = campaign.get( PREVIEW_URL );
+		const previewUrlDarkmode = campaign.get( PREVIEW_URL_DARKMODE );
+
+		const previewUrlObject = new PreviewUrl( previewUrl, previewUrlDarkmode );
+
+		// If preview_url_darkmode is not defined, the PreviewUrl class object will have only one property (preview_url_darkmode has to be optional in the class then)
+
+		// create an object of PreviewUrl class with preview_url and/or preview_url_darkmode
+
+		// If preview_url_darkmode is defined: add a new dimension to the test matrix (Dimension.DARK_MODE)
+		// It has two values: "on" and "off" ()
 
 		testMatrix.set( Dimension.BANNER, Array.from( banners.keys() ) );
 
+		if ( previewUrlObject.previewUrlDarkmode !== undefined ) {
+			testMatrix.set( Dimension.DARKMODE, [ 'on', 'off' ] );
+		}
+
 		const matrix = new TestCaseGenerator(
 			this.getBannerPlaceholders( banners ),
-			previewUrl,
+			previewUrlObject,
 			PLACEHOLDER
 		);
 

@@ -1,6 +1,7 @@
 import cartesian from '../Cartesian';
 import {TestCase} from "./TestCase";
 import { Dimension, isValidDimension } from "./Dimension";
+import { PreviewUrl } from './PreviewUrl';
 
 /**
  * This is a builder class that creates TestCase instances from a list of dimensions
@@ -10,14 +11,14 @@ export class TestCaseGenerator {
 	dimensions: Map<Dimension, string[]>;
 	pageNames: Map<string, string>;
 	pageNamePlaceholder: string;
-	bannerUrl: string;
+	previewUrl: PreviewUrl;
 
-	constructor( pageNames: Map<string,string>, bannerUrl: string, pageNamePlaceholder: string ) {
+	constructor( pageNames: Map<string,string>, previewUrl: PreviewUrl, pageNamePlaceholder: string ) {
 		this.testCases = [];
 		this.dimensions = new Map();
 
 		this.pageNames = pageNames;
-		this.bannerUrl = bannerUrl;
+		this.previewUrl = previewUrl;
 		this.pageNamePlaceholder = pageNamePlaceholder;
 	}
 
@@ -47,7 +48,14 @@ export class TestCaseGenerator {
 
 	getBannerUrl( dimensionKeys: string[], dimensionValues: string[] ): string {
 		const bannerIndex = dimensionKeys.indexOf( Dimension.BANNER );
-		return this.bannerUrl.replace( this.pageNamePlaceholder, this.pageNames.get( dimensionValues[ bannerIndex ] ) );
+		const darkModeIndex = dimensionKeys.indexOf( Dimension.DARKMODE );
+		const darkMode = dimensionValues[ darkModeIndex ];
+
+		if( darkMode === 'on' ) {
+			return this.previewUrl.previewUrlDarkmode.replace( this.pageNamePlaceholder, this.pageNames.get( dimensionValues[ bannerIndex ] ) );
+		}
+
+		return this.previewUrl.previewUrl.replace( this.pageNamePlaceholder, this.pageNames.get( dimensionValues[ bannerIndex ] ) );
 	}
 
 	private validate(): void {
