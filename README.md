@@ -10,9 +10,11 @@ The system consists of four parts:
 4. A CLI tool that creates a test matrix (a batch of screenshots) from the
    campaign configuration and pushes them into the queue.
 
-Please note that the instructions in this README are for *local 
-development* only! To create screenshots, use docker-compose environment
-and the instructions in [PRODUCTION.md](PRODUCTION.md).
+
+> [!IMPORTANT]
+> Please note that the instructions in this README are for *local 
+> development* only! To create screenshots, use docker-compose environment
+> and the instructions in [PRODUCTION.md](PRODUCTION.md).
 
 ## Installing the dependencies
 

@@ -1,13 +1,11 @@
 # How to create screenshots in production
 
-The production environment uses `docker compose` to start the message
-queue, one metadata worker and four instances of the screenshot worker (to
-parallelize the screenshot processes).
-
 In production, you *must* run all commands described in the
-[README](README.md) inside Docker containers. To avoid long command lines,
-we have encapsulated the commands in a [`Makefile`](Makefile) and the
-shell script `queue_screenshots.sh`.
+[README](README.md) inside Docker containers. The production environment
+uses `docker compose` to start the message queue, one metadata worker and
+four instances of the screenshot worker (to parallelize the screenshot
+processes).
+
 
 ## Creating Screenshots
 
@@ -77,10 +75,16 @@ You can get a unified stream of log output (with timestamps) by running
 By default, the workers should start with the `--verbose` flag
 (see `entrypoint` in the `docker-compose` file).
 
-
 ### Show queue and message count
 
 	docker compose exec rabbitmq bash -c 'rabbitmqctl list_queues'
+
+### Flushing all commands from the queue
+
+    make shutdown-workers 
+
+This will stop all containers *and* delete their storage volumes, making
+the queue empty.
 
 ### Refreshing the metadata summary
 
@@ -93,4 +97,31 @@ the overview page for Shutterbug, based on the existing metadata files. If
 a metadata file is invalid, the metadata worker will show a log message
 and ignore the file.
 
+## Background Information: How the docker compose environment works
+
+The production environment uses *two* files to define the setup for `docker compose`:
+`docker-compose.yml` and `docker-compose.prod.yml`. The latter overrides
+settings in the former. See [Merge Compose Files](https://docs.docker.com/compose/how-tos/multiple-compose-files/merge/)
+from the official documentation.
+
+**Do not** use `docker compose` commands without specifying both files! To
+make your job easer and to avoid typing long command lines, we have
+encapsulated some commands in the [`Makefile`](Makefile) and the shell
+script `queue_screenshots.sh`.
+
+`docker-compose.prod.yml` is *not* part of the `banner-screenshots`
+repository but part of the infrastructure repository. The deployment
+script for `banner-screenshots` will put it into the right place.
+
+> [!IMPORTANT]
+> If the number of workers changes in `docker-compose.yml` you must also
+> adapt the workers in `docker-compose.prod.yml`!
+
+### Testing the docker compose environment locally
+
+You can test the `docker compose` environment: Both `Makefile` and
+`queue_screenshots.sh` will try to fall back to the file
+`docker-compose.dev.yml` if the file `docker-compose.prod.yml` does not
+exist. You can create the `docker-compose.dev.yml` file by copying the
+contents of `docker-compose.dev.example.yml` into it.
 
