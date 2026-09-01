@@ -16,12 +16,12 @@
     "node": ">=18.0"
   },
   "devDependencies": {
-    "@types/node": "^26.1.2",
-    "@wdio/cli": "^9.30.0",
-    "@wdio/local-runner": "~9.30.0",
-    "@wdio/mocha-framework": "^9.30.0",
-    "@wdio/spec-reporter": "9.29.1",
-    "@wdio/testingbot-service": "^9.30.0",
+    "@types/node": "^26.4.0",
+    "@wdio/cli": "^9.31.4",
+    "@wdio/local-runner": "~9.31.4",
+    "@wdio/mocha-framework": "^9.31.2",
+    "@wdio/spec-reporter": "9.31.2",
+    "@wdio/testingbot-service": "^9.31.4",
     "@wdio/types": "^9.14.0",
     "ts-mocha": "^11.1.0",
     "ts-node": "^10.9.2"
@@ -36,7 +36,7 @@
     "toml": "^5.0.0",
     "typescript": "^7.0.2",
     "url-join-ts": "^1.0.5",
-    "webdriverio": "^9.30.0"
+    "webdriverio": "^9.31.4"
   },
   "bin": {
     "metadata_summary": "metadata_summary.js"
