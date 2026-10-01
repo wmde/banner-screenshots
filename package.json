@@ -31,7 +31,7 @@
     "amqp-connection-manager": "^5.0.0",
     "amqplib": "^2.0.1",
     "commander": "^15.0.0",
-    "dotenv": "^17.4.2",
+    "dotenv": "^18.0.4",
     "partition-all": "^1.0.1",
     "toml": "^5.0.0",
     "typescript": "^7.0.2",
